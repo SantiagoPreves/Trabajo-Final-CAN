@@ -1,0 +1,50 @@
+prueba in a las 11:53:59
+
+{"ts":57992,"gnss":"NO_FIX","RPM":"410C2DC4","vel_kph":"410D28","temp_mot_c":"410598","temp_adm_c":"410F3F","carga_pct":"4104A9","comb_pct":"412F3B","accel_pct":"411120","map_kpa":"410B50","maf_gs":"4110046D","pcomb_kpa":"410A77","avance_deg":"410E76","ton_s":"411F0070","dist_mil_km":"4121002A","temp_ace_c":"415C88","cons_lh":"415E00EB"}
+
+prueba out a las 11:53:59
+
+{"ts":57992,"rpm":2929,"vel_kph":"410D28","temp_mot_c":"410598","temp_adm_c":"410F3F","carga_pct":"4104A9","comb_pct":"412F3B","accel_pct":"411120","map_kpa":"410B50","maf_gs":"4110046D","pcomb_kpa":"410A77","avance_deg":"410E76","ton_s":"411F0070","dist_mil_km":"4121002A","temp_ace_c":"415C88","cons_lh":"415E00EB"}
+
+prueba in 11:54:18:981
+
+{"ts":77783,"gnss":"3,09,02,00,06,38.012256,S,57.581666,W,290426,1454,15.1,0.06,144.03","RPM":"410C2704","vel_kph":"410D1A","temp_mot_c":"410598","temp_adm_c":"410F43","carga_pct":"41046E","comb_pct":"412F53","accel_pct":"41118B","map_kpa":"410B6D","maf_gs":"41100563","pcomb_kpa":"410A5B","avance_deg":"410E6B","ton_s":"411F0084","dist_mil_km":"4121002A","temp_ace_c":"415C98","cons_lh":"415E0125"}
+
+prueba out 2026-04-29 11:54:19:192
+
+{"ts":77783,"lat":38.012256,"lat_dir":"S","lon":57.581666,"lon_dir":"W","fecha":"29-04-26","hora":"11:54:00","vel_gnss_kph":27.97,"dir_deg":0.06,"sats_fix":144,"rpm":2497,"vel_kph":"410D1A","temp_mot_c":"410598","temp_adm_c":"410F43","carga_pct":"41046E","comb_pct":"412F53","accel_pct":"41118B","map_kpa":"410B6D","maf_gs":"41100563","pcomb_kpa":"410A5B","avance_deg":"410E6B","ton_s":"411F0084","dist_mil_km":"4121002A","temp_ace_c":"415C98","cons_lh":"415E0125"}
+
+2026-04-29 11:59:35:446 desconecto la Bluefruit
+
+No tenia SD, tampoco anduvo la reconexión MQTT, el código JS del SV no traduce nada
+
+
+Ahora 12:22 (veremos que hora marca el SV pruebo de nuevo), ahora hay SD pero 
+
+PRUEBA IN 12:23:14:178
+
+{"ts":29205,"gnss":"NO_FIX","RPM":"?OKOKOK","vel_kph":"OK","temp_mot_c":"SEARCHING...410D53","temp_adm_c":"410D66","carga_pct":"410F4D","comb_pct":"41048F","accel_pct":"412F45","map_kpa":"4111B1","maf_gs":"410B6B","pcomb_kpa":"4110042D","avance_deg":"410A73","ton_s":"410E67","dist_mil_km":"411F074C","temp_ace_c":"4121002A","cons_lh":"415C99"}
+
+prueba out 12:23:14:240
+
+{"ts":29205,"rpm":null,"temp_mot_c":"SEARCHING...410D53","temp_adm_c":"410D66","carga_pct":"410F4D","comb_pct":"41048F","accel_pct":"412F45","map_kpa":"4111B1","maf_gs":"410B6B","pcomb_kpa":"4110042D","avance_deg":"410A73","ton_s":"410E67","dist_mil_km":"411F074C","temp_ace_c":"4121002A","cons_lh":"415C99"}
+
+prueba in primer fix 12:25:15:005
+
+{"ts":150015,"gnss":"3,06,05,02,06,38.012486,S,57.581245,W,290426,152562,0.90,9,","RPM":"410C1614","vel_kph":"410D50","temp_mot_c":"4105A5","temp_adm_c":"410F48","carga_pct":"4104B7","comb_pct":"412F8A","accel_pct":"411102","map_kpa":"410B58","maf_gs":"411003B6","pcomb_kpa":"410A5E","avance_deg":"410E73","ton_s":"411F07C5","dist_mil_km":"4121002A","temp_ace_c":"415C89","cons_lh":"415E00D3"}
+
+prueba out 2026-04-29 12:25:15:048
+
+
+{"ts":150015,"lat":38.012486,"lat_dir":"S","lon":57.581245,"lon_dir":"W","fecha":"29-04-26","hora":"12:25:62","vel_gnss_kph":1.67,"dir_deg":9,"sats_fix":0,"rpm":1413,"vel_kph":"410D50","temp_mot_c":"4105A5","temp_adm_c":"410F48","carga_pct":"4104B7","comb_pct":"412F8A","accel_pct":"411102","map_kpa":"410B58","maf_gs":"411003B6","pcomb_kpa":"410A5E","avance_deg":"410E73","ton_s":"411F07C5","dist_mil_km":"4121002A","temp_ace_c":"415C89","cons_lh":"415E00D3"}
+
+12:26:15 desconecto USB de bluefruit
+
+no anda mas, ahora pruebo al reves, desconectar el MQTT
+
+12:31:15:750 ultimo prueba in, apague el MQTT y vemos: 12:32:39:238 llego el mensaje nuevo eso anda
+
+
+12:34:31.291 prendo todo
+12:34:57.213 mando el MQTT prueba in y desconecto bluefruit
+12:36:14.154 conecto de nuevo
