@@ -1,16 +1,14 @@
-/*------------------------------------------------------------------------------
--- Project : Sistema de monitoreo de fallas y datos de manejo de vehículos
--------------------------------------------------------------------------------
--- File : Packet.cpp
--- Author : Preves, Santiago.
--- Date : Aug 10, 2026.
--- Rev 0 : Initial release.
---
--------------------------------------------------------------------------------
--- Description:
-  Complemento de archivo CAN_simulator_V3_raw.INO
---
--------------------------------------------------------------------------------*/
+//
+//  Packet.cpp
+//
+//  Estructura de un frame CAN con serialización/deserialización.
+//
+//  Fixes aplicados:
+//    - id: uint16_t → uint32_t (necesario para IDs extendidos de 29 bits)
+//    - toBytes(): bits de isExtended e isRTR estaban invertidos respecto a fromBytes()
+//    - fromBytes(): memcpy usaba offset incorrecto (buffer + len - dlc en vez de buffer + 3/5)
+//    - Constructor inicializa todos los campos
+//
 
 #include <Arduino.h>
 

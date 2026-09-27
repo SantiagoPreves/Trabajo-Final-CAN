@@ -1,22 +1,22 @@
-/*------------------------------------------------------------------------------
+ /*------------------------------------------------------------------------------
 -- Project : Sistema de monitoreo de fallas y datos de manejo de vehículos
 -------------------------------------------------------------------------------
--- File : CAN_simulator_V3_raw.INO
+-- File : CAN_simulator.INO (Compile in Arduino UNO)
 -- Author : Preves, Santiago.
--- Date : Aug 10, 2026.
--- Rev 0 : Initial release.
+-- Date : March, 2026.
+-- Rev 1 : 1st Version.
 --
 -------------------------------------------------------------------------------
 -- Description:
-  CAN Simulator - ECU OBD-II  (salida Serial RAW hex)
-  Los bytes se imprimen tal como viajan por el bus CAN,
-  sin etiquetas ni conversión a unidades físicas.
-
-  PIDs Mode 01 soportados:
-  0x00, 0x01, 0x04, 0x05, 0x0A, 0x0B, 0x0C, 0x0D,
-  0x0E, 0x0F, 0x10, 0x11, 0x1F, 0x20, 0x21, 0x2F,
-  0x40, 0x5C, 0x5E
-  Modos soportados: 01 / 03 / 04
+// CAN Simulator - ECU OBD-II  (salida Serial RAW hex)
+// Los bytes se imprimen tal como viajan por el bus CAN,
+// sin etiquetas ni conversión a unidades físicas.
+//
+// PIDs Mode 01 soportados:
+//   0x00, 0x01, 0x04, 0x05, 0x0A, 0x0B, 0x0C, 0x0D,
+//   0x0E, 0x0F, 0x10, 0x11, 0x1F, 0x20, 0x21, 0x2F,
+//   0x40, 0x5C, 0x5E
+// Modos soportados: 01 / 03 / 04
 --               
 -------------------------------------------------------------------------------*/
 
@@ -34,58 +34,9 @@ unsigned char len = 0;
 uint8_t rxBuf[8];
 char msgString[128];
 
-// ── DTCs variables (sorteo aleatorio) ──────────────────────────────────────────
-// Catálogo de DTCs generales (valor CRUDO de 2 bytes tal como va en el bus,
-// justo después del "43"). El decoder los reconstruye a Pxxxx/Cxxxx/Bxxxx/Uxxxx.
-const uint16_t catalogoDTC[] = {
-  0x0100, // P0100 - sensor de flujo de aire (MAF)          [Motor]
-  0x0171, // P0171 - mezcla demasiado pobre                 [Motor]
-  0x0300, // P0300 - fallo de encendido varios cilindros    [Motor]
-  0x0420, // P0420 - eficiencia del catalizador             [Motor]
-  0x0128, // P0128 - termostato de refrigerante             [Motor]
-  0x4035, // C0035 - sensor velocidad rueda del. izq.       [Chasis]
-  0x4110, // C0110 - motor de bomba de ABS                  [Chasis]
-  0x8010, // B0010 - airbag del conductor                   [Carroceria]
-  0x9318, // B1318 - tension de bateria baja                [Carroceria]
-  0xC100, // U0100 - perdida de comunicacion con la ECU     [Red]
-  0xC121, // U0121 - perdida de comunicacion con ABS        [Red]
-  0xD000, // U1000 - comunicacion en red CAN                [Red]
-};
-const int CATALOGO_N = sizeof(catalogoDTC) / sizeof(catalogoDTC[0]);
-
-#define MAX_DTC          2         // máximo de fallas simultáneas sorteadas
-#define DTC_INTERVAL_MS  30000UL   // re-sortea cada 30s; poné 0 para sortear solo al arranque
-
-uint16_t activeDTCs[MAX_DTC];
-int      numDTCs   = 0;           
-bool     hasDTCs   = false;
-uint32_t lastSorteo = 0;
-
-// Sortea 0, 1 o 2 DTCs al azar del catálogo (a veces ninguno = auto sano).
-void sortearDTCs() {
-  int n = random(0, MAX_DTC + 1);   // 0..MAX_DTC (uniforme)
-  numDTCs = 0;
-  for (int i = 0; i < n; i++) {
-    uint16_t code;
-    bool dup;
-    int intentos = 0;
-    do {
-      code = catalogoDTC[random(0, CATALOGO_N)];
-      dup = false;
-      for (int j = 0; j < numDTCs; j++) if (activeDTCs[j] == code) dup = true;
-    } while (dup && ++intentos < 10);
-    activeDTCs[numDTCs++] = code;
-  }
-  hasDTCs = (numDTCs > 0);
-
-  Serial.print("DTCs sorteados: ");
-  if (numDTCs == 0) {
-    Serial.println("(ninguno - auto sano)");
-  } else {
-    for (int i = 0; i < numDTCs; i++) { Serial.print("0x"); Serial.print(activeDTCs[i], HEX); Serial.print(" "); }
-    Serial.println();
-  }
-}
+uint16_t storedDTCs[] = { 0x0100, 0x5000 };  // P0100 (MAF), U1000 (CAN)
+const int numDTCs = sizeof(storedDTCs) / sizeof(storedDTCs[0]);
+bool hasDTCs = true;
 
 uint32_t engineStartTime = 0;
 uint16_t distanceMIL_km  = 42;
@@ -142,7 +93,7 @@ void handleMode01(Packet& request, Packet& response) {
     case 0x01: {
       initResponse(response, 0x01);
       response.data[0] = 0x06;
-      response.data[3] = (hasDTCs ? 0x80 : 0x00) | (numDTCs & 0x7F);
+      response.data[3] = (hasDTCs ? 0x80 : 0x00) | (hasDTCs ? (numDTCs & 0x7F) : 0x00);
       response.data[4] = 0xE0;
       response.data[5] = 0xFF;
       response.data[6] = 0x00;
@@ -316,6 +267,7 @@ void handlePacket(Packet& request) {
 
     case 0x03:
       // Respuesta a Modo 03 (leer DTCs).
+      // FIX: la trama estaba mal armada -> el ELM327 no la parseaba.
       //   - PCI (data[0]) debe ser la cantidad de bytes de PAYLOAD (0x43 + DTCs),
       //     NO incluir el propio byte de PCI. Antes ponía 'offset' (contaba de más).
       //   - dlc debe ser 8 con padding (como el Modo 01), no 'offset'.
@@ -327,11 +279,13 @@ void handlePacket(Packet& request) {
       response.data[1] = 0x43;
       {
         int offset = 2;
-        // activeDTCs ya guarda el valor CRUDO de 2 bytes -> se escribe directo
-        for (int i = 0; i < numDTCs && offset + 1 < 8; i++) {
-          uint16_t code = activeDTCs[i];
-          response.data[offset++] = (code >> 8) & 0xFF;
-          response.data[offset++] =  code       & 0xFF;
+        if (hasDTCs) {
+          for (int i = 0; i < numDTCs && offset + 1 < 8; i++) {
+            uint16_t code = storedDTCs[i];
+            uint8_t systemBits = ((code & 0xF000) == 0x5000) ? 0xC0 : 0x00;
+            response.data[offset++] = ((code >> 8) & 0x3F) | systemBits;
+            response.data[offset++] = code & 0xFF;
+          }
         }
         response.data[0] = offset - 1;   // FIX: bytes de payload (43 + DTCs), sin el PCI
         response.dlc     = 8;            // FIX: trama estándar de 8 bytes (padding)
@@ -341,7 +295,6 @@ void handlePacket(Packet& request) {
 
     case 0x04:
       hasDTCs = false;
-      numDTCs = 0;   // [NEW] limpiar también el contador
       response.id         = 0x7E8;
       response.isRTR      = false;
       response.isExtended = false;
@@ -370,22 +323,10 @@ void setup() {
   pinMode(CAN0_INT, INPUT);
 
   engineStartTime = millis();
-
-  // [NEW] Semilla random (pin analógico flotante + micros) y primer sorteo de DTCs
-  randomSeed(analogRead(A0) ^ micros());
-  sortearDTCs();
-  lastSorteo = millis();
-
   Serial.println("CAN ready");
 }
 
 void loop() {
-  // [NEW] Re-sortear DTCs cada tanto (0 = solo al arranque)
-  if (DTC_INTERVAL_MS > 0 && millis() - lastSorteo >= DTC_INTERVAL_MS) {
-    lastSorteo = millis();
-    sortearDTCs();
-  }
-
   if (!digitalRead(CAN0_INT)) {
     CAN0.readMsgBuf(&rxId, &len, rxBuf);
 

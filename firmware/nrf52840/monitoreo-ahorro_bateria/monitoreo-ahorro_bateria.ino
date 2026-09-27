@@ -1,14 +1,15 @@
-/*------------------------------------------------------------------------------
+ /*------------------------------------------------------------------------------
 -- Project : Sistema de monitoreo de fallas y datos de manejo de vehículos
 -------------------------------------------------------------------------------
--- File : .INO (Compile in Adaftruit NRF52840 Sense)
+-- File : monitoreo-ahorro_bateria.INO (Compile in Adaftruit NRF52840 Sense)
 -- Author : Preves, Santiago.
--- Date : Sep 21, 2026.
--- Rev 4 : Final release.
+-- Date : Sep 10, 2026.
+-- Rev 10 :
 --
 -------------------------------------------------------------------------------
 -- Description:
-  Completar
+  Version mejorada de monitoreo_sin_gestion.INO, suma un modo de ahorro de bateria
+  en el que el consumo se lleva al minimo posible para mejorar la eficiencia
 --               
 -------------------------------------------------------------------------------*/
 // ============================================================
@@ -18,11 +19,11 @@
 //  UART     : A7670SA en Serial1  (TX=pin1, RX=pin0)
 //  SPI      : SD card  (CS = A0 / CHIPSEL_BLUEF)
 //
-//  ── Mapa de pines REAL (según esquemático) ──────────────────
+//  ── Mapa de pines (según esquemático) ──────────────────
 //    A0  -> CHIPSEL_BLUEF   (CS de la SD)
 //    A1  -> SLEEP_7670      (control de sleep del A7670SA)
-//    A3  -> NIVEL_BAT       (lectura ADC del divisor de batería)   [C1] (era A2 en el comentario viejo)
-//    A5  -> PWRKEY_7670     (encendido/apagado del A7670SA)        [C1] (era A3 en el comentario viejo)
+//    A3  -> NIVEL_BAT       (lectura ADC del divisor de batería)  
+//    A5  -> PWRKEY_7670     (encendido/apagado del A7670SA)        
 //    D3  -> CHRG            (open-drain TP4056, activo en LOW)
 //    D4  -> STDBY           (open-drain TP4056, activo en LOW)
 //    D5  -> ACTIVAR_NIVEL   (habilita el divisor de batería vía Q2)
@@ -56,7 +57,7 @@
 #define SIM_BAUD    115200
 
 // ============================================================
-//  SD  (CHIPSEL_BLUEF -> A0)
+//  SD
 // ============================================================
 #define SD_CS_PIN   A0
 bool sdLista = false;
@@ -79,19 +80,17 @@ bool sdLista = false;
 #define ADC_MAX         4095.0f  // 12 bits
 #define BAT_OVERSAMPLE  16       // promediado para bajar ruido
 #define BAT_SETTLE_MS   30       // estabilización del divisor tras encenderlo
-// Factor de calibración: medí la batería con tester y poné CAL_BAT = Vreal / Vmedido.
-// Con la referencia ya corregida deberías quedar muy cerca de 1.00.
+// Factor de calibración
 #define CAL_BAT         1.00f
 
-// Nivel del MOSFET Q2 (BSS84 P-channel, high-side): LOW en el gate = ENCENDER.
+// Nivel del MOSFET Q2
 #define NIVEL_ACTIVO   LOW
 #define NIVEL_INACTIVO HIGH
 
 float voltajeBateria = 0.0f;
 
 // ============================================================
-//  DETECCIÓN DE CARGA (TP4056: CHRG=D3, STDBY=D4)
-//  Salidas open-drain -> INPUT_PULLUP. Activas en LOW.
+//  DETECCIÓN DE CARGA Activas en LOW.
 // ============================================================
 #define PIN_CHRG    10  // D3
 #define PIN_STDBY   11  // D4
@@ -100,7 +99,7 @@ bool cargando       = false;
 bool cargaCompleta  = false;
 
 // ============================================================
-//  A7670SA - control HW (PWRKEY_7670 -> A5, SLEEP_7670 -> A1)
+//  A7670SA
 // ============================================================
 #define PIN_PWRKEY_7670  A5
 #define PIN_SLEEP_7670   A1
@@ -123,14 +122,14 @@ String  mqttClientID   = "feather_sd_";
 #define APN "internet"
 
 // ============================================================
-//  MODO DIAGNÓSTICO DE ALIMENTACIÓN   [C11]
+//  MODO DIAGNÓSTICO DE ALIMENTACIÓN
 //  Para aislar el consumo y ver si el módem transmite con batería
 //  cuando NO compite con el BLE ni el GNSS.
 //    DIAG_SOLO_MQTT = 1 -> NO arranca BLE/OBD; solo publica
 //                          batería+IMU en un timer (mínimo consumo).
 //    DIAG_CON_GNSS  = 0 -> apaga el GNSS (ahorra ~30mA continuos).
 //  Combinaciones para probar:
-//    (1,0) solo MQTT sin GNSS  = consumo MÍNIMO (la prueba que pediste)
+//    (1,0) solo MQTT sin GNSS  = consumo MÍNIMO
 //    (1,1) solo MQTT con GNSS
 //    (0,1) sistema normal completo (volver a producción)
 //    (0,0) normal pero sin GNSS
@@ -139,19 +138,68 @@ String  mqttClientID   = "feather_sd_";
 #define DIAG_CON_GNSS    1
 
 // ============================================================
+//  MODO DE AHORRO DE ENERGÍA
+//  Ciclo "despertar -> adquirir -> transmitir -> dormir": entre
+//  transmisiones se APAGA el BLE y se BAJA la parte de red/MQTT
+//  (y, opcionalmente, el GNSS), quedando el módem en sleep. Cada
+//  transmisión CIERRA la conexión MQTT (DISC+STOP) para que el
+//  broker vea la baja y no quede el socket colgado.
+//
+//    MODO_AHORRO = 1 -> nuevo ciclo con sleep (5 min).
+//    MODO_AHORRO = 0 -> comportamiento continuo original (15 s).
+// ============================================================
+#define MODO_AHORRO   2
+
+// Reintentos de transmisión por ciclo antes de rendirse y dormir
+#define AHORRO_MAX_INTENTOS_TX  2
+
+// Ciclos consecutivos con TX fallida antes de forzar
+// un reinicio total (NVIC_SystemReset). Reemplaza al liveness (desactivado en
+// ahorro): saca al equipo de un cuelgue LÓGICO del módem que el watchdog HW no
+// detecta (el firmware corre y alimenta el WDT, pero nunca transmite).
+#define AHORRO_MAX_CICLOS_FALLIDOS  3
+
+// ---- Estrategia del MÓDEM entre ciclos --------------------------------
+//  Qué hacer con el A7670SA entre transmisiones. En TODOS los
+// modos el socket MQTT se cierra (DISC+STOP) al final del ciclo.
+//   AHORRO_MODO_MODEM = 0 -> [DEFAULT, ROBUSTO] el módem queda ENCENDIDO y
+//        REGISTRADO; sólo se cierra MQTT y se baja el PDP (AT+CGACT=0). El
+//        módem SIEMPRE responde a AT, así que despertarlo nunca falla. Idle
+//        LTE ~10-20 mA. 
+//   AHORRO_MODO_MODEM = 1 -> CSCLK sleep por DTR (menor consumo).
+//   AHORRO_MODO_MODEM = 2 -> power-down TOTAL (AT+CPOF). Consumo mínimo, pero
+//        cada ciclo rehace el attach de red (~15-25 s), gasta más energía en
+//        ese attach y BORRA las efemérides del GNSS.
+#define AHORRO_MODO_MODEM   2
+
+// ---- Estrategia del GNSS ----------------------------------------------
+//   GNSS_MANTENER_ON = 1 -> el GNSS queda ALIMENTADO siempre. Garantiza fix
+//        rápido en cada ventana (hot start "gratis"), a costa de ~30 mA
+//        continuos. Es lo más confiable para tener posición siempre.
+//   GNSS_MANTENER_ON = 0 -> se apaga el GNSS entre ciclos y se intenta un
+//        HOT/WARM START al despertar (AT+CGNSSPWR=1). Ahorra esos ~30 mA,
+//        pero el TTFF depende de que el módulo RETENGA las efemérides en su
+//        RAM de respaldo (NO combinar con AHORRO_MODO_MODEM=2).
+#define GNSS_MANTENER_ON     1
+#define GNSS_USAR_AGPS       1          // 1 = pedir efemérides por red (AT+CAGPS) tras levantar el PDP
+#define GNSS_FIX_TIMEOUT_MS  45000UL    // máx. espera de un fix al despertar
+
+// ============================================================
 //  WATCHDOG / LIVENESS   [C4][C5]
 // ============================================================
 #define WDT_TIMEOUT_S   20UL       // reinicia si el firmware se congela > 20s
+#if MODO_AHORRO
+#define LIVENESS_MS     0UL
+#else
 #define LIVENESS_MS     240000UL   // 4 min sin publicar -> reinicio de recuperación
+#endif
 uint32_t tUltimoPublish = 0;
 
 // ============================================================
-//  LOG DE DEBUG DEL A7670SA EN LA SD   [C6]
+//  LOG DE DEBUG DEL A7670SA EN LA SD
 //  Registra en /debug.log cada intento de transmisión con su
 //  contexto (batería, señal CSQ, respuesta cruda del módem) y el
-//  motivo de cada reinicio. Sirve para ver POR QUÉ no transmite:
-//  brownout (vbat baja), señal pobre (CSQ bajo) o error del módem.
-//  Cada línea se abre/escribe/cierra para que sobreviva a un corte.
+//  motivo de cada reinicio.
 // ============================================================
 #define DEBUG_LOG_FILE   "/debug.log"
 #define DEBUG_LOG_MAX    1048576UL   // 1 MB: si supera, se reinicia el archivo
@@ -174,24 +222,30 @@ struct PIDEntry {
   const char* nombre;
   uint8_t     pid;
   const char* unidad;
+  bool        enSD;     //            true = se traduce y guarda en la SD (caja negra).
+                        //            El MQTT sigue enviando TODOS los PID crudos.
 };
 
+// Columna en SD: en modo caja negra sólo se traducen/guardan en la
+// SD las magnitudes con valor forense/de conducción. El resto (diagnóstico
+// fino) se sigue transmitiendo CRUDO por MQTT.
+//   SE MANTIENEN en SD:  RPM, vel_kph, temp_mot_c, carga_pct, accel_pct
 const PIDEntry pids[] = {
-  { "01 0C", "RPM",          0x0C, "RPM"  },
-  { "01 0D", "vel_kph",      0x0D, "km/h" },
-  { "01 05", "temp_mot_c",   0x05, "C"    },
-  { "01 0F", "temp_adm_c",   0x0F, "C"    },
-  { "01 04", "carga_pct",    0x04, "%"    },
-  { "01 2F", "comb_pct",     0x2F, "%"    },
-  { "01 11", "accel_pct",    0x11, "%"    },
-  { "01 0B", "map_kpa",      0x0B, "kPa"  },
-  { "01 10", "maf_gs",       0x10, "g/s"  },
-  { "01 0A", "pcomb_kpa",    0x0A, "kPa"  },
-  { "01 0E", "avance_deg",   0x0E, "deg"  },
-  { "01 1F", "ton_s",        0x1F, "s"    },
-  { "01 21", "dist_mil_km",  0x21, "km"   },
-  { "01 5C", "temp_ace_c",   0x5C, "C"    },
-  { "01 5E", "cons_lh",      0x5E, "L/h"  },
+  { "01 0C", "RPM",          0x0C, "RPM",  true  },  // régimen de motor  (SD)
+  { "01 0D", "vel_kph",      0x0D, "km/h", true  },  // velocidad         (SD)
+  { "01 05", "temp_mot_c",   0x05, "C",    true  },  // temp refrigerante (SD)
+  { "01 0F", "temp_adm_c",   0x0F, "C",    false },
+  { "01 04", "carga_pct",    0x04, "%",    true  },  // carga del motor   (SD)
+  { "01 2F", "comb_pct",     0x2F, "%",    false },
+  { "01 11", "accel_pct",    0x11, "%",    true  },  // pos. acelerador   (SD)
+  { "01 0B", "map_kpa",      0x0B, "kPa",  false },
+  { "01 10", "maf_gs",       0x10, "g/s",  false },
+  { "01 0A", "pcomb_kpa",    0x0A, "kPa",  false },
+  { "01 0E", "avance_deg",   0x0E, "deg",  false },
+  { "01 1F", "ton_s",        0x1F, "s",    false },
+  { "01 21", "dist_mil_km",  0x21, "km",   false },
+  { "01 5C", "temp_ace_c",   0x5C, "C",    false },
+  { "01 5E", "cons_lh",      0x5E, "L/h",  false },
 };
 
 const uint8_t NUM_PIDS = sizeof(pids) / sizeof(pids[0]);
@@ -204,11 +258,36 @@ String rawPID[sizeof(pids) / sizeof(pids[0])];
 char          bufELM[ELM_BUF_SIZE];
 uint8_t       bufELMIdx = 0;
 volatile bool elmListo  = false;
+// La inicialización del ELM327 (AT Z/E0/L0/S0/SP0)
+// ocurre DENTRO de connect_callback, DESPUÉS de que elmChar.discovered() ya
+// dio true. Esta bandera se pone en true SÓLO cuando esa init terminó, para
+// no empezar a pedir PIDs mientras el callback todavía manda "AT Z"
+volatile bool elmInicializado = false;
+
+// Candados para evitar que scan_callback reactive el scanner
+// con paquetes rezagados o que connect_callback prenda el LED fuera de ciclo.
+volatile bool blePermitido  = false;
+volatile bool bleConectando = false;
+
+// Handle del enlace BLE central actual (para desconectar limpio al
+// terminar el sondeo OBD). Lo setean connect_callback / disconnect_callback.
+volatile uint16_t g_connHandle = BLE_CONN_HANDLE_INVALID;
+
+#if MODO_AHORRO
+// Estado del módem: true si quedó apagado (modo 2) o si una recuperación por
+// HW lo dejó recién encendido. Evita re-pulsar PWRKEY sobre un módem que ya
+// está ON (lo que lo APAGARÍA).
+bool g_modemApagado = false;
+// true si el ciclo anterior no pudo transmitir. El
+// próximo wake hará AT+CRESET del módem para limpiar una pila MQTT trabada
+// (SIMCom responde OK al AT pero ERROR al CMQTTSTART) antes de reintentar.
+bool g_ultimoCicloFallo = false;
+#endif
 
 // ============================================================
 //  MÁQUINA DE ESTADOS
 // ============================================================
-enum Estado : uint8_t { IDLE, ESPERANDO_ELM, ESPERANDO_DTC, HACIENDO_GNSS };   // [C13]
+enum Estado : uint8_t { IDLE, ESPERANDO_ELM, ESPERANDO_DTC, HACIENDO_GNSS }; 
 volatile Estado estado = IDLE;
 
 uint8_t  pidActual       = 0;
@@ -216,20 +295,30 @@ uint32_t tiempoEnvio     = 0;
 uint32_t tiempoProxCiclo = 0;
 
 const uint32_t TIMEOUT_ELM     = 3000;
+#if MODO_AHORRO
+const uint32_t INTERVALO_CICLO = 300000;   // 5 min entre ciclos
+#else
 const uint32_t INTERVALO_CICLO = 15000;
+#endif
 
 // ============================================================
 //  GNSS crudo
 // ============================================================
 String rawGNSS = "NO_FIX";
-String rawDTC  = "";   // [C13] respuesta cruda del Modo 03 (DTCs), ej "4301 33"
+String rawDTC  = ""; 
 
 // ============================================================
 //  FLAGS estado MQTT/4G
 // ============================================================
 bool simListo   = false;
 bool mqttOnline = false;
-bool gnssOn     = false;   // [C8] GNSS encendido (para no re-encender cada ciclo)
+// Servicio MQTT (CMQTTSTART + CMQTTACCQ) arrancado y vivo. 
+bool mqttSvcUp  = false;
+bool gnssOn     = false;   // GNSS encendido (para no re-encender cada ciclo)
+// Diagnóstico del último intento de fix (satélites vistos)
+// y flag de configuración inicial del receptor (READY + modo), para no repetir.
+String gnssDiag        = "sats=?";
+bool   gnssConfigurado = false;
 
 // ============================================================
 //  IMU — LSM6DS33
@@ -255,16 +344,17 @@ void publicarMQTT(const String& payload);
 bool iniciarSD();
 void guardarCSVtraducido();
 float traducirPID(uint8_t pid, const String& hexStr);
-String limpiarOBD(const String& bruto, uint8_t pid);   // [C10]
-String decodificarDTC(const String& bruto);            // [C13]
-String categoriaDTC(char letra);                       // [C14]
-String descripcionDTC(const String& code);             // [C14]
-String alertaDTC(const String& codigos);               // [C14]
+String limpiarOBD(const String& bruto, uint8_t pid);  
+String decodificarDTC(const String& bruto);            
+String categoriaDTC(char letra);                       
+String descripcionDTC(const String& code);             
+String alertaDTC(const String& codigos);               
 
 float leerNivelBateria();
 void  leerEstadoCarga();
 void  actualizarLEDCarga();
 void  pulsarPWRKEY_7670();
+void  apagarPWRKEY_7670();                             
 
 bool    wakeupSIM();
 String  simSend(const String& cmd, uint32_t timeout = 3000, const String& waitFor = "OK");
@@ -274,16 +364,28 @@ bool    iniciarMQTT();
 void    reconectarMQTT();
 void    teardownMQTT();
 
-void    iniciarWatchdog();     // [C4]
-void    alimentarWatchdog();   // [C4]
+void    iniciarWatchdog();     
+void    alimentarWatchdog();   
 
-void    logDebug(const String& msg);   // [C6]
-String  limpiarResp(String r);         // [C6]
-String  motivoReset();                 // [C6]
-int     leerCSQ();                     // [C6]
+void    logDebug(const String& msg);   
+String  limpiarResp(String r);         
+String  motivoReset();                 
+int     leerCSQ();                     
 
-bool    respuestaTieneReinicio(const String& r);   // [C7]
-void    esperarBootModulo();                        // [C7]
+bool    respuestaTieneReinicio(const String& r);   
+void    esperarBootModulo();                        
+
+#if MODO_AHORRO
+bool    ahorroConectarELM(uint32_t timeoutMs); 
+void    ahorroApagarBLE();                     
+void    ahorroPollPID(uint8_t i);                 
+void    ahorroPollDTC();                         
+void    ahorroApagarGNSS();                       
+void    ahorroPrepararGNSS();                    
+bool    ahorroDespertarModem();                   
+void    ahorroDormirModem();                      
+void    cicloAhorro();                           
+#endif
 
 // ============================================================
 //  WATCHDOG HW (nRF52)   [C4]
@@ -306,7 +408,7 @@ void alimentarWatchdog()
 }
 
 // ============================================================
-//  DEBUG LOG   [C6]
+//  DEBUG LOG  
 // ============================================================
 
 // Deja una respuesta AT en una sola línea legible y acotada.
@@ -340,7 +442,7 @@ void logDebug(const String& msg)
 String motivoReset()
 {
   uint32_t r = NRF_POWER->RESETREAS;
-  NRF_POWER->RESETREAS = 0xFFFFFFFF;   // limpiar (write-1-to-clear)
+  NRF_POWER->RESETREAS = 0xFFFFFFFF;   
   if (r == 0) return "POWERON/BROWNOUT";
   String s = "";
   if (r & POWER_RESETREAS_RESETPIN_Msk) s += "PIN ";
@@ -399,8 +501,10 @@ void esperarBootModulo()
   // El contexto de red y MQTT quedó perdido: forzar reinicialización limpia.
   simListo   = false;
   mqttOnline = false;
-  gnssOn     = false;   // [C8] el reboot apaga el GNSS: hay que reencenderlo
-  logDebug("MODEM boot completo -> se reinicializará red+MQTT");   // [C7]
+  mqttSvcUp  = false;   // el reboot perdió el servicio MQTT
+  gnssOn     = false;   // el reboot apaga el GNSS: hay que reencenderlo
+  gnssConfigurado = false;   // re-configurar READY+modo tras el reboot
+  logDebug("MODEM boot completo -> se reinicializará red+MQTT");   
 }
 
 // ============================================================
@@ -408,7 +512,7 @@ void esperarBootModulo()
 // ============================================================
 void setup()
 {
-  // [C6] Leer el motivo del último reinicio ANTES de que algo lo pise.
+  // Leer el motivo del último reinicio ANTES de que algo lo pise.
   g_motivoReset = motivoReset();
 
   delay(3000);
@@ -439,7 +543,7 @@ void setup()
   pinMode(PIN_PWRKEY_7670, OUTPUT);
   digitalWrite(PIN_PWRKEY_7670, HIGH);
 
-  // [C2] ADC: fijar referencia y resolución UNA vez.
+  // ADC: fijar referencia y resolución UNA vez.
   analogReference(AR_INTERNAL);   // 0.6V ref + gain 1/6 -> fondo de escala 3.6V
   analogReadResolution(12);
 
@@ -465,15 +569,21 @@ void setup()
     Serial.println("NO RESPONDE (posiblemente arrancando).");
   }
 
+#if !MODO_AHORRO
   if (iniciarRed())  simListo = true;
   else Serial.println("AVISO: red 4G no disponible, se reintentará.");
 
   if (simListo && iniciarMQTT()) mqttOnline = true;
   else Serial.println("AVISO: MQTT offline, se reintentará.");
+#else
+  // La red y el MQTT se levantan por ciclo (no en setup) para no
+  // tenerlos enganchados. El módem ya quedó encendido por PWRKEY + CRESET.
+  Serial.println("[AHORRO] Red/MQTT se levantan por ciclo (no en setup).");
+#endif
 
   if (iniciarSD()) sdLista = true;
 
-  // [C6] Rotar el log si quedó muy grande, y dejar la marca de arranque
+  // Rotar el log si quedó muy grande, y dejar la marca de arranque
   // con el motivo del reinicio y la batería medida en ese momento.
   if (sdLista) {
     File fchk = SD.open(DEBUG_LOG_FILE, FILE_READ);
@@ -508,6 +618,9 @@ void setup()
   Bluefruit.begin(0, 1);
   Bluefruit.setTxPower(4);
   Bluefruit.setName("Bluefruit-ELM");
+  Bluefruit.autoConnLed(false); // Desactivo el manejo automatico del LED
+  pinMode(LED_BLUE, OUTPUT);
+  digitalWrite(LED_BLUE, LOW);
   Bluefruit.Central.setConnectCallback(connect_callback);
   Bluefruit.Central.setDisconnectCallback(disconnect_callback);
   elmService.begin();
@@ -517,18 +630,30 @@ void setup()
   Bluefruit.Scanner.setInterval(160, 80);
   Bluefruit.Scanner.useActiveScan(true);
 
+#if MODO_AHORRO
+  blePermitido  = false;
+  bleConectando = false;
+  Serial.println("[AHORRO] BLE configurado; scanner en reposo (se activa por ciclo).");
+#else
+  blePermitido  = true;
+  bleConectando = false;
   Serial.println("Escaneando BLE...");
   Bluefruit.Scanner.start(0);
+#endif
 #else
-  // [C11] Modo diagnóstico: BLE apagado para no competir por corriente.
+  // Modo diagnóstico: BLE apagado para no competir por corriente.
   Serial.println("MODO DIAG: BLE/OBD deshabilitados (solo MQTT).");
   logDebug("MODO DIAG solo-MQTT  GNSS=" + String(DIAG_CON_GNSS));
 #endif
 
-  // [C4][C5] Arrancar watchdog y contador de liveness al final del setup,
+  // Arrancar watchdog y contador de liveness al final del setup,
   // para no reiniciar durante la inicialización (que es larga).
   tUltimoPublish = millis();
   iniciarWatchdog();
+
+#if MODO_AHORRO
+  tiempoProxCiclo = millis();   // disparar el primer ciclo enseguida
+#endif
 }
 
 // ============================================================
@@ -538,8 +663,9 @@ void loop()
 {
   alimentarWatchdog();   // [C4]
 
-  // [C5] Liveness: si hace demasiado que no publicamos, reiniciar para recuperar.
-  if (millis() - tUltimoPublish > LIVENESS_MS) {
+  // Liveness: si hace demasiado que no publicamos, reiniciar para recuperar.
+  // LIVENESS_MS==0 lo desactiva (en ahorro el módem duerme adrede).
+  if (LIVENESS_MS != 0 && millis() - tUltimoPublish > LIVENESS_MS) {
     Serial.println("[LIVENESS] Demasiado tiempo sin publicar -> reinicio de recuperación.");
 #if DIAG_SOLO_MQTT
     bool bleConn = false;
@@ -549,11 +675,27 @@ void loop()
     logDebug("LIVENESS reset: " + String((millis() - tUltimoPublish) / 1000) +
              "s sin publicar. vbat=" + String(voltajeBateria, 2) +
              " mqtt=" + String(mqttOnline ? 1 : 0) +
-             " ble=" + String(bleConn ? 1 : 0));   // [C6]
+             " ble=" + String(bleConn ? 1 : 0));  
     Serial.flush();
     delay(50);
     NVIC_SystemReset();
   }
+
+#if MODO_AHORRO
+  // Ciclo despertar/dormir. Fuera de la ventana de transmisión
+  // todo queda apagado/dormido; sólo mantenemos vivo el watchdog. Cuando se
+  // cumple el intervalo (5 min) se ejecuta un ciclo completo y se re-agenda.
+  if (millis() >= tiempoProxCiclo) {
+    cicloAhorro();
+    tiempoProxCiclo = millis() + INTERVALO_CICLO;
+  } else {
+    uint32_t restante = tiempoProxCiclo - millis();
+    uint32_t paso = (restante > 2000UL) ? 2000UL : restante;
+    alimentarWatchdog();   // mantener el WDT durante el sueño
+    delay(paso);           // (dormido en trozos < WDT_TIMEOUT_S)
+  }
+  return;   // en ahorro NO se corre la máquina de estados continua de abajo
+#endif
 
   // ── Heartbeat MQTT ──
   static uint32_t tHeartbeat = 0;
@@ -577,7 +719,7 @@ void loop()
   }
 
 #if DIAG_SOLO_MQTT
-  // [C11] Camino de diagnóstico: sin BLE/OBD. Publica batería+IMU (+GNSS
+  // Camino de diagnóstico: sin BLE/OBD. Publica batería+IMU (+GNSS
   // si DIAG_CON_GNSS) en un timer, para medir si el módem transmite con
   // batería cuando es lo único que consume corriente.
   {
@@ -619,7 +761,7 @@ void loop()
       if (elmListo) {
         rawPID[pidActual] = String(bufELM);
         rawPID[pidActual].trim();
-        // [C10] Limpiar ruido del ELM327 ("ELM327 v2.1", "OK", "SEARCHING...")
+        // Limpiar ruido del ELM327 ("ELM327 v2.1", "OK", "SEARCHING...")
         // que se cuela en el primer ciclo. Extrae solo la respuesta hex válida.
         {
           String limpio = limpiarOBD(rawPID[pidActual], pids[pidActual].pid);
@@ -637,7 +779,7 @@ void loop()
       }
       break;
 
-    case ESPERANDO_DTC:   // [C13] respuesta al Modo 03
+    case ESPERANDO_DTC:   //respuesta al Modo 03
       if (elmListo) {
         String d = String(bufELM); d.trim(); d.toUpperCase();
         // Guardar solo si es una respuesta de DTC válida ("43..."); si no,
@@ -689,7 +831,7 @@ void avanzarPID()
     enviarComando(pids[pidActual].comando);
     tiempoEnvio = millis();
   } else {
-    // [C13] Terminados los PID, pedir DTCs (Modo 03) antes del GNSS.
+    // Terminados los PID, pedir DTCs (Modo 03) antes del GNSS.
     rawDTC = "";
     bufELMIdx = 0; bufELM[0] = '\0'; elmListo = false;
     delay(150);
@@ -705,36 +847,56 @@ void avanzarPID()
 // ============================================================
 void scan_callback(ble_gap_evt_adv_report_t* report)
 {
+  //Si la ventana BLE ya se cerró o ya estamos conectando al
+  // ELM327, ignorar paquetes rezagados para no hacer Scanner.resume().
+  if (!blePermitido || bleConectando) return;
+
   char name[32] = {0};
   Bluefruit.Scanner.parseReportByType(
     report, BLE_GAP_AD_TYPE_COMPLETE_LOCAL_NAME, (uint8_t*)name, sizeof(name));
   if (strlen(name) > 0) {
     Serial.printf("Encontrado: %-20s  RSSI: %d\n", name, report->rssi);
     if (strstr(name, "OBD") != NULL) {
+      bleConectando = true;
       Bluefruit.Scanner.stop();
       Bluefruit.Central.connect(report);
       return;
     }
   }
-  Bluefruit.Scanner.resume();
+  if (blePermitido && !bleConectando) {
+    Bluefruit.Scanner.resume();
+  }
 }
 
 void connect_callback(uint16_t conn_handle)
 {
+  // Si la conexión se concretó cuando ya se había mandado a
+  // apagar el BLE, cortar inmediatamente sin prender el LED.
+  if (!blePermitido) {
+    Bluefruit.disconnect(conn_handle);
+    digitalWrite(LED_BLUE, LOW);
+    return;
+  }
+
   Serial.println("Conectado. Descubriendo servicios...");
+
+  g_connHandle = conn_handle;   // recordar el handle para desconectar luego
 
   pidActual = 0;
   bufELMIdx = 0; bufELM[0] = '\0'; elmListo = false;
+  elmInicializado = false;   // recién listo al terminar la init
   estado = IDLE;
 
   if (!elmService.discover(conn_handle)) {
     Serial.println("ERROR: FFF0 — reiniciando scanner...");
-    Bluefruit.Scanner.start(0);
+    bleConectando = false;
+    if (blePermitido) Bluefruit.Scanner.start(0);
     return;
   }
   if (!elmChar.discover()) {
     Serial.println("ERROR: FFF1 — reiniciando scanner...");
-    Bluefruit.Scanner.start(0);
+    bleConectando = false;
+    if (blePermitido) Bluefruit.Scanner.start(0);
     return;
   }
   elmChar.enableNotify();
@@ -745,21 +907,41 @@ void connect_callback(uint16_t conn_handle)
   delay(300);  enviarComando("AT L0");
   delay(300);  enviarComando("AT S0");
   delay(300);  enviarComando("AT SP 0");
-  // [C10] Dar tiempo a que el ELM termine su init y descartar el banner
+  // Dar tiempo a que el ELM termine su init y descartar el banner
   // ("ELM327 v2.1", "OK", "SEARCHING...") antes de pedir el primer PID.
   delay(1200);
   bufELMIdx = 0; bufELM[0] = '\0'; elmListo = false;
+
+  // Verificar que la ventana BLE no haya expirado durante los
+  // 3.6 s de delays de inicialización antes de encender el LED.
+  if (!blePermitido) {
+    Bluefruit.disconnect(conn_handle);
+    digitalWrite(LED_BLUE, LOW);
+    return;
+  }
+
+  elmInicializado = true;   //ahora sí es seguro pedir PIDs
+  digitalWrite(LED_BLUE, HIGH);
   Serial.println("ELM327 listo");
 }
 
 void disconnect_callback(uint16_t conn_handle, uint8_t reason)
 {
   (void) conn_handle;
-  estado = IDLE;
-  pidActual = 0; bufELMIdx = 0; bufELM[0] = '\0'; elmListo = false;
+  g_connHandle    = BLE_CONN_HANDLE_INVALID;   // handle ya no válido
+  estado          = IDLE;
+  pidActual       = 0; bufELMIdx = 0; bufELM[0] = '\0'; elmListo = false;
+  elmInicializado = false;   
+  bleConectando   = false;   
+  digitalWrite(LED_BLUE, LOW);
   Serial.printf("BLE desconectado (0x%02X)\n", reason);
+#if !MODO_AHORRO
+  //  En ahorro NO relanzamos el scanner acá: el BLE debe quedar
+  // apagado entre ciclos. El scanner lo arranca ahorroConectarELM() cuando toca.
   delay(500);
+  digitalWrite(LED_BLUE, LOW);
   Bluefruit.Scanner.start(0);
+#endif
 }
 
 void notify_callback(BLEClientCharacteristic*, uint8_t* data, uint16_t len)
@@ -791,11 +973,11 @@ void enviarComando(const char* cmd)
 void pedirGNSSCrudo()
 {
 #if !DIAG_CON_GNSS
-  // [C11] GNSS deshabilitado para ahorrar corriente.
+  // GNSS deshabilitado para ahorrar corriente.
   rawGNSS = "GNSS_OFF";
   return;
 #else
-  // [C8] Encender GNSS SOLO si no está ya encendido. Antes se hacía cada
+  // Encender GNSS SOLO si no está ya encendido. Antes se hacía cada
   // ciclo y el URC "+CGNSSPWR: READY" llegaba tarde y contaminaba el
   // siguiente comando MQTT (se veía "@TOPIC ... +CGNSSPWR: READY!").
   if (!gnssOn) {
@@ -839,22 +1021,42 @@ void pedirGNSSCrudo()
     linea.replace(" ", "");
     linea.replace("OK", "");
 
-    // Validar fix: el campo 5 (lat) debe existir y no estar vacío
-    String lat = "";
-    int idx = 0, pos = 0;
-    for (int i = 0; i <= (int)linea.length(); i++) {
+    // Separar en campos. Formato A7670 típico:
+    //   +CGNSSINFO: <mode>,<GPS_sats>,<GLO_sats>,<BDS_sats>,<lat>,<N/S>,<lon>,...
+    // Sin fix llega todo vacío (",,,,,,"). Antes se validaba SOLO el campo 5,
+    // que en algunas variantes no es la latitud -> podía leer NO_FIX aun con
+    // fix. Ahora: fix si el <mode> es 1/2/3 Y hay latitud (campo 4) no vacía.
+    String campos[20];
+    int nCampos = 0, pos = 0;
+    for (int i = 0; i <= (int)linea.length() && nCampos < 20; i++) {
       if (i == (int)linea.length() || linea[i] == ',') {
-        if (idx == 5) { lat = linea.substring(pos, i); break; }
-        idx++;
+        campos[nCampos++] = linea.substring(pos, i);
         pos = i + 1;
       }
     }
-    lat.trim();
-    if (lat.length() > 0) rawGNSS = linea;
+    String modo = (nCampos > 0) ? campos[0] : "";
+    String lat  = (nCampos > 4) ? campos[4] : "";
+    modo.trim(); lat.trim();
+
+    // Diagnóstico: modo + satélites por constelación (campos 1..3). Sirve para
+    // distinguir "0 satélites -> antena/cielo" de "ve satélites pero no fija".
+    gnssDiag = "modo=" + (modo.length() ? modo : "-") +
+               " gps=" + ((nCampos > 1) ? campos[1] : "-") +
+               " glo=" + ((nCampos > 2) ? campos[2] : "-") +
+               " bds=" + ((nCampos > 3) ? campos[3] : "-");
+
+    // Fix válido si el <mode> indica 2D/3D y hay latitud. No se exige la
+    // posición exacta de la longitud para tolerar variantes con distinto nº de
+    // campos (el raw completo queda en rawGNSS igual). Ver gnssDiag/logDebug.
+    bool hayFix = (modo == "2" || modo == "3") && lat.length() > 0;
+    if (hayFix) rawGNSS = linea;
+  } else {
+    gnssDiag = "sin respuesta CGNSSINFO";
   }
 
   Serial.print("<< GNSS: ");
-  Serial.println(rawGNSS);
+  Serial.print(rawGNSS);
+  Serial.print("  ["); Serial.print(gnssDiag); Serial.println("]");
 #endif   // DIAG_CON_GNSS
 }
 
@@ -905,7 +1107,7 @@ String construirJSONraw()
   j += ",\"vbat\":";     j += String(voltajeBateria, 2);
   j += ",\"cargando\":"; j += cargando ? "true" : "false";
   j += ",\"carga_ok\":"; j += cargaCompleta ? "true" : "false";
-  j += ",\"dtc\":\"";    j += rawDTC; j += "\"";   // [C13] crudo Modo 03 (Node-RED decodifica)
+  j += ",\"dtc\":\"";    j += rawDTC; j += "\"";   // crudo Modo 03 (Node-RED decodifica)
 
   j += "}";
   return j;
@@ -916,17 +1118,17 @@ String construirJSONraw()
 // ============================================================
 void publicarMQTT(const String& payload)
 {
-  // [C8] Drenar URCs pendientes (GNSS, CGEV, etc.) antes de publicar,
+  // Drenar URCs pendientes (GNSS, CGEV, etc.) antes de publicar,
   // para que no se cuelen en la respuesta del primer comando.
   while (SIM_SERIAL.available()) SIM_SERIAL.read();
 
-  // [C7] Sacamos el AT+CSQ del camino de publicación (para descartarlo);
+  // Sacamos el AT+CSQ del camino de publicación (para descartarlo);
   //      el CSQ se sigue registrando en los logs de red.
   String ctx = " vbat=" + String(voltajeBateria, 2);
 
   String topic = MQTT_TOPIC;
   String r = simSend("AT+CMQTTTOPIC=0," + String(topic.length()), 3000, ">");
-  if (respuestaTieneReinicio(r)) {   // [C7]
+  if (respuestaTieneReinicio(r)) {   
     logDebug("PUB: reinicio del modem @TOPIC" + ctx);
     esperarBootModulo();
     return;
@@ -940,7 +1142,7 @@ void publicarMQTT(const String& payload)
   delay(200);
 
   r = simSend("AT+CMQTTPAYLOAD=0," + String(payload.length()), 3000, ">");
-  if (respuestaTieneReinicio(r)) {   // [C7]
+  if (respuestaTieneReinicio(r)) { 
     logDebug("PUB: reinicio del modem @PAYLOAD" + ctx);
     esperarBootModulo();
     return;
@@ -954,23 +1156,23 @@ void publicarMQTT(const String& payload)
   delay(200);
 
   r = simSend("AT+CMQTTPUB=0," + String(MQTT_QOS) + ",60,0", 5000, "+CMQTTPUB:");
-  if (respuestaTieneReinicio(r)) {   // [C7]
+  if (respuestaTieneReinicio(r)) {   
     logDebug("PUB: reinicio del modem @CMQTTPUB" + ctx);
     esperarBootModulo();
     return;
   }
   if (r.indexOf("+CMQTTPUB: 0,0") >= 0) {
     Serial.println("MQTT: OK");
-    tUltimoPublish = millis();   // [C5] marcamos publicación exitosa
-    logDebug("PUB OK" + ctx + " len=" + String(payload.length()));   // [C6]
+    tUltimoPublish = millis();  
+    logDebug("PUB OK" + ctx + " len=" + String(payload.length()));  
   } else {
     mqttOnline = false;
-    logDebug("PUB FAIL @CMQTTPUB" + ctx + " resp=" + limpiarResp(r));   // [C6]
+    logDebug("PUB FAIL @CMQTTPUB" + ctx + " resp=" + limpiarResp(r));  
   }
 }
 
 // ============================================================
-//  Limpiar respuesta OBD del ruido del ELM327   [C10]
+//  Limpiar respuesta OBD del ruido del ELM327
 //  Busca el marcador "41"+PID y devuelve solo la corrida hex que
 //  sigue (corta en el primer caracter no-hex). Así:
 //    "410C40D0OKELM327 v2.1OKOKOK" -> "410C40D0"
@@ -984,7 +1186,7 @@ String limpiarOBD(const String& bruto, uint8_t pid)
   h.replace(" ", "");
 
   char marc[8];
-  sprintf(marc, "41%02X", pid);        // ej. "410C"
+  sprintf(marc, "41%02X", pid);      
   int i = h.indexOf(marc);
   if (i < 0) return "";
 
@@ -998,7 +1200,7 @@ String limpiarOBD(const String& bruto, uint8_t pid)
 }
 
 // ============================================================
-//  Decodificar DTCs (Modo 03)   [C13]
+//  Decodificar DTCs (Modo 03)   
 //  Entrada: respuesta cruda "43" + pares de bytes (cada DTC = 2 bytes).
 //  Cada par se decodifica al formato estándar Pxxxx/Cxxxx/Bxxxx/Uxxxx.
 //  Devuelve los códigos separados por ";" o "" si no hay ninguno.
@@ -1024,7 +1226,7 @@ String decodificarDTC(const String& bruto)
       if (!((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F'))) { ok = false; break; }
     }
     if (!ok) break;
-    // [FIX] b1/b2 en minúscula: el core Bluefruit define B1/B2 como macros
+    // b1/b2 en minúscula: el core Bluefruit define B1/B2 como macros
     // (binary.h) y chocaban -> "expected unqualified-id before numeric constant".
     uint8_t b1 = (uint8_t)strtol(h.substring(k, k + 2).c_str(), nullptr, 16);
     uint8_t b2 = (uint8_t)strtol(h.substring(k + 2, k + 4).c_str(), nullptr, 16);
@@ -1043,7 +1245,7 @@ String decodificarDTC(const String& bruto)
 }
 
 // ============================================================
-//  Descripción legible de un DTC   [C14]
+//  Descripción legible de un DTC 
 //  Categoría por letra + descripción específica de los códigos más
 //  comunes. SIN COMAS (para no romper el CSV).
 // ============================================================
@@ -1126,7 +1328,7 @@ float traducirPID(uint8_t pid, const String& hexStr)
   h.toUpperCase();
   if (h.length() < 6) return PID_ERROR;
 
-  // [C12] Validar que sea una respuesta hex válida "41"+PID. Antes,
+  // Validar que sea una respuesta hex válida "41"+PID. Antes,
   // "NO_DATA" (largo 7) pasaba el filtro y se mal-parseaba como A=0x0A
   // (temp=-30, vel=10, etc.). Ahora se rechaza TIMEOUT/NO_DATA/ruido.
   char marc[8]; sprintf(marc, "41%02X", pid);
@@ -1174,14 +1376,19 @@ bool iniciarSD()
 
     f.print("millis,fecha,hora,lat,lat_dir,lon,lon_dir,alt_m,vel_kph,dir_deg");
     for (uint8_t i = 0; i < NUM_PIDS; i++) {
+#if MODO_AHORRO
+      if (!pids[i].enSD) continue;   // caja negra: sólo PIDs relevantes
+#endif
       f.print(","); f.print(pids[i].nombre);
       f.print("("); f.print(pids[i].unidad); f.print(")");
     }
     f.print(",imu_ax(m/s2),imu_ay(m/s2),imu_az(m/s2)");
     f.print(",imu_gx(rad/s),imu_gy(rad/s),imu_gz(rad/s)");
     f.print(",vbat(V),cargando,carga_completa");
-    f.print(",dtc");        // [C13]
-    f.print(",dtc_alerta"); // [C14] descripción legible
+    f.print(",dtc");        // códigos compactos (P/C/B/U)
+#if !MODO_AHORRO
+    f.print(",dtc_alerta"); // descripción legible (se omite en ahorro para achicar la fila)
+#endif
     f.println();
     f.close();
     Serial.println("SD: cabecera trad.csv creada");
@@ -1235,13 +1442,16 @@ void guardarCSVtraducido()
 
     f.print((gIdx > 13) ? g[13] : "0");                 // rumbo
   } else {
-    // [C12] FIX: eran 9 comas y sobraba una -> corría todas las columnas de
+    // FIX: eran 9 comas y sobraba una -> corría todas las columnas de
     // PID/IMU/batería un lugar (filas de 35 columnas). La región GNSS son
     // 9 campos = 8 comas (la última la agrega el loop de PIDs).
     f.print(",,,,,,,,");
   }
 
   for (uint8_t i = 0; i < NUM_PIDS; i++) {
+#if MODO_AHORRO
+    if (!pids[i].enSD) continue;   //  igual filtro que la cabecera
+#endif
     f.print(",");
     float val = traducirPID(pids[i].pid, rawPID[i]);
     if (PID_ES_ERROR(val)) f.print("ERR");
@@ -1263,11 +1473,16 @@ void guardarCSVtraducido()
   f.print(","); f.print(cargando ? 1 : 0);
   f.print(","); f.print(cargaCompleta ? 1 : 0);
 
-  // [C13][C14] DTCs decodificados + alerta legible
+  // DTCs decodificados (+ alerta legible sólo fuera de ahorro)
   {
     String cod = decodificarDTC(rawDTC);
     f.print(","); f.print(cod.length() > 0 ? cod : "none");
+#if !MODO_AHORRO
     f.print(","); f.print(alertaDTC(cod));   // "sin fallas" o "Motor en falla: ... [P0100]"
+#endif
+    // En ahorro NO se escribe la columna dtc_alerta (string largo).
+    // Los códigos compactos alcanzan para la caja negra; la descripción legible
+    // la puede resolver Node-RED / el análisis posterior a partir del código.
   }
 
   f.println();
@@ -1312,10 +1527,10 @@ String simSend(const String& cmd, uint32_t timeout, const String& waitFor)
   while (millis() - t0 < timeout) {
     while (SIM_SERIAL.available()) resp += (char)SIM_SERIAL.read();
     if (waitFor.length() > 0 && resp.indexOf(waitFor) >= 0) { matched = true; break; }
-    alimentarWatchdog();   // [C4] mantener vivo el WDT durante esperas largas
+    alimentarWatchdog();   //mantener vivo el WDT durante esperas largas
     delay(10);
   }
-  // [C8] "grace read": el token puede ser un PREFIJO de la respuesta real.
+  // "grace read": el token puede ser un PREFIJO de la respuesta real.
   // Ej.: esperamos "+CMQTTPUB:" y cortábamos antes de que llegara ", 0,0",
   // reportando FAIL una publicación que en realidad salió. Tras encontrar
   // el token seguimos leyendo una ventana corta para completar la línea.
@@ -1347,7 +1562,7 @@ bool iniciarRed()
   if (!wakeupSIM()) { Serial.println(" NO RESPONDE"); return false; }
   Serial.println(" OK");
 
-  // [C9] Forzar SOLO LTE (CNMP=38). Evita que el módem caiga a 2G/GSM,
+  // Forzar SOLO LTE (CNMP=38). Evita que el módem caiga a 2G/GSM,
   // cuyos pulsos de TX de ~2A hacen brownear el módem con batería.
   // 2=Automático, 13=GSM only, 38=LTE only, 51=GSM+LTE.
   simSendCheck("AT+CNMP=38", "OK", 3000);
@@ -1359,7 +1574,7 @@ bool iniciarRed()
   uint32_t t0 = millis();
   bool reg = false;
   while (millis() - t0 < 20000) {
-    alimentarWatchdog();   // [C4]
+    alimentarWatchdog();   
     String r = simSend("AT+CGREG?", 2000, "+CGREG:");
     if (r.indexOf("+CGREG: 0,1") >= 0 || r.indexOf("+CGREG: 0,5") >= 0) { reg = true; break; }
     delay(2000);
@@ -1367,12 +1582,12 @@ bool iniciarRed()
   }
   if (!reg) {
     Serial.println(" SIN SEÑAL");
-    logDebug("RED FAIL registro (sin señal) CSQ=" + String(leerCSQ()));  // [C6]
+    logDebug("RED FAIL registro (sin señal) CSQ=" + String(leerCSQ()));  
     return false;
   }
   Serial.println(" OK");
-  logDebug("RED registro OK  CSQ=" + String(leerCSQ()));                 // [C6]
-  // [C9] Registrar la tecnología de red real (LTE vs GSM) para confirmar.
+  logDebug("RED registro OK  CSQ=" + String(leerCSQ()));                
+  // Registrar la tecnología de red real (LTE vs GSM) para confirmar.
   logDebug("RED CPSI=" + limpiarResp(simSend("AT+CPSI?", 2000, "+CPSI:")));
 
   Serial.print("  [3/5] APN...");
@@ -1386,14 +1601,14 @@ bool iniciarRed()
   Serial.print("  [5/5] IP: ");
   String ip = simSend("AT+CGPADDR=1", 3000, "+CGPADDR:");
   int ini = ip.indexOf("+CGPADDR:");
-  if (ini >= 0) { String l = ip.substring(ini); l.trim(); Serial.println(l); logDebug("RED IP=" + limpiarResp(l)); }  // [C6]
-  else { Serial.println("(no obtenida)"); logDebug("RED IP no obtenida"); }  // [C6]
+  if (ini >= 0) { String l = ip.substring(ini); l.trim(); Serial.println(l); logDebug("RED IP=" + limpiarResp(l)); } 
+  else { Serial.println("(no obtenida)"); logDebug("RED IP no obtenida"); }  
 
 #if DIAG_CON_GNSS
   simSendCheck("AT+CGNSSPWR=1");
-  gnssOn = true;   // [C8]
+  gnssOn = true;  
 #else
-  simSendCheck("AT+CGNSSPWR=0");   // [C11] GNSS apagado para ahorrar corriente
+  simSendCheck("AT+CGNSSPWR=0");   // GNSS apagado para ahorrar corriente
   gnssOn = false;
 #endif
   delay(1000);
@@ -1412,6 +1627,8 @@ void teardownMQTT()
   simSend("AT+CMQTTSTOP", 5000, "+CMQTTSTOP: 0");
   delay(1000);
   while (SIM_SERIAL.available()) SIM_SERIAL.read();
+  mqttSvcUp  = false;   // el STOP liberó (o intentó) el servicio
+  mqttOnline = false;
 }
 
 // ============================================================
@@ -1420,43 +1637,60 @@ void teardownMQTT()
 bool iniciarMQTT()
 {
   Serial.println("--- Iniciando MQTT ---");
-  teardownMQTT();
 
-  Serial.print("  [MQTT] START... ");
-  String r = simSend("AT+CMQTTSTART", 5000, "+CMQTTSTART:");
-  if (respuestaTieneReinicio(r)) {   // [C7]
-    Serial.println("REINICIO MODEM");
-    logDebug("MQTT: reinicio del modem @START resp=" + limpiarResp(r));
-    esperarBootModulo();
-    return false;
-  }
-  // [C8] Si START da ERROR (stack MQTT trabado), forzar STOP y reintentar una vez.
-  if (r.indexOf("+CMQTTSTART:") < 0 && r.indexOf("ERROR") >= 0) {
-    logDebug("MQTT @START ERROR -> STOP y reintento");
-    simSend("AT+CMQTTSTOP", 5000, "OK");
+  // Arrancar el servicio (START + ACCQ) SÓLO si no está ya
+  // arrancado. En este A7670 el CMQTTSTOP no libera bien el servicio, así que
+  // re-arrancarlo cada ciclo hacía que el próximo CMQTTSTART diera ERROR (el
+  // "una sí una no"). Ahora el servicio se mantiene vivo entre ciclos y por
+  // ciclo sólo se hace CONNECT/DISC. El servicio se recrea tras teardown total,
+  // reboot o CRESET (que ponen mqttSvcUp=false).
+  if (!mqttSvcUp) {
+    //No llamamos a teardownMQTT() aquí: al final de cada
+    // ciclo ahorroDormirModem() ya hizo el teardown, y si el módem viene de un
+    // arranque en frío (Modo 2), enviar DISC/RELCLIENT/STOP sin START previo
+    // devuelve ERROR y puede bloquear el parser antes de AT+CMQTTSTART.
+
+    Serial.print("  [MQTT] START... ");
+    String r = simSend("AT+CMQTTSTART", 5000, "+CMQTTSTART:");
+    if (respuestaTieneReinicio(r)) {
+      Serial.println("REINICIO MODEM");
+      logDebug("MQTT: reinicio del modem @START resp=" + limpiarResp(r));
+      esperarBootModulo();
+      return false;
+    }
+    // Si START da ERROR (servicio a medio arrancar), STOP + espera + reintento.
+    for (uint8_t k = 0; k < 3 &&
+         r.indexOf("+CMQTTSTART: 0") < 0 && r.indexOf("+CMQTTSTART: 23") < 0; k++) {
+      logDebug("MQTT @START ERROR -> STOP y reintento " + String(k + 1) + "/3");
+      alimentarWatchdog();
+      simSend("AT+CMQTTSTOP", 5000, "OK");
+      delay(800 + 700 * k);                 // 0.8s, 1.5s, 2.2s
+      alimentarWatchdog();
+      r = simSend("AT+CMQTTSTART", 6000, "+CMQTTSTART:");
+      if (respuestaTieneReinicio(r)) { esperarBootModulo(); return false; }
+    }
+    if (r.indexOf("+CMQTTSTART: 0") < 0 && r.indexOf("+CMQTTSTART: 23") < 0) {
+      Serial.println("FALLO -> " + r);
+      logDebug("MQTT FAIL @START resp=" + limpiarResp(r));
+      return false;
+    }
+    Serial.println("OK");
     delay(500);
-    r = simSend("AT+CMQTTSTART", 5000, "+CMQTTSTART:");
-  }
-  if (r.indexOf("+CMQTTSTART: 0") < 0 && r.indexOf("+CMQTTSTART: 23") < 0) {
-    Serial.println("FALLO -> " + r);
-    logDebug("MQTT FAIL @START resp=" + limpiarResp(r));   // [C6]
-    return false;
-  }
-  Serial.println("OK");
-  delay(500);
 
-  Serial.print("  [MQTT] ACCQ... ");
-  r = simSend("AT+CMQTTACCQ=0,\"" + mqttClientID + "\"", 5000, "OK");
-  if (respuestaTieneReinicio(r)) {   // [C7]
-    Serial.println("REINICIO MODEM");
-    logDebug("MQTT: reinicio del modem @ACCQ resp=" + limpiarResp(r));
-    esperarBootModulo();
-    return false;
-  }
-  if (r.indexOf("OK") < 0) {
-    Serial.println("FALLO -> " + r);
-    logDebug("MQTT FAIL @ACCQ resp=" + limpiarResp(r));   // [C6]
-    return false;
+    Serial.print("  [MQTT] ACCQ... ");
+    r = simSend("AT+CMQTTACCQ=0,\"" + mqttClientID + "\"", 5000, "OK");
+    if (respuestaTieneReinicio(r)) {
+      Serial.println("REINICIO MODEM");
+      logDebug("MQTT: reinicio del modem @ACCQ resp=" + limpiarResp(r));
+      esperarBootModulo();
+      return false;
+    }
+    if (r.indexOf("OK") < 0) {
+      Serial.println("FALLO -> " + r);
+      logDebug("MQTT FAIL @ACCQ resp=" + limpiarResp(r));
+      return false;
+    }
+    mqttSvcUp = true;   // servicio arrancado y cliente adquirido
   }
 
   Serial.print("  [MQTT] CONNECT... ");
@@ -1465,21 +1699,24 @@ bool iniciarMQTT()
   if (strlen(MQTT_USER) > 0)
     connCmd += ",\"" + String(MQTT_USER) + "\",\"" + String(MQTT_PASS) + "\"";
 
-  r = simSend(connCmd, 10000, "+CMQTTCONNECT:");
-  if (respuestaTieneReinicio(r)) {   // [C7]
+  String r = simSend(connCmd, 10000, "+CMQTTCONNECT:");
+  if (respuestaTieneReinicio(r)) {
     Serial.println("REINICIO MODEM");
     logDebug("MQTT: reinicio del modem @CONNECT resp=" + limpiarResp(r));
-    esperarBootModulo();
+    esperarBootModulo();       // esto ya pone mqttSvcUp=false vía flags de reboot
     return false;
   }
   if (r.indexOf("+CMQTTCONNECT: 0,0") < 0) {
     Serial.println("FALLO -> " + r);
     logDebug("MQTT FAIL @CONNECT vbat=" + String(voltajeBateria, 2) +
-             " resp=" + limpiarResp(r));   // [C6]
+             " resp=" + limpiarResp(r));
+    // CONNECT falló con el servicio arrancado: forzar
+    // recreación del servicio en el próximo intento (por las dudas quedó sucio).
+    mqttSvcUp = false;
     return false;
   }
   Serial.println("MQTT: conectado");
-  logDebug("MQTT CONNECT OK vbat=" + String(voltajeBateria, 2));   // [C6]
+  logDebug("MQTT CONNECT OK vbat=" + String(voltajeBateria, 2));
   return true;
 }
 
@@ -1489,7 +1726,7 @@ bool iniciarMQTT()
 void reconectarMQTT()
 {
   Serial.println("MQTT: ciclo de reconexión...");
-  logDebug("RECONECT inicio vbat=" + String(voltajeBateria, 2));   // [C6]
+  logDebug("RECONECT inicio vbat=" + String(voltajeBateria, 2)); 
   teardownMQTT();
 
   simListo = false;
@@ -1501,7 +1738,7 @@ void reconectarMQTT()
 }
 
 // ============================================================
-//  BATERÍA — leerNivelBateria()   [C2]
+//  BATERÍA — leerNivelBateria() 
 //  Referencia 3.6V, promediado y factor de calibración.
 // ============================================================
 float leerNivelBateria()
@@ -1538,7 +1775,7 @@ void actualizarLEDCarga()
 }
 
 // ============================================================
-//  A7670SA — pulsarPWRKEY_7670()
+//  A7670SA — pulsarPWRKEY_7670() (Encendido: pulso de 1s)
 // ============================================================
 void pulsarPWRKEY_7670()
 {
@@ -1549,3 +1786,419 @@ void pulsarPWRKEY_7670()
   digitalWrite(PIN_PWRKEY_7670, HIGH);
   delay(3000);
 }
+
+// ============================================================
+//  A7670SA — apagarPWRKEY_7670() 
+//  Pulso en LOW de 3000 ms (alimentando el watchdog) y espera
+//  de 5000 ms en HIGH para desregistro limpio de la celda LTE.
+// ============================================================
+void apagarPWRKEY_7670()
+{
+  digitalWrite(PIN_PWRKEY_7670, HIGH);
+  delay(100);
+  digitalWrite(PIN_PWRKEY_7670, LOW);
+  for (uint8_t i = 0; i < 6; i++) {
+    alimentarWatchdog();
+    delay(500);   // 6 x 500 ms = 3000 ms en LOW
+  }
+  digitalWrite(PIN_PWRKEY_7670, HIGH);
+  for (uint8_t i = 0; i < 10; i++) {
+    alimentarWatchdog();
+    delay(500);   // 10 x 500 ms = 5000 ms en HIGH
+  }
+}
+
+// ============================================================
+//  ===============  MODO DE AHORRO DE ENERGÍA  ===============
+//  Helpers del ciclo despertar/dormir. 
+//  Reutilizan las funciones existentes (iniciarRed, iniciarMQTT,
+//  teardownMQTT, pedirGNSSCrudo, publicarMQTT, etc.) sin tocar la
+//  filosofía "MQTT crudo / SD traducido".
+// ============================================================
+#if MODO_AHORRO
+
+bool ahorroConectarELM(uint32_t timeoutMs)
+{
+  //  Habilitar la ventana BLE antes de chequear o escanear
+  blePermitido  = true;
+  bleConectando = false;
+
+  if (Bluefruit.Central.connected() && elmInicializado) {
+    digitalWrite(LED_BLUE, HIGH);
+    return true;
+  }
+
+  Serial.println("[AHORRO] BLE ON: buscando ELM327...");
+  Bluefruit.Scanner.start(0);              // 0 = sin timeout interno; lo cortamos nosotros
+  uint32_t t0 = millis();
+
+  while (millis() - t0 < timeoutMs) {
+    alimentarWatchdog();                   //  no dejar vencer el WDT en la espera
+
+    if (Bluefruit.Central.connected() && elmInicializado) {
+      Bluefruit.Scanner.stop();
+      digitalWrite(LED_BLUE, HIGH);
+      return true;
+    }
+    delay(50);
+  }
+
+  // Si dio timeout, cerrar el candado inmediatamente para que
+  // un callback tardío en segundo plano no encienda el LED ni reconecte.
+  blePermitido  = false;
+  bleConectando = false;
+  Bluefruit.Scanner.stop();
+  digitalWrite(LED_BLUE, LOW);
+  Serial.println("[AHORRO] ELM327 no encontrado / no listo (timeout).");
+  return false;
+}
+
+// ---- BLE: apagar (detener scanner + desconectar) para bajar consumo ----
+void ahorroApagarBLE()
+{
+  //Cerrar candados ANTES de desconectar para bloquear callbacks
+  blePermitido  = false;
+  bleConectando = false;
+  Bluefruit.Scanner.stop();
+
+  if (Bluefruit.Central.connected() && g_connHandle != BLE_CONN_HANDLE_INVALID) {
+    Bluefruit.disconnect(g_connHandle);
+    uint32_t t0 = millis();
+    while (Bluefruit.Central.connected() && millis() - t0 < 1500) {
+      alimentarWatchdog();
+      delay(20);
+    }
+  }
+  // Forzar apagado del LED y suspender el servicio BLE
+  digitalWrite(LED_BLUE, LOW);
+  Serial.println("[AHORRO] BLE OFF.");
+}
+
+// ---- OBD: poll SÍNCRONO de un PID (llena rawPID[i]) ----
+void ahorroPollPID(uint8_t i)
+{
+  bufELMIdx = 0; bufELM[0] = '\0'; elmListo = false;
+  enviarComando(pids[i].comando);
+  uint32_t t0 = millis();
+  while (millis() - t0 < TIMEOUT_ELM) {
+    alimentarWatchdog();
+    if (elmListo) break;
+    delay(5);
+  }
+  if (elmListo) {
+    rawPID[i] = String(bufELM); rawPID[i].trim();
+    String limpio = limpiarOBD(rawPID[i], pids[i].pid);   //descartar banner/ruido
+    if (limpio.length() >= 6) rawPID[i] = limpio;
+    else if (rawPID[i].indexOf("TIMEOUT") < 0) rawPID[i] = "NO_DATA";
+    elmListo = false;
+  } else {
+    rawPID[i] = "TIMEOUT";
+  }
+  delay(150);   // guarda entre comandos (igual que avanzarPID)
+}
+
+// ---- OBD: poll SÍNCRONO de DTC (Modo 03) ----
+void ahorroPollDTC()
+{
+  bufELMIdx = 0; bufELM[0] = '\0'; elmListo = false;
+  enviarComando("03");
+  uint32_t t0 = millis();
+  while (millis() - t0 < TIMEOUT_ELM) {
+    alimentarWatchdog();
+    if (elmListo) break;
+    delay(5);
+  }
+  if (elmListo) {
+    String d = String(bufELM); d.trim(); d.toUpperCase();
+    rawDTC = (d.indexOf("43") >= 0) ? d : "";
+    elmListo = false;
+  } else {
+    rawDTC = "";
+  }
+  Serial.printf("[AHORRO] DTC = %s\n", rawDTC.c_str());
+}
+
+// ---- GNSS: apagar receptor ----
+void ahorroApagarGNSS()
+{
+#if DIAG_CON_GNSS
+  if (gnssOn) { simSendCheck("AT+CGNSSPWR=0", "OK", 2000); gnssOn = false; }
+#endif
+}
+
+// ---- GNSS: preparar/asegurar fix al despertar (hot start o ya encendido) ----
+void ahorroPrepararGNSS()
+{
+#if !DIAG_CON_GNSS
+  return;                                  // GNSS deshabilitado por flag de diagnóstico
+#else
+  if (!gnssOn) {
+    // Re-encender el receptor. Si el módulo retuvo efemérides -> hot/warm start.
+    if (simSendCheck("AT+CGNSSPWR=1", "OK", 2000)) gnssOn = true;
+    delay(500);
+  }
+
+  // Configuración inicial del receptor, UNA sola vez por
+  // encendido del módem (se re-hace tras un reboot: gnssConfigurado=false).
+  if (gnssOn && !gnssConfigurado) {
+    // Esperar el URC "+CGNSSPWR: READY" (el receptor tarda en levantar tras
+    // CGNSSPWR=1; pedir CGNSSINFO antes devuelve vacío). Tolerante: si no llega
+    // en 8 s seguimos igual, pero lo dejamos registrado.
+    uint32_t tr = millis(); String rr = "";
+    while (millis() - tr < 8000) {
+      while (SIM_SERIAL.available()) rr += (char)SIM_SERIAL.read();
+      if (rr.indexOf("+CGNSSPWR: READY") >= 0 || rr.indexOf("+CGNSSPWR:READY") >= 0) break;
+      alimentarWatchdog();
+      delay(50);
+    }
+    //  Habilitar TODAS las constelaciones (GPS+GLONASS+BDS+
+    // Galileo) para maximizar satélites visibles. La sintaxis de CGNSSMODE
+    // varía por variante/firmware; se ignora el error si no aplica.
+    simSend("AT+CGNSSMODE=15,1", 2000, "OK");
+    gnssConfigurado = true;
+    logDebug("GNSS config: READY=" +
+             String((rr.indexOf("READY") >= 0) ? 1 : 0));
+  }
+
+  #if GNSS_USAR_AGPS
+    //  AGPS por red para acelerar el TTFF (baja de minutos a
+    // segundos). Requiere PDP activo (ya lo está en este punto). El comando
+    // típico SIMCom es AT+CAGPS; algunas variantes usan otro nombre. Se pide
+    // solo si todavía no hay fix, para no gastar red al pedo.
+    if (rawGNSS == "NO_FIX" || rawGNSS == "GNSS_OFF")
+      simSend("AT+CAGPS", 10000, "OK");
+  #endif
+
+  // Esperar un fix válido hasta el timeout (reutiliza pedirGNSSCrudo()).
+  // Con GNSS_MANTENER_ON=1 suele salir en el primer intento (venía encendido).
+  uint32_t t0 = millis();
+  while (millis() - t0 < GNSS_FIX_TIMEOUT_MS) {
+    alimentarWatchdog();
+    pedirGNSSCrudo();
+    if (rawGNSS != "NO_FIX" && rawGNSS != "GNSS_OFF") break;
+    delay(1000);
+  }
+
+  // Dejar SIEMPRE registro en el debug.log del resultado y
+  // los satélites vistos. Así se puede diagnosticar sin serial: si siempre da
+  // "gps=0 glo=0 bds=0" -> antena/cielo; si ve satélites pero no fija -> falta
+  // tiempo o AGPS; si fija -> todo OK.
+  logDebug("GNSS " + String((rawGNSS == "NO_FIX") ? "NO_FIX" : "FIX") +
+           " [" + gnssDiag + "]");
+#endif
+}
+
+// ---- MÓDEM: despertar y levantar red + MQTT ----
+bool ahorroDespertarModem()
+{
+  digitalWrite(PIN_SLEEP_7670, LOW);       // DTR bajo = módem despierto (inofensivo en modo 0)
+
+#if (AHORRO_MODO_MODEM == 2)
+  // El módem venía apagado (power-down total): encender por hardware.
+  if (g_modemApagado) {                    // sólo pulsar PWRKEY si estaba apagado
+    pulsarPWRKEY_7670();                    // (pulsarlo estando ON lo APAGARÍA)
+    SIM_SERIAL.begin(SIM_BAUD);
+    // [FIX Modo 2 - Paso 3] Esperar el boot real del A7670SA (6 a 9 s) y
+    // limpiar banderas en lugar de sólo delay(1000).
+    esperarBootModulo();
+    g_modemApagado = false;
+  }
+  while (SIM_SERIAL.available()) SIM_SERIAL.read();
+#elif (AHORRO_MODO_MODEM == 1)
+  // Salir del CSCLK sleep por DTR.
+  delay(50);
+  simSend("AT+CSCLK=0", 1000, "OK");       // deshabilitar sleep mientras trabajamos
+#endif
+  // Modo 0 (default): el módem quedó encendido y registrado; no hay que hacer nada.
+
+  // Confirmar que responde a AT. Si no, intentar UNA
+  // recuperación por hardware (el módem pudo brownoutear o quedar trabado):
+  // re-pulsar PWRKEY, re-init de la UART y reintentar. Así el sistema se
+  // AUTO-SANA en vez de fallar para siempre (era lo que pasaba: una vez que el
+  // módem quedaba mudo, todos los ciclos daban "red/MQTT no levantó").
+  if (!wakeupSIM()) {
+    Serial.println("[AHORRO] módem no responde; recuperación por HW (PWRKEY)...");
+    logDebug("AHORRO wake: modem mudo -> re-PWRKEY");
+    pulsarPWRKEY_7670();
+    SIM_SERIAL.begin(SIM_BAUD);
+    esperarBootModulo();
+    g_modemApagado = false;
+    if (!wakeupSIM()) { Serial.println("[AHORRO] módem sigue mudo tras recuperación."); return false; }
+  }
+
+  // Si el ciclo anterior no pudo transmitir, la pila
+  // TCP/MQTT del módem pudo quedar trabada (responde AT pero rechaza
+  // CMQTTSTART/ACCQ). Un CRESET la limpia sin llegar al reinicio total del
+  // micro; recupera en el ciclo siguiente en vez de esperar el backstop.
+  if (g_ultimoCicloFallo) {
+    Serial.println("[AHORRO] ciclo previo falló -> AT+CRESET del módem.");
+    logDebug("AHORRO wake: CRESET por ciclo previo fallido");
+    alimentarWatchdog();
+    simSend("AT+CRESET", 3000, "OK");
+    alimentarWatchdog();
+    delay(8000);                            // < WDT_TIMEOUT_S; el módem re-arranca
+    alimentarWatchdog();
+    while (SIM_SERIAL.available()) SIM_SERIAL.read();
+    if (!wakeupSIM()) { Serial.println("[AHORRO] módem no responde tras CRESET."); return false; }
+    // El CRESET reinició el módem: el servicio MQTT y el GNSS
+    // quedaron apagados. Marcar el estado como perdido para que se recreen
+    // limpios (antes quedaban stale -> el ciclo post-CRESET perdía el fix GNSS
+    // y podía arrastrar un servicio MQTT fantasma).
+    mqttSvcUp = false;
+    gnssOn = false; gnssConfigurado = false;
+  }
+
+  simListo = false; mqttOnline = false;
+  if (!iniciarRed())  { logDebug("AHORRO wake: red no levantó"); return false; }
+  simListo = true;
+  if (!iniciarMQTT()) { logDebug("AHORRO wake: MQTT no conectó"); return false; }
+  mqttOnline = true;
+  return true;
+}
+
+// ---- MÓDEM: cerrar el socket MQTT + reposo según AHORRO_MODO_MODEM ----
+void ahorroDormirModem()
+{
+#if (AHORRO_MODO_MODEM == 0)
+  // Modo 0 (default): cerrar SOLO el socket ante el broker
+  // con CMQTTDISC (el servidor ve la baja limpia), pero MANTENER arrancado el
+  // servicio MQTT (mqttSvcUp) y el PDP. Así el próximo ciclo hace sólo CONNECT
+  // (sin STOP/START), que es lo que fallaba con ERROR en este A7670. El socket
+  // igual queda cerrado, que era el requisito.
+  simSend("AT+CMQTTDISC=0,60", 5000, "OK");
+  mqttOnline = false;
+  #if !GNSS_MANTENER_ON
+    ahorroApagarGNSS();                    // opcional: apagar sólo el GNSS
+  #endif
+  Serial.println("[AHORRO] socket MQTT cerrado (servicio y PDP se mantienen).");
+  return;   // el módem queda encendido, registrado, con servicio MQTT vivo
+#else
+  // Modos 1 y 2: teardown COMPLETO (el módem va a dormir/apagarse, hay que
+  // liberar todo y avisar al broker).
+  teardownMQTT();                          // DISC + REL + STOP (baja mqttSvcUp)
+  simSend("AT+CGACT=0,1", 5000, "OK");     // bajar el PDP
+#endif
+
+#if (AHORRO_MODO_MODEM == 2)
+  // Power-down TOTAL del módem.
+  ahorroApagarGNSS();                      // sin módem no hay GNSS igual
+
+  //Intentar apagado por software nativo con confirmación
+  // y, si el módem sigue respondiendo a AT, forzar el apagado físico con el
+  // pulso largo de 3 s en LOW + 5 s en HIGH (apagarPWRKEY_7670).
+  bool offSW = simSendCheck("AT+CPOF", "OK", 3000);
+  if (!offSW) {
+    offSW = simSendCheck("AT+CPOWD=1", "OK", 3000);
+  }
+  if (offSW) {
+    for (uint8_t i = 0; i < 6; i++) {
+      alimentarWatchdog();
+      delay(500);                          // esperar 3 s a que termine el power-down
+    }
+  }
+  // Si no aceptó el comando o sigue vivo respondiendo a AT, apagar por PWRKEY (3s LOW)
+  if (!offSW || simSend("AT", 1000, "OK").indexOf("OK") >= 0) {
+    Serial.println("[AHORRO] Apagando A7670SA por hardware (PWRKEY 3s)...");
+    apagarPWRKEY_7670();
+  }
+
+  g_modemApagado  = true;
+  // Resetear banderas para que el próximo ciclo sepa que
+  // el módem arrancó en frío y vuelva a inicializar GNSS y MQTT.
+  gnssOn          = false;
+  gnssConfigurado = false;
+  mqttSvcUp       = false;
+#elif (AHORRO_MODO_MODEM == 1)
+  // Sleep por DTR (requiere DTR bien cableado y polaridad correcta).
+  #if !GNSS_MANTENER_ON
+    ahorroApagarGNSS();                    // apagar GNSS entre ciclos (se re-enciende al despertar)
+  #endif
+  simSend("AT+CSCLK=1", 1000, "OK");       // habilitar sleep por DTR
+  digitalWrite(PIN_SLEEP_7670, HIGH);      // DTR alto = dejar dormir
+#endif
+
+  simListo = false; mqttOnline = false;
+  Serial.println("[AHORRO] socket MQTT cerrado; PDP abajo.");
+}
+
+// ---- Un ciclo completo de ahorro ----
+void cicloAhorro()
+{
+  Serial.println("\n===== [AHORRO] Inicio de ciclo =====");
+  alimentarWatchdog();
+
+  // 1) Batería/carga (barato, con todo aún dormido).
+  voltajeBateria = leerNivelBateria();
+  leerEstadoCarga();
+  actualizarLEDCarga();
+
+  // 2) OBD por BLE (encender, pollear, apagar).
+  for (uint8_t i = 0; i < NUM_PIDS; i++) rawPID[i] = "TIMEOUT";
+  rawDTC = "";
+  if (ahorroConectarELM(15000)) {
+    for (uint8_t i = 0; i < NUM_PIDS; i++) { alimentarWatchdog(); ahorroPollPID(i); }
+    ahorroPollDTC();
+  } else {
+    logDebug("AHORRO: ELM327 no conectado; PIDs=TIMEOUT");
+  }
+  ahorroApagarBLE();
+
+  // 3) IMU (barato).
+  leerIMU();
+
+  // 4) Despertar módem + red + MQTT, con reintentos. Cada intento levanta todo
+  //    desde cero (iniciarMQTT hace teardown antes), así no arrastra un socket
+  //    a medio abrir.
+  bool txOK = false;
+  for (uint8_t intento = 1; intento <= AHORRO_MAX_INTENTOS_TX && !txOK; intento++) {
+    alimentarWatchdog();
+    Serial.printf("[AHORRO] Intento TX %u/%u\n", (unsigned)intento, (unsigned)AHORRO_MAX_INTENTOS_TX);
+    if (!ahorroDespertarModem()) {
+      logDebug("AHORRO TX intento " + String(intento) + ": red/MQTT no levantó");
+      continue;                            // reintenta (o se rinde si era el último)
+    }
+    ahorroPrepararGNSS();                   // GNSS: hot start o ya encendido
+    pedirGNSSCrudo();                       // lectura final de posición
+    String json = construirJSONraw();
+    Serial.print("JSON: "); Serial.println(json);
+    publicarMQTT(json);                     // pone mqttOnline=false si falla; tUltimoPublish si OK
+    if (mqttOnline) txOK = true;
+    else logDebug("AHORRO TX intento " + String(intento) + ": publish falló");
+  }
+
+  // 5) SD (traducido REDUCIDO) — se guarda siempre, haya o no TX.
+  if (sdLista) guardarCSVtraducido();
+
+  // 6) Cerrar socket MQTT y dormir/apagar el módem.
+  ahorroDormirModem();
+
+  // Anti-zombificación. Con LIVENESS_MS=0 el watchdog
+  // HW no cubre un cuelgue LÓGICO: si la pila MQTT del módem queda trabada,
+  // iniciarMQTT falla siempre y el equipo dejaría de transmitir en silencio
+  // para siempre. Contamos ciclos fallidos consecutivos: g_ultimoCicloFallo
+  // hace que el próximo wake intente un AT+CRESET, y si aun así no se recupera
+  // tras AHORRO_MAX_CICLOS_FALLIDOS ciclos, reinicio total (re-corre setup(),
+  // que hace PWRKEY+CRESET y deja el módem limpio).
+  static uint8_t ciclosFallidos = 0;
+  if (txOK) {
+    ciclosFallidos = 0;
+    g_ultimoCicloFallo = false;
+  } else {
+    ciclosFallidos++;
+    g_ultimoCicloFallo = true;
+    logDebug("AHORRO ciclo fallido " + String(ciclosFallidos) + "/" +
+             String(AHORRO_MAX_CICLOS_FALLIDOS));
+    if (ciclosFallidos >= AHORRO_MAX_CICLOS_FALLIDOS) {
+      Serial.println("[AHORRO] Fallos de TX persistentes -> reinicio de recuperación.");
+      logDebug("AHORRO reset: " + String(ciclosFallidos) +
+               " ciclos sin TX. vbat=" + String(voltajeBateria, 2));
+      Serial.flush();
+      delay(50);
+      NVIC_SystemReset();
+    }
+  }
+
+  Serial.printf("===== [AHORRO] Fin de ciclo (txOK=%d) =====\n", txOK ? 1 : 0);
+}
+
+#endif   // MODO_AHORRO
