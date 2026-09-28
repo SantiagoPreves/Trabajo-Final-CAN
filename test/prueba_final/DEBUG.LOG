@@ -1,0 +1,551 @@
+3258 | ========== BOOT v3.1  reset=POWERON/BROWNOUT  vbat=4.16  cargando=1  modo_modem=2  pwrkey_alto=0  agps=0 ==========
+12712 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+15046 | MODEM encendido al iniciar el ciclo aunque se apagó con CPOF: se re-enciende solo (PWRKEY queda presionado en reposo?). Revisar PWRKEY_ACTIVO_ALTO.
+15200 | GNSS ON (AP-Flash hot start)
+15249 | RED registro OK en 0 s  CSQ=26
+15312 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,18,51,49,4 OK
+15351 | RED IP=+CGPADDR: 1,10.29.198.138 OK
+105955 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+106515 | MQTT CONNECT OK vbat=4.17
+106604 | PUB OK vbat=4.17 len=502
+110568 | CICLO 1 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=102 s vbat=4.17
+211375 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+213840 | GNSS ON (AP-Flash hot start)
+213919 | RED registro OK en 0 s  CSQ=26
+213983 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,9,49,51,1 OK
+214020 | RED IP=+CGPADDR: 1,10.234.196.40
+269427 | GNSS FIX (espera 55 s, desde encendido 55 s) [modo=3 FIX] agps=no reinicios_modem=0
+269916 | MQTT CONNECT OK vbat=4.16
+270014 | PUB OK vbat=4.16 len=581
+273324 | GNSS OFF + efemérides guardadas (AP-Flash)
+277014 | CICLO 2 fin: obd=1 tx=1 fix=1 reinicios_modem=0 auto_on=1 dur=69 s vbat=4.16
+412034 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+414481 | GNSS ON (AP-Flash hot start)
+414560 | RED registro OK en 0 s  CSQ=26
+414628 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,16,50,51,3 OK
+414663 | RED IP=+CGPADDR: 1,10.208.202.182 OK
+449921 | GNSS FIX (espera 35 s, desde encendido 35 s) [modo=3 FIX] agps=no reinicios_modem=0
+450270 | MQTT CONNECT OK vbat=4.17
+450400 | PUB OK vbat=4.17 len=581
+454332 | CICLO 3 fin: obd=1 tx=1 fix=1 reinicios_modem=0 auto_on=1 dur=46 s vbat=4.17
+610571 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+615311 | GNSS ON (AP-Flash hot start)
+615366 | RED registro OK en 0 s  CSQ=27
+615428 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,15,50,51,2 OK
+615459 | RED IP=+CGPADDR: 1,10.170.195.210
+679945 | GNSS FIX (espera 64 s, desde encendido 64 s) [modo=3 FIX] agps=no reinicios_modem=0
+680448 | MQTT CONNECT OK vbat=4.17
+680576 | PUB OK vbat=4.17 len=580
+684528 | CICLO 4 fin: obd=1 tx=1 fix=1 reinicios_modem=0 auto_on=1 dur=76 s vbat=4.17
+817232 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+819699 | GNSS ON (AP-Flash hot start)
+819784 | RED registro OK en 0 s  CSQ=25
+819847 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,11,50,49,1 OK
+819887 | RED IP=+CGPADDR: 1,10.20.224.41 OK
+870251 | GNSS FIX (espera 50 s, desde encendido 50 s) [modo=3 FIX] agps=no reinicios_modem=0
+870792 | MQTT CONNECT OK vbat=4.17
+870889 | PUB OK vbat=4.17 len=577
+874848 | CICLO 5 fin: obd=1 tx=1 fix=1 reinicios_modem=0 auto_on=1 dur=67 s vbat=4.17
+1012793 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+1015239 | GNSS ON (AP-Flash hot start)
+1015318 | RED registro OK en 0 s  CSQ=25
+1015380 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,15,49,49,1 OK
+1015415 | RED IP=+CGPADDR: 1,10.254.225.188 OK
+1105985 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+1106363 | MQTT CONNECT OK vbat=4.16
+1106452 | PUB OK vbat=4.16 len=499
+1110407 | CICLO 6 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=102 s vbat=4.16
+1211918 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+1214384 | GNSS ON (AP-Flash hot start)
+1214463 | RED registro OK en 0 s  CSQ=27
+1214527 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,18,51,50,5 OK
+1214558 | RED IP=+CGPADDR: 1,10.189.194.255 OK
+1305218 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+1305684 | MQTT CONNECT OK vbat=4.17
+1305772 | PUB OK vbat=4.17 len=503
+1309702 | CICLO 7 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=101 s vbat=4.17
+1411478 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+1413961 | GNSS ON (AP-Flash hot start)
+1414053 | RED registro OK en 0 s  CSQ=26
+1414117 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,14,50,50,2 OK
+1414151 | RED IP=+CGPADDR: 1,10.128.226.244 OK
+1504723 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+1505164 | MQTT CONNECT OK vbat=4.17
+1505258 | PUB OK vbat=4.17 len=503
+1509199 | CICLO 8 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=101 s vbat=4.17
+1619021 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+1621785 | GNSS ON (AP-Flash hot start)
+1621864 | RED registro OK en 0 s  CSQ=26
+1621926 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,14,51,52,3 OK
+1621960 | RED IP=+CGPADDR: 1,10.68.208.178 OK
+1675333 | GNSS FIX (espera 53 s, desde encendido 53 s) [modo=3 FIX] agps=no reinicios_modem=0
+1675866 | MQTT CONNECT OK vbat=4.17
+1675962 | PUB OK vbat=4.17 len=581
+1679928 | CICLO 9 fin: obd=1 tx=1 fix=1 reinicios_modem=0 auto_on=1 dur=72 s vbat=4.17
+1813179 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+1815965 | GNSS ON (AP-Flash hot start)
+1816044 | RED registro OK en 0 s  CSQ=27
+1816108 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,15,51,50,2 OK
+1816146 | RED IP=+CGPADDR: 1,10.19.234.249 O
+1887702 | GNSS FIX (espera 71 s, desde encendido 71 s) [modo=3 FIX] agps=no reinicios_modem=0
+1888244 | MQTT CONNECT OK vbat=4.17
+1888346 | PUB OK vbat=4.17 len=578
+1892313 | CICLO 10 fin: obd=1 tx=1 fix=1 reinicios_modem=0 auto_on=1 dur=84 s vbat=4.17
+2010983 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+2013766 | GNSS ON (AP-Flash hot start)
+2013873 | RED registro OK en 0 s  CSQ=25
+2013936 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,18,51,49,3 OK
+2013967 | RED IP=+CGPADDR: 1,10.45.219.175
+2104565 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+2105075 | MQTT CONNECT OK vbat=4.18
+2105195 | PUB OK vbat=4.18 len=503
+2109142 | CICLO 11 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=101 s vbat=4.18
+2211857 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+2214341 | GNSS ON (AP-Flash hot start)
+2214421 | RED registro OK en 0 s  CSQ=25
+2214485 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,15,50,49,2 OK
+2214526 | RED IP=+CGPADDR: 1,10.202.186.163 OK
+2305159 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+2305711 | MQTT CONNECT OK vbat=4.18
+2305801 | PUB OK vbat=4.18 len=495
+2309750 | CICLO 12 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=101 s vbat=4.18
+2411565 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+2414050 | GNSS ON (AP-Flash hot start)
+2414099 | RED registro OK en 0 s  CSQ=27
+2414163 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,9,50,52,2 OK
+2414224 | RED IP=+CGPADDR: 1,10.241.174.176 OK
+2504833 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+2505247 | MQTT CONNECT OK vbat=4.17
+2505341 | PUB OK vbat=4.17 len=499
+2509263 | CICLO 13 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=101 s vbat=4.17
+2617650 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+2620415 | GNSS ON (AP-Flash hot start)
+2620494 | RED registro OK en 0 s  CSQ=26
+2620557 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,11,51,52,2 OK
+2620594 | RED IP=+CGPADDR: 1,10.73.77.87 O
+2711195 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+2711639 | MQTT CONNECT OK vbat=4.17
+2711728 | PUB OK vbat=4.17 len=495
+2715690 | CICLO 14 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=107 s vbat=4.17
+2811819 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+2814583 | GNSS ON (AP-Flash hot start)
+2814662 | RED registro OK en 0 s  CSQ=26
+2814734 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,18,51,50,3 OK
+2814808 | RED IP=+CGPADDR: 1,10.5.178.83 OK
+2905409 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+2905898 | MQTT CONNECT OK vbat=4.18
+2905987 | PUB OK vbat=4.18 len=503
+2909934 | CICLO 15 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=102 s vbat=4.18
+3015854 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+3018322 | GNSS ON (AP-Flash hot start)
+3018401 | RED registro OK en 0 s  CSQ=26
+3018479 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,15,50,50,2 OK
+3018516 | RED IP=+CGPADDR: 1,10.83.210.180
+3107112 | GNSS FIX (espera 88 s, desde encendido 88 s) [modo=3 FIX] agps=no reinicios_modem=0
+3107542 | MQTT CONNECT OK vbat=4.17
+3107641 | PUB OK vbat=4.17 len=573
+3110907 | GNSS OFF + efemérides guardadas (AP-Flash)
+3114598 | CICLO 16 fin: obd=1 tx=1 fix=1 reinicios_modem=0 auto_on=1 dur=106 s vbat=4.17
+3211303 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+3214085 | GNSS ON (AP-Flash hot start)
+3214165 | RED registro OK en 0 s  CSQ=26
+3214228 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,15,50,51,2 OK
+3214290 | RED IP=+CGPADDR: 1,10.225.205.95 OK
+3304860 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+3305346 | MQTT CONNECT OK vbat=4.18
+3305436 | PUB OK vbat=4.18 len=503
+3309380 | CICLO 17 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=101 s vbat=4.18
+3413264 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+3415711 | GNSS ON (AP-Flash hot start)
+3415791 | RED registro OK en 0 s  CSQ=26
+3415854 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,16,50,50,3 OK
+3415888 | RED IP=+CGPADDR: 1,10.148.252.236 OK
+3506459 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+3506992 | MQTT CONNECT OK vbat=4.17
+3507088 | PUB OK vbat=4.17 len=503
+3511059 | CICLO 18 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=103 s vbat=4.17
+3614281 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+3617042 | GNSS ON (AP-Flash hot start)
+3617122 | RED registro OK en 0 s  CSQ=26
+3617185 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,11,49,51,2 OK
+3617219 | RED IP=+CGPADDR: 1,10.9.109.139 OK
+3707823 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+3708357 | MQTT CONNECT OK vbat=4.18
+3708447 | PUB OK vbat=4.18 len=503
+3712401 | CICLO 19 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=104 s vbat=4.18
+3810538 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+3813307 | GNSS ON (AP-Flash hot start)
+3813385 | RED registro OK en 0 s  CSQ=27
+3813449 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,15,49,50,1 OK
+3813487 | RED IP=+CGPADDR: 1,10.109.98.160
+3904117 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+3904681 | MQTT CONNECT OK vbat=4.18
+3904772 | PUB OK vbat=4.18 len=495
+3908855 | CICLO 20 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=101 s vbat=4.18
+4013144 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+4015909 | GNSS ON (AP-Flash hot start)
+4015988 | RED registro OK en 0 s  CSQ=26
+4016050 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,9,49,50,1 OK
+4016084 | RED IP=+CGPADDR: 1,10.6.170.60 OK
+4106653 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+4107054 | MQTT CONNECT OK vbat=4.17
+4107149 | PUB OK vbat=4.17 len=503
+4111073 | CICLO 21 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=103 s vbat=4.17
+4211519 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+4213963 | GNSS ON (AP-Flash hot start)
+4214042 | RED registro OK en 0 s  CSQ=26
+4214106 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,15,49,49,1 OK
+4214139 | RED IP=+CGPADDR: 1,10.11.206.251
+4304771 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+4305201 | MQTT CONNECT OK vbat=4.18
+4305291 | PUB OK vbat=4.18 len=499
+4309223 | CICLO 22 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=101 s vbat=4.18
+4412964 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+4415731 | GNSS ON (AP-Flash hot start)
+4415810 | RED registro OK en 0 s  CSQ=25
+4415874 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,12,49,50,1 OK
+4415907 | RED IP=+CGPADDR: 1,10.200.227.133
+4506508 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+4507019 | MQTT CONNECT OK vbat=4.18
+4507109 | PUB OK vbat=4.18 len=499
+4511082 | CICLO 23 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=103 s vbat=4.18
+4611268 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+4614033 | GNSS ON (AP-Flash hot start)
+4614112 | RED registro OK en 0 s  CSQ=25
+4614190 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,12,50,51,2 OK
+4614222 | RED IP=+CGPADDR: 1,10.217.171.111 OK
+4704801 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+4705273 | MQTT CONNECT OK vbat=4.18
+4705362 | PUB OK vbat=4.18 len=503
+4709302 | CICLO 24 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=101 s vbat=4.18
+4811116 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+4813900 | GNSS ON (AP-Flash hot start)
+4813979 | RED registro OK en 0 s  CSQ=25
+4814042 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,16,50,49,2 OK
+4814087 | RED IP=+CGPADDR: 1,10.17.141.185
+4904688 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+4905166 | MQTT CONNECT OK vbat=4.18
+4905255 | PUB OK vbat=4.18 len=499
+4909188 | CICLO 25 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=101 s vbat=4.18
+5012502 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+5014966 | GNSS ON (AP-Flash hot start)
+5015045 | RED registro OK en 0 s  CSQ=26
+5015109 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,18,50,49,2 OK
+5015175 | RED IP=+CGPADDR: 1,10.214.171.149 OK
+5105777 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+5106288 | MQTT CONNECT OK vbat=4.18
+5106377 | PUB OK vbat=4.18 len=499
+5110339 | CICLO 26 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=102 s vbat=4.18
+5210991 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+5213457 | GNSS ON (AP-Flash hot start)
+5213536 | RED registro OK en 0 s  CSQ=27
+5213605 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,12,50,51,2 OK
+5213636 | RED IP=+CGPADDR: 1,10.213.227.197
+5304266 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+5304704 | MQTT CONNECT OK vbat=4.18
+5304793 | PUB OK vbat=4.18 len=499
+5308755 | CICLO 27 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=100 s vbat=4.18
+5413548 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+5416315 | GNSS ON (AP-Flash hot start)
+5416400 | RED registro OK en 0 s  CSQ=27
+5416462 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,10,49,52,0 OK
+5416497 | RED IP=+CGPADDR: 1,10.120.233.13 OK
+5507163 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+5507590 | MQTT CONNECT OK vbat=4.18
+5507679 | PUB OK vbat=4.18 len=499
+5511624 | CICLO 28 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=103 s vbat=4.18
+5609787 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+5612552 | GNSS ON (AP-Flash hot start)
+5612630 | RED registro OK en 0 s  CSQ=26
+5612694 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,16,50,50,2 OK
+5612728 | RED IP=+CGPADDR: 1,10.234.237.137 OK
+5703332 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+5703696 | MQTT CONNECT OK vbat=4.18
+5703798 | PUB OK vbat=4.18 len=499
+5707725 | CICLO 29 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=99 s vbat=4.18
+5811085 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+5813871 | GNSS ON (AP-Flash hot start)
+5813950 | RED registro OK en 0 s  CSQ=25
+5814012 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,17,50,49,3 OK
+5814050 | RED IP=+CGPADDR: 1,10.197.147.122
+5904656 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+5905166 | MQTT CONNECT OK vbat=4.18
+5905256 | PUB OK vbat=4.18 len=503
+5909195 | CICLO 30 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=101 s vbat=4.18
+6010817 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+6013601 | GNSS ON (AP-Flash hot start)
+6013679 | RED registro OK en 0 s  CSQ=26
+6013743 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,15,51,51,2 OK
+6013777 | RED IP=+CGPADDR: 1,10.89.155.14 OK
+6104378 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+6104877 | MQTT CONNECT OK vbat=4.18
+6104996 | PUB OK vbat=4.18 len=503
+6108945 | CICLO 31 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=101 s vbat=4.18
+6211143 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+6213911 | GNSS ON (AP-Flash hot start)
+6213996 | RED registro OK en 0 s  CSQ=25
+6214059 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,16,50,51,2 OK
+6214108 | RED IP=+CGPADDR: 1,10.134.165.168 OK
+6304690 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+6305139 | MQTT CONNECT OK vbat=4.18
+6305228 | PUB OK vbat=4.18 len=499
+6309194 | CICLO 32 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=101 s vbat=4.18
+6413148 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+6415629 | GNSS ON (AP-Flash hot start)
+6415708 | RED registro OK en 0 s  CSQ=25
+6415772 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,16,50,50,1 OK
+6415803 | RED IP=+CGPADDR: 1,10.69.162.150
+6506434 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+6506892 | MQTT CONNECT OK vbat=4.18
+6506988 | PUB OK vbat=4.18 len=503
+6510937 | CICLO 33 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=103 s vbat=4.18
+6610988 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+6613750 | GNSS ON (AP-Flash hot start)
+6613830 | RED registro OK en 0 s  CSQ=27
+6613893 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,14,50,52,3 OK
+6613924 | RED IP=+CGPADDR: 1,10.112.240.125
+6704556 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+6705053 | MQTT CONNECT OK vbat=4.18
+6705143 | PUB OK vbat=4.18 len=495
+6709104 | CICLO 34 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=101 s vbat=4.18
+6814402 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+6817167 | GNSS ON (AP-Flash hot start)
+6817247 | RED registro OK en 0 s  CSQ=27
+6817321 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,9,50,52,2 OK
+6817352 | RED IP=+CGPADDR: 1,10.198.180.34
+6907959 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+6908429 | MQTT CONNECT OK vbat=4.18
+6908548 | PUB OK vbat=4.18 len=503
+6912501 | CICLO 35 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=104 s vbat=4.18
+7011111 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+7013900 | GNSS ON (AP-Flash hot start)
+7013979 | RED registro OK en 0 s  CSQ=25
+7014042 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,16,50,50,2 OK
+7014074 | RED IP=+CGPADDR: 1,10.125.229.217
+7104680 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+7105123 | MQTT CONNECT OK vbat=4.18
+7105212 | PUB OK vbat=4.18 len=495
+7109174 | CICLO 36 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=101 s vbat=4.18
+7213650 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+7216118 | GNSS ON (AP-Flash hot start)
+7216204 | RED registro OK en 0 s  CSQ=27
+7216266 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,17,50,50,1 OK
+7216306 | RED IP=+CGPADDR: 1,10.136.238.217 OK
+7306878 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+7307309 | MQTT CONNECT OK vbat=4.19
+7307397 | PUB OK vbat=4.19 len=495
+7311349 | CICLO 37 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=103 s vbat=4.19
+7413149 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+7415632 | GNSS ON (AP-Flash hot start)
+7415712 | RED registro OK en 0 s  CSQ=25
+7415776 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,15,49,49,1 OK
+7415816 | RED IP=+CGPADDR: 1,10.130.231.42 OK
+7506391 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+7506799 | MQTT CONNECT OK vbat=4.19
+7506888 | PUB OK vbat=4.19 len=499
+7510821 | CICLO 38 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=103 s vbat=4.19
+7615793 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+7618241 | GNSS ON (AP-Flash hot start)
+7618320 | RED registro OK en 0 s  CSQ=25
+7618389 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,16,51,50,3 OK
+7618423 | RED IP=+CGPADDR: 1,10.189.91.97 OK
+7669804 | GNSS FIX (espera 51 s, desde encendido 51 s) [modo=3 FIX] agps=no reinicios_modem=0
+7670320 | MQTT CONNECT OK vbat=4.18
+7670417 | PUB OK vbat=4.18 len=577
+7673716 | GNSS OFF + efemérides guardadas (AP-Flash)
+7677407 | CICLO 39 fin: obd=1 tx=1 fix=1 reinicios_modem=0 auto_on=1 dur=69 s vbat=4.18
+7812991 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+7815634 | GNSS ON (AP-Flash hot start)
+7815683 | RED registro OK en 0 s  CSQ=25
+7815747 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,9,49,51,1 OK
+7815799 | RED IP=+CGPADDR: 1,10.197.166.190
+7906402 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+7907099 | MQTT CONNECT OK vbat=4.18
+7907189 | PUB OK vbat=4.18 len=499
+7911134 | CICLO 40 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=103 s vbat=4.18
+8017434 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+8019903 | GNSS ON (AP-Flash hot start)
+8019982 | RED registro OK en 0 s  CSQ=26
+8020044 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,20,50,50,4 OK
+8020076 | RED IP=+CGPADDR: 1,10.225.171.60 O
+8110677 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+8111047 | MQTT CONNECT OK vbat=4.19
+8111136 | PUB OK vbat=4.19 len=499
+8115055 | CICLO 41 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=107 s vbat=4.19
+8210721 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+8213486 | GNSS ON (AP-Flash hot start)
+8213565 | RED registro OK en 0 s  CSQ=26
+8213627 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,15,50,50,1 OK
+8213662 | RED IP=+CGPADDR: 1,10.156.222.191 OK
+8304231 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+8304770 | MQTT CONNECT OK vbat=4.20
+8304860 | PUB OK vbat=4.20 len=503
+8308840 | CICLO 42 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=101 s vbat=4.20
+8412750 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+8415216 | GNSS ON (AP-Flash hot start)
+8415295 | RED registro OK en 0 s  CSQ=26
+8415371 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,15,50,50,2 OK
+8415402 | RED IP=+CGPADDR: 1,10.37.180.151 O
+8506001 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+8506390 | MQTT CONNECT OK vbat=4.18
+8506479 | PUB OK vbat=4.18 len=503
+8510419 | CICLO 43 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=102 s vbat=4.18
+8617864 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+8620649 | GNSS ON (AP-Flash hot start)
+8620728 | RED registro OK en 0 s  CSQ=25
+8620793 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,16,50,51,1 OK
+8620828 | RED IP=+CGPADDR: 1,10.37.180.151 OK
+8711430 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+8711771 | MQTT CONNECT OK vbat=4.18
+8711890 | PUB OK vbat=4.18 len=503
+8715831 | CICLO 44 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=108 s vbat=4.18
+8814851 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+8817335 | GNSS ON (AP-Flash hot start)
+8817415 | RED registro OK en 0 s  CSQ=27
+8817478 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,16,51,51,3 OK
+8817512 | RED IP=+CGPADDR: 1,10.120.233.161 OK
+8908082 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+8908428 | MQTT CONNECT OK vbat=4.19
+8908517 | PUB OK vbat=4.19 len=495
+8912478 | CICLO 45 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=104 s vbat=4.19
+9016313 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+9019095 | GNSS ON (AP-Flash hot start)
+9019173 | RED registro OK en 0 s  CSQ=26
+9019237 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,15,51,49,2 OK
+9019271 | RED IP=+CGPADDR: 1,10.165.219.16 OK
+9109873 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+9110327 | MQTT CONNECT OK vbat=4.19
+9110447 | PUB OK vbat=4.19 len=503
+9114378 | CICLO 46 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=106 s vbat=4.19
+9215199 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+9217662 | GNSS ON (AP-Flash hot start)
+9217748 | RED registro OK en 0 s  CSQ=26
+9217811 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,21,51,49,4 OK
+9217845 | RED IP=+CGPADDR: 1,10.165.219.16 OK
+9308455 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+9308791 | MQTT CONNECT OK vbat=4.18
+9308883 | PUB OK vbat=4.18 len=503
+9312804 | CICLO 47 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=104 s vbat=4.18
+9413347 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+9415812 | GNSS ON (AP-Flash hot start)
+9415890 | RED registro OK en 0 s  CSQ=27
+9415954 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,14,50,51,2 OK
+9415991 | RED IP=+CGPADDR: 1,10.65.180.223
+9506637 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+9507074 | MQTT CONNECT OK vbat=4.18
+9507163 | PUB OK vbat=4.18 len=503
+9511105 | CICLO 48 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=103 s vbat=4.18
+9615887 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+9618372 | GNSS ON (AP-Flash hot start)
+9618451 | RED registro OK en 0 s  CSQ=27
+9618514 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,10,50,52,1 OK
+9618552 | RED IP=+CGPADDR: 1,10.216.210.122 OK
+9709125 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+9709591 | MQTT CONNECT OK vbat=4.18
+9709680 | PUB OK vbat=4.18 len=499
+9713636 | CICLO 49 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=105 s vbat=4.18
+9811259 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+9814023 | GNSS ON (AP-Flash hot start)
+9814102 | RED registro OK en 0 s  CSQ=26
+9814170 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,16,50,51,3 OK
+9814205 | RED IP=+CGPADDR: 1,10.105.113.100 OK
+9904837 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+9905333 | MQTT CONNECT OK vbat=4.18
+9905423 | PUB OK vbat=4.18 len=495
+9909363 | CICLO 50 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=101 s vbat=4.18
+10013335 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+10015785 | GNSS ON (AP-Flash hot start)
+10015883 | RED registro OK en 0 s  CSQ=27
+10015958 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,15,51,52,3 OK
+10015993 | RED IP=+CGPADDR: 1,10.225.214.183 OK
+10106594 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+10107072 | MQTT CONNECT OK vbat=4.18
+10107161 | PUB OK vbat=4.18 len=496
+10111103 | CICLO 51 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=103 s vbat=4.18
+10216129 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+10218915 | GNSS ON (AP-Flash hot start)
+10219000 | RED registro OK en 0 s  CSQ=25
+10219063 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,15,49,51,2 OK
+10219094 | RED IP=+CGPADDR: 1,10.64.190.1 OK
+10309696 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+10310209 | MQTT CONNECT OK vbat=4.19
+10310298 | PUB OK vbat=4.19 len=496
+10314244 | CICLO 52 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=106 s vbat=4.19
+10413170 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+10415637 | GNSS ON (AP-Flash hot start)
+10415715 | RED registro OK en 0 s  CSQ=25
+10415779 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,16,50,49,3 OK
+10415813 | RED IP=+CGPADDR: 1,10.21.144.242 OK
+10506448 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+10506998 | MQTT CONNECT OK vbat=4.18
+10507087 | PUB OK vbat=4.18 len=496
+10511063 | CICLO 53 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=103 s vbat=4.18
+10617311 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+10619777 | GNSS ON (AP-Flash hot start)
+10619856 | RED registro OK en 0 s  CSQ=26
+10619918 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,15,49,49,2 OK
+10619953 | RED IP=+CGPADDR: 1,10.146.213.211 OK
+10710526 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+10711022 | MQTT CONNECT OK vbat=4.18
+10711148 | PUB OK vbat=4.18 len=504
+10715105 | CICLO 54 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=107 s vbat=4.18
+10812859 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+10815641 | GNSS ON (AP-Flash hot start)
+10815719 | RED registro OK en 0 s  CSQ=25
+10815783 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,14,50,50,2 OK
+10815817 | RED IP=+CGPADDR: 1,10.204.248.223 OK
+10906451 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+10906852 | MQTT CONNECT OK vbat=4.18
+10906942 | PUB OK vbat=4.18 len=500
+10910872 | CICLO 55 fin: obd=1 tx=1 fix=0 reinicios_modem=0 auto_on=1 dur=103 s vbat=4.18
+11014323 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+11016770 | GNSS ON (AP-Flash hot start)
+11016848 | RED registro OK en 0 s  CSQ=27
+11016912 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,15,50,50,2 OK
+11016943 | RED IP=+CGPADDR: 1,10.229.158.158
+11107573 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+11122643 | MQTT: reinicio del modem @CONNECT resp=*ATREADY: 1 *ISIMAID: "A0000000871004FF54F00189000001FF" +CPIN: READY +CGEV: EPS PDN ACT 1 SMS DONE
+11122664 | MODEM reinicio detectado -> esperando boot completo
+11122691 | MODEM boot completo -> se reinicializará red+MQTT
+11122711 | AHORRO TX intento 1: MQTT no conectó
+11122867 | GNSS ON (AP-Flash hot start)
+11122946 | RED registro OK en 0 s  CSQ=26
+11123008 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,18,50,48,4 OK
+11123053 | RED IP=+CGPADDR: 1,10.229.158.158 OK
+11123456 | MQTT CONNECT OK vbat=4.13
+11123649 | PUB OK vbat=4.13 len=501
+11127428 | CICLO 56 fin: obd=1 tx=1 fix=0 reinicios_modem=1 auto_on=1 dur=119 s vbat=4.13
+11219340 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+11222107 | GNSS ON (AP-Flash hot start)
+11222186 | RED registro OK en 0 s  CSQ=26
+11222250 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,19,50,50,3 OK
+11222287 | RED IP=+CGPADDR: 1,10.207.178.3
+11312886 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+11327924 | MQTT: reinicio del modem @CONNECT resp=*ATREADY: 1 *ISIMAID: "A0000000871004FF54F00189000001FF" +CPIN: READY +CGEV: EPS PDN ACT 1 SMS DONE
+11327945 | MODEM reinicio detectado -> esperando boot completo
+11327972 | MODEM boot completo -> se reinicializará red+MQTT
+11327993 | AHORRO TX intento 1: MQTT no conectó
+11328148 | GNSS ON (AP-Flash hot start)
+11328230 | RED registro OK en 0 s  CSQ=26
+11328296 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,16,51,49,8 OK
+11328360 | RED IP=+CGPADDR: 1,10.149.173.30 OK
+11328841 | MQTT CONNECT OK vbat=4.11
+11328995 | PUB OK vbat=4.11 len=501
+11332776 | CICLO 57 fin: obd=1 tx=1 fix=0 reinicios_modem=1 auto_on=1 dur=124 s vbat=4.11
+11411638 | OBD soporte 01-20=987f8003 21-40=80020001 41-60=14
+11414101 | GNSS ON (AP-Flash hot start)
+11414183 | RED registro OK en 0 s  CSQ=26
+11414255 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,15,50,51,1 OK
+11414291 | RED IP=+CGPADDR: 1,10.149.173.30 OK
+11504867 | GNSS NO_FIX (espera 90 s, desde encendido 90 s) [modo=- sin_fix] agps=no reinicios_modem=0
+11519910 | MQTT: reinicio del modem @CONNECT resp=*ATREADY: 1 *ISIMAID: "A0000000871004FF54F00189000001FF" +CPIN: READY *ATREADY: 1 *ISIMAID: "A0000000871004FF54F00189000001FF" +CPIN: READY ...
+11519934 | MODEM reinicio detectado -> esperando boot completo
+11519971 | MODEM boot completo -> se reinicializará red+MQTT
+11520002 | AHORRO TX intento 1: MQTT no conectó
+11520163 | GNSS ON (AP-Flash hot start)
+11520215 | RED registro OK en 0 s  CSQ=26
+11520283 | RED CPSI=+CPSI: LTE,Online,722-310,0xD369,929537,111,EUTRAN-BAND4,2100,3,3,19,50,50,5 OK
+11520320 | RED IP=+CGPADDR: 1,10.65.150.20 OK
+11520898 | MQTT CONNECT OK vbat=4.06
+11521038 | PUB OK vbat=4.06 len=505
+11524845 | CICLO 58 fin: obd=1 tx=1 fix=0 reinicios_modem=1 auto_on=1 dur=117 s vbat=4.06

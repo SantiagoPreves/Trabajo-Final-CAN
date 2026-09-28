@@ -1,0 +1,1232 @@
+14:11:11.932 -> ╔══════════════════════════════╗
+14:11:11.932 -> ║  TEST 4G + MQTT              ║
+14:11:11.932 -> ╚══════════════════════════════╝
+14:11:11.932 -> 
+14:11:12.922 -> --- Iniciando red 4G ---
+14:11:12.922 ->   [1/5] Módulo AT...
+14:11:15.947 ->   !! CMD FAIL: [AT]
+14:11:15.947 ->      Esperado: [OK]
+14:11:15.947 ->      Recibido: [AT
+14:11:15.947 -> ERROR
+14:11:15.947 -> ]
+14:11:15.947 ->  NO RESPONDE — revisar UART/alimentación
+14:11:15.947 -> >>> Red 4G: FALLO — revisar APN/SIM
+14:11:15.947 ->     El loop igual seguirá intentando MQTT...
+14:11:15.947 -> >>> MQTT: FALLO — revisar broker/puerto/credenciales
+14:11:15.947 -> 
+14:11:15.947 -> --- Iniciando publicaciones ---
+14:11:15.947 -> [MQTT] offline — reintentando...
+14:11:28.071 -> --- Iniciando MQTT ---
+14:11:28.071 ->   [1/3] CMQTTSTART... OK
+14:11:28.586 ->   [2/3] CMQTTACCQ (clientID: feather_test_01)... OK
+14:11:28.586 ->   [3/3] Conectando a 10.2.13.97:1884... FALLO
+14:11:31.620 ->   Respuesta raw: AT+CMQTTCONNECT=0,"tcp://10.2.13.97:1884",60,1
+14:11:31.620 -> +CMQTTCONNECT: 0,1
+14:11:31.620 -> 
+14:11:31.620 -> ERROR
+14:11:31.620 -> 
+14:11:31.620 ->   Códigos de error +CMQTTCONNECT:
+14:11:31.620 ->     0  = OK (si ves esto y falló, revisar índice de cliente)
+14:11:31.620 ->     1  = error de red / TCP
+14:11:31.620 ->     2  = MQTT protocol error
+14:11:31.620 ->     3  = cliente ID rechazado (ya conectado con ese ID?)
+14:11:31.620 ->     4  = credenciales incorrectas
+14:11:31.620 ->     5  = no autorizado
+14:11:31.620 -> [MQTT] reintento fallido — se intentará en el próximo ciclo
+14:11:31.620 -> [MQTT] sigue offline — dato omitido
+14:11:31.620 -> [MQTT] offline — reintentando...
+14:11:43.709 -> --- Iniciando MQTT ---
+14:11:43.709 ->   [1/3] CMQTTSTART... OK
+14:11:44.216 ->   [2/3] CMQTTACCQ (clientID: feather_test_01)...
+14:11:49.231 ->   !! CMD FAIL: [AT+CMQTTACCQ=0,"feather_test_01"]
+14:11:49.231 ->      Esperado: [OK]
+14:11:49.231 ->      Recibido: [AT+CMQTTACCQ=0,"feather_test_01"
+14:11:49.231 -> ERROR
+14:11:49.231 -> ]
+14:11:49.231 ->  FALLO
+14:11:49.231 -> [MQTT] reintento fallido — se intentará en el próximo ciclo
+14:11:49.231 -> [MQTT] sigue offline — dato omitido
+14:11:49.231 -> [MQTT] offline — reintentando...
+14:12:01.345 -> --- Iniciando MQTT ---
+14:12:01.345 ->   [1/3] CMQTTSTART... OK
+14:12:01.851 ->   [2/3] CMQTTACCQ (clientID: feather_test_01)...
+14:12:06.867 ->   !! CMD FAIL: [AT+CMQTTACCQ=0,"feather_test_01"]
+14:12:06.867 ->      Esperado: [OK]
+14:12:06.867 ->      Recibido: [AT+CMQTTACCQ=0,"feather_test_01"
+14:12:06.867 -> ERROR
+
+CODIGO CORREGIDO, DA RED ASI:
+
+14:36:14.053 -> --- Iniciando red 4G ---
+14:36:14.053 ->   [1/5] Módulo AT... OK
+14:36:15.479 ->   [2/5] Registro en red... OK
+14:36:15.479 ->   [3/5] APN (wap.gprs.unifon.com.ar)... OK
+14:36:15.642 ->   [4/5] Activando PDP... OK
+14:36:15.681 ->   [5/5] IP asignada: +CGPADDR: 1,10.101.128.133
+
+DESPUES NO TEGNO RED
+
+
+
+
+=== OBD + GPS MQTT Logger ===
+--- Iniciando red 4G ---
+  [1/5] Módulo AT... OK
+  [2/5] Esperando registro... OK
+  [3/5] APN (internet)... OK
+  [4/5] Activando PDP... OK
+  [5/5] IP asignada: +CGPADDR: 1,10.53.170.144
+
+OK
+  Red 4G lista
+--- Iniciando MQTT ---
+MQTT: conectado al broker
+Escaneando dispositivos BLE...
+Encontrado: 01GXE2438C0134        RSSI: -68
+Encontrado: 01GXE2438C0134        RSSI: -71
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -50
+Encontrado: 01GXE2438C0134        RSSI: -71
+Encontrado: 01GXE2438C0134        RSSI: -68
+Encontrado: Xiaomi Smart Band 7 1B11  RSSI: -71
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -49
+Encontrado: 01GXE2438C0134        RSSI: -68
+Encontrado: 01GXE2438C0134        RSSI: -68
+Encontrado: 01GXE2438C0134        RSSI: -68
+Encontrado: 01GXE2438C0134        RSSI: -68
+Encontrado: 01GXE2438C0134        RSSI: -70
+Encontrado: 01GXE2438C0134        RSSI: -68
+Encontrado: 01GXE2438C0134        RSSI: -69
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -47
+Encontrado: 01GXE2438C0134        RSSI: -67
+Encontrado: 01GXE2438C0134        RSSI: -68
+Encontrado: 01GXE2438C0134        RSSI: -69
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -47
+Encontrado: 01GXE2438C0134        RSSI: -68
+Encontrado: 01GXE2438C0134        RSSI: -68
+Encontrado: 01GXE2438C0134        RSSI: -69
+Encontrado: 01GXE2438C0134        RSSI: -68
+Encontrado: 01GXE2438C0134        RSSI: -68
+Encontrado: 01GXE2438C0134        RSSI: -70
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -51
+Encontrado: 01GXE2438C0134        RSSI: -70
+Encontrado: 01GXE2438C0134        RSSI: -72
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -53
+Encontrado: 01GXE2438C0134        RSSI: -69
+Encontrado: 01GXE2438C0134        RSSI: -68
+Encontrado: Xiaomi Smart Band 7 1B11  RSSI: -66
+Encontrado: 01GXE2438C0134        RSSI: -68
+Encontrado: 01GXE2438C0134        RSSI: -69
+Encontrado: 01GXE2438C0134        RSSI: -67
+Encontrado: 01GXE2438C0134        RSSI: -67
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -50
+Encontrado: 01GXE2438C0134        RSSI: -67
+Encontrado: 01GXE2438C0134        RSSI: -68
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -50
+Encontrado: 01GXE2438C0134        RSSI: -67
+Encontrado: 01GXE2438C0134        RSSI: -68
+Encontrado: 01GXE2438C0134        RSSI: -67
+Encontrado: 01GXE2438C0134        RSSI: -67
+Encontrado: 01GXE2438C0134        RSSI: -68
+Encontrado: 01GXE2438C0134        RSSI: -67
+Encontrado: 01GXE2438C0134        RSSI: -67
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -48
+Encontrado: 01GXE2438C0134        RSSI: -68
+Encontrado: 01GXE2438C0134        RSSI: -67
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -48
+Encontrado: 01GXE2438C0134        RSSI: -68
+Encontrado: 01GXE2438C0134        RSSI: -67
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -48
+Encontrado: 01GXE2438C0134        RSSI: -68
+Encontrado: OBDBLE                RSSI: -70
+ELM327 detectado → conectando...
+Conectado. Descubriendo servicios...
+>> [OBD] RPM (01 0C)
+NOTIFY habilitado
+ELM327 listo
+<< RPM = SEARCHING...410C4C0COKELM327 v2.1OKOKOK
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":20746,"gnss":",,,,,,,,","RPM":"SEARCHING...410C4C0COKELM327 v2.1OKOKOK"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = SEARCHING...410C3EA8
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":23425,"gnss":",,,,,,,,","RPM":"SEARCHING...410C3EA8"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C54E4
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":25986,"gnss":",,,,,,,,","RPM":"410C54E4"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C0F4C
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":28545,"gnss":",,,,,,,,","RPM":"410C0F4C"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C59D4
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":31085,"gnss":",,,,,,,,","RPM":"410C59D4"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C540C
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":33645,"gnss":",,,,,,,,","RPM":"410C540C"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C41F4
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":36206,"gnss":",,,,,,,,","RPM":"410C41F4"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C5A1C
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":38765,"gnss":",,,,,,,,","RPM":"410C5A1C"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C45E0
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":41345,"gnss":",,,,,,,,","RPM":"410C45E0"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C15C4
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":43906,"gnss":",,,,,,,,","RPM":"410C15C4"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C1800
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":46505,"gnss":",,,,,,,,","RPM":"410C1800"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C23B4
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":49145,"gnss":",,,,,,,,","RPM":"410C23B4"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C5384
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":51786,"gnss":",,,,,,,,","RPM":"410C5384"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C51B0
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":54366,"gnss":",,,,,,,,","RPM":"410C51B0"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C1D8C
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":57025,"gnss":",,,,,,,,","RPM":"410C1D8C"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C5448
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":59706,"gnss":",,,,,,,,","RPM":"410C5448"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C0BD4
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":62265,"gnss":",,,,,,,,","RPM":"410C0BD4"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2264
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":64845,"gnss":",,,,,,,,","RPM":"410C2264"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2B04
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":67465,"gnss":",,,,,,,,","RPM":"410C2B04"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C4030
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":70085,"gnss":",,,,,,,,","RPM":"410C4030"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C3760
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":72645,"gnss":",,,,,,,,","RPM":"410C3760"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2050
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":75305,"gnss":",,,,,,,,","RPM":"410C2050"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C58E8
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":77866,"gnss":",,,,,,,,","RPM":"410C58E8"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2130
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":80485,"gnss":",,,,,,,,","RPM":"410C2130"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C5450
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":83045,"gnss":",,,,,,,,","RPM":"410C5450"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C5028
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":85605,"gnss":",,,,,,,,","RPM":"410C5028"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C271C
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":88166,"gnss":",,,,,,,,","RPM":"410C271C"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2A88
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":90746,"gnss":",,,,,,,,","RPM":"410C2A88"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C48E8
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":93286,"gnss":",,,,,,,,","RPM":"410C48E8"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C11F4
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":95866,"gnss":",,,,,,,,","RPM":"410C11F4"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C4520
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":98425,"gnss":",,,,,,,,","RPM":"410C4520"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C5AA4
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":100965,"gnss":",,,,,,,,","RPM":"410C5AA4"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C4594
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":103525,"gnss":",,,,,,,,","RPM":"410C4594"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C5724
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":106085,"gnss":",,,,,,,,","RPM":"410C5724"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C5160
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":108645,"gnss":",,,,,,,,","RPM":"410C5160"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C57F0
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":111286,"gnss":",,,,,,,,","RPM":"410C57F0"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C43B4
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":113925,"gnss":",,,,,,,,","RPM":"410C43B4"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C20C8
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":116505,"gnss":",,,,,,,,","RPM":"410C20C8"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C31B4
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":119125,"gnss":",,,,,,,,","RPM":"410C31B4"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C328C
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":121685,"gnss":",,,,,,,,","RPM":"410C328C"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C5494
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":124246,"gnss":",,,,,,,,","RPM":"410C5494"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C10A4
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":126805,"gnss":",,,,,,,,","RPM":"410C10A4"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C4E58
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":129446,"gnss":",,,,,,,,","RPM":"410C4E58"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C587C
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":132005,"gnss":",,,,,,,,","RPM":"410C587C"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C3420
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":134565,"gnss":",,,,,,,,","RPM":"410C3420"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C3EE4
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":137125,"gnss":",,,,,,,,","RPM":"410C3EE4"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C3C74
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":139685,"gnss":",,,,,,,,","RPM":"410C3C74"}
+MQTT: fallo publicación → 
+OK
+
++CMQTTPUB: 0,
+>> [OBD] RPM (01 0C)
+<< RPM = 410C17AC
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+MQTT: reintentando conexión...
+--- Iniciando MQTT ---
+  FAIL: AT+CMQTTACCQ=0,"feather_completo_01" → 
+ERROR
+
+MQTT: reintento fallido.
+MQTT offline — dato descartado.
+>> [OBD] RPM (01 0C)
+<< RPM = 410C39B8
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+MQTT: reintentando conexión...
+--- Iniciando MQTT ---
+  FAIL: AT+CMQTTACCQ=0,"feather_completo_01" → 
+ERROR
+
+MQTT: reintento fallido.
+MQTT offline — dato descartado.
+>> [OBD] RPM (01 0C)
+<< RPM = 410C22D4
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+MQTT: reintentando conexión...
+--- Iniciando MQTT ---
+  FAIL: AT+CMQTTACCQ=0,"feather_completo_01" → 
+ERROR
+
+MQTT: reintento fallido.
+MQTT offline — dato descartado.
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2A34
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+MQTT: reintentando conexión...
+--- Iniciando MQTT ---
+  FAIL: AT+CMQTTACCQ=0,"feather_completo_01" → 
+ERROR
+
+MQTT: reintento fallido.
+MQTT offline — dato descartado.
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2A74
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+MQTT: reintentando conexión...
+--- Iniciando MQTT ---
+=== OBD + GPS MQTT Logger ===
+--- Iniciando red 4G ---
+  [1/5] Módulo AT... OK
+  [2/5] Esperando registro... OK
+  [3/5] APN (internet)... OK
+  [4/5] Activando PDP... OK
+  [5/5] IP asignada: +CGPADDR: 1,10.33.170.26
+
+OK
+  Red 4G lista
+--- Iniciando MQTT ---
+MQTT: conectado al broker
+Escaneando dispositivos BLE...
+Encontrado: 01GXE2438C0134        RSSI: -70
+Encontrado: OBDBLE                RSSI: -64
+ELM327 detectado → conectando...
+Conectado. Descubriendo servicios...
+>> [OBD] RPM (01 0C)
+NOTIFY habilitado
+ELM327 listo
+<< RPM = 410C18ECOKELM327 v2.1OKOKOK
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":14853,"gnss":",,,,,,,,","RPM":"410C18ECOKELM327 v2.1OKOKOK"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = SEARCHING...410C2724
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":17533,"gnss":",,,,,,,,","RPM":"SEARCHING...410C2724"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2BD0
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":20093,"gnss":",,,,,,,,","RPM":"410C2BD0"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C390C
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":22773,"gnss":",,,,,,,,","RPM":"410C390C"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C23E8
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":25373,"gnss":",,,,,,,,","RPM":"410C23E8"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2EB0
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":27933,"gnss":",,,,,,,,","RPM":"410C2EB0"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C46AC
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":30493,"gnss":",,,,,,,,","RPM":"410C46AC"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C33A4
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":33053,"gnss":",,,,,,,,","RPM":"410C33A4"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C4C48
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":35673,"gnss":",,,,,,,,","RPM":"410C4C48"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C24C0
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":38233,"gnss":",,,,,,,,","RPM":"410C24C0"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C4A78
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":40813,"gnss":",,,,,,,,","RPM":"410C4A78"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C17B0
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":43413,"gnss":",,,,,,,,","RPM":"410C17B0"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C4A04
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":45972,"gnss":",,,,,,,,","RPM":"410C4A04"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C4238
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":48533,"gnss":",,,,,,,,","RPM":"410C4238"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C0BA0
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":51093,"gnss":",,,,,,,,","RPM":"410C0BA0"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C1A94
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":53733,"gnss":",,,,,,,,","RPM":"410C1A94"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2A24
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":56292,"gnss":",,,,,,,,","RPM":"410C2A24"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C1D3C
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":58873,"gnss":",,,,,,,,","RPM":"410C1D3C"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C4850
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":61493,"gnss":",,,,,,,,","RPM":"410C4850"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C43C4
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":64073,"gnss":",,,,,,,,","RPM":"410C43C4"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C56D8
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":66693,"gnss":",,,,,,,,","RPM":"410C56D8"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2E84
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":69252,"gnss":",,,,,,,,","RPM":"410C2E84"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C5454
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":71833,"gnss":",,,,,,,,","RPM":"410C5454"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C1758
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":74373,"gnss":",,,,,,,,","RPM":"410C1758"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C4020
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":76933,"gnss":",,,,,,,,","RPM":"410C4020"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C57A4
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":79513,"gnss":",,,,,,,,","RPM":"410C57A4"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C3EFC
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":82073,"gnss":",,,,,,,,","RPM":"410C3EFC"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C11E4
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":84613,"gnss":",,,,,,,,","RPM":"410C11E4"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2B5C
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":87173,"gnss":",,,,,,,,","RPM":"410C2B5C"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2C4C
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":89733,"gnss":",,,,,,,,","RPM":"410C2C4C"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C1448
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":92273,"gnss":",,,,,,,,","RPM":"410C1448"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C43D8
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":94813,"gnss":",,,,,,,,","RPM":"410C43D8"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C31FC
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":97373,"gnss":",,,,,,,,","RPM":"410C31FC"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2B40
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":99933,"gnss":",,,,,,,,","RPM":"410C2B40"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C3B90
+>> AT+CGNSSINFO
+<< GNSS: 3,09,00,00,02,38.012353,S,57.581870,W,300326,183867,2.50,2.30,0.98,4
+JSON: {"ts":102503,"gnss":"3,09,00,00,02,38.012353,S,57.581870,W,300326,183867,2.50,2.30,0.98,4","RPM":"410C3B90"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C1D10
+>> AT+CGNSSINFO
+<< GNSS: 3,09,00,00,02,38.012368,S,57.581931,W,300326,18381,2.31,0.98,4
+JSON: {"ts":105104,"gnss":"3,09,00,00,02,38.012368,S,57.581931,W,300326,18381,2.31,0.98,4","RPM":"410C1D10"}
+MQTT: fallo publicación → 
+OK
+
++CMQTTPUB: 0,
+>> [OBD] RPM (01 0C)
+<< RPM = 410C4D74
+>> AT+CGNSSINFO
+<< GNSS: 3,09,00,00,02,38.012375,S,57.581951,W,300326,18387,36.67,2.51,2.31,0.98,4
+MQTT: reintentando conexión...
+--- Iniciando MQTT ---
+  FAIL: AT+CMQTTACCQ=0,"feather_completo_01" → 
+ERROR
+
+MQTT: reintento fallido.
+MQTT offline — dato descartado.
+>> [OBD] RPM (01 0C)
+<< RPM = 410C5448
+>> AT+CGNSSINFO
+<< GNSS: 3,09,00,01,05,38.012365,S,57.581941,W,300326,1838,1.44,0.93,7
+MQTT: reintentando conexión...
+--- Iniciando MQTT ---
+  FAIL: AT+CMQTTACCQ=0,"feather_completo_01" → 
+ERROR
+
+MQTT: reintento fallido.
+MQTT offline — dato descartado.
+>> [OBD] RPM (01 0C)
+<< RPM = 410C0CA0
+>> AT+CGNSSINFO
+<< GNSS: 3,09,00,01,04,38.012356,S,57.581921,W,300326,1839,7
+MQTT: reintentando conexión...
+--- Iniciando MQTT ---
+  FAIL: AT+CMQTTACCQ=0,"feather_completo_01" → 
+ERROR
+
+MQTT: reintento fallido.
+MQTT offline — dato descartado.
+>> [OBD] RPM (01 0C)
+<< RPM = 410C1C0C
+>> AT+CGNSSINFO
+<< GNSS: 3,09,00,01,04,38.012331,S,57.581866,W,300326,1839,1.01,0.89,9
+MQTT: reintentando conexión...
+=== OBD + GPS MQTT Logger ===
+--- Iniciando red 4G ---
+  [1/5] Módulo AT... OK
+  [2/5] Esperando registro... OK
+  [3/5] APN (internet)... OK
+  [4/5] Activando PDP... OK
+  [5/5] IP asignada: +CGPADDR: 1,10.33.170.26
+
+OK
+  Red 4G lista
+--- Iniciando MQTT ---
+  FAIL: AT+CMQTTACCQ=0,"feather_completo_01" → 
+ERROR
+
+AVISO: MQTT offline, se reintentará.
+Escaneando dispositivos BLE...
+Encontrado: 01GXE2438C0134        RSSI: -78
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -50
+Encontrado: 01GXE2438C0134        RSSI: -72
+Encontrado: 01GXE2438C0134        RSSI: -71
+Encontrado: 01GXE2438C0134        RSSI: -73
+Encontrado: 01GXE2438C0134        RSSI: -72
+Encontrado: Xiaomi Smart Band 7 1B11  RSSI: -72
+Encontrado: 01GXE2438C0134        RSSI: -77
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -46
+Encontrado: 01GXE2438C0134        RSSI: -74
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -45
+Encontrado: 01GXE2438C0134        RSSI: -72
+Encontrado: 01GXE2438C0134        RSSI: -77
+Encontrado: 01GXE2438C0134        RSSI: -73
+Encontrado: 01GXE2438C0134        RSSI: -72
+Encontrado: 01GXE2438C0134        RSSI: -79
+Encontrado: 01GXE2438C0134        RSSI: -72
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -43
+Encontrado: 01GXE2438C0134        RSSI: -74
+Encontrado: 01GXE2438C0134        RSSI: -71
+Encontrado: 01GXE2438C0134        RSSI: -74
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -45
+Encontrado: 01GXE2438C0134        RSSI: -78
+Encontrado: 01GXE2438C0134        RSSI: -72
+Encontrado: 01GXE2438C0134        RSSI: -75
+Encontrado: 01GXE2438C0134        RSSI: -75
+Encontrado: 01GXE2438C0134        RSSI: -72
+Encontrado: OBDBLE                RSSI: -63
+ELM327 detectado → conectando...
+Conectado. Descubriendo servicios...
+>> [OBD] RPM (01 0C)
+NOTIFY habilitado
+ELM327 listo
+<< RPM = 410C3AE0OKELM327 v2.1OKOKOK
+>> AT+CGNSSINFO
+<< GNSS: 3,10,00,01,04,38.012316,S,57.581888,W,300326,18405.35,1.35,1.02,0.89,9
+MQTT: reintentando conexión...
+--- Iniciando MQTT ---
+  FAIL: AT+CMQTTACCQ=0,"feather_completo_01" → 
+ERROR
+
+MQTT: reintento fallido.
+MQTT offline — dato descartado.
+>> [OBD] RPM (01 0C)
+<< RPM = SEARCHING...410C0B24
+>> AT+CGNSSINFO
+<< GNSS: 3,11,00,02,05,38.012335,S,57.581853,W,300326,18405,1.02,0.89,9
+MQTT: reintentando conexión...
+--- Iniciando MQTT ---
+=== OBD + GPS MQTT Logger ===
+--- Iniciando red 4G ---
+  [1/5] Módulo AT... OK
+  [2/5] Esperando registro... OK
+  [3/5] APN (internet)... OK
+  [4/5] Activando PDP... OK
+  [5/5] IP asignada: +CGPADDR: 1,10.213.236.181
+
+OK
+  Red 4G lista
+--- Iniciando MQTT ---
+MQTT: conectado al broker
+Escaneando dispositivos BLE...
+Encontrado: 01GXE2438C0134        RSSI: -78
+Encontrado: 01GXE2438C0134        RSSI: -70
+Encontrado: 01GXE2438C0134        RSSI: -73
+Encontrado: 01GXE2438C0134        RSSI: -75
+Encontrado: 01GXE2438C0134        RSSI: -71
+Encontrado: 01GXE2438C0134        RSSI: -72
+Encontrado: Xiaomi Smart Band 7 1B11  RSSI: -64
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -59
+Encontrado: 01GXE2438C0134        RSSI: -71
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -58
+Encontrado: 01GXE2438C0134        RSSI: -77
+Encontrado: 01GXE2438C0134        RSSI: -71
+Encontrado: 01GXE2438C0134        RSSI: -70
+Encontrado: 01GXE2438C0134        RSSI: -71
+Encontrado: Xiaomi Smart Band 7 1B11  RSSI: -65
+Encontrado: 01GXE2438C0134        RSSI: -80
+Encontrado: 01GXE2438C0134        RSSI: -70
+Encontrado: 01GXE2438C0134        RSSI: -71
+Encontrado: 01GXE2438C0134        RSSI: -83
+Encontrado: 01GXE2438C0134        RSSI: -70
+Encontrado: 01GXE2438C0134        RSSI: -71
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -52
+Encontrado: 01GXE2438C0134        RSSI: -81
+Encontrado: 01GXE2438C0134        RSSI: -70
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -52
+Encontrado: 01GXE2438C0134        RSSI: -79
+Encontrado: 01GXE2438C0134        RSSI: -70
+Encontrado: 01GXE2438C0134        RSSI: -71
+Encontrado: 01GXE2438C0134        RSSI: -79
+Encontrado: 01GXE2438C0134        RSSI: -70
+Encontrado: 01GXE2438C0134        RSSI: -71
+Encontrado: 01GXE2438C0134        RSSI: -80
+Encontrado: 01GXE2438C0134        RSSI: -71
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -47
+Encontrado: 01GXE2438C0134        RSSI: -72
+Encontrado: 01GXE2438C0134        RSSI: -78
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -48
+Encontrado: 01GXE2438C0134        RSSI: -70
+Encontrado: Mi Smart Band 6       RSSI: -79
+Encontrado: 01GXE2438C0134        RSSI: -78
+Encontrado: 01GXE2438C0134        RSSI: -72
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -56
+Encontrado: 01GXE2438C0134        RSSI: -70
+Encontrado: 01GXE2438C0134        RSSI: -71
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -56
+Encontrado: 01GXE2438C0134        RSSI: -70
+Encontrado: 01GXE2438C0134        RSSI: -71
+Encontrado: 01GXE2438C0134        RSSI: -71
+Encontrado: 01GXE2438C0134        RSSI: -71
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -51
+Encontrado: 01GXE2438C0134        RSSI: -70
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -44
+Encontrado: 01GXE2438C0134        RSSI: -71
+Encontrado: 01GXE2438C0134        RSSI: -77
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -49
+Encontrado: 01GXE2438C0134        RSSI: -71
+Encontrado: 01GXE2438C0134        RSSI: -76
+Encontrado: 01GXE2438C0134        RSSI: -70
+Encontrado: 01GXE2438C0134        RSSI: -76
+Encontrado: Xiaomi Smart Band 7 1B11  RSSI: -72
+Encontrado: 01GXE2438C0134        RSSI: -76
+Encontrado: 01GXE2438C0134        RSSI: -70
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -47
+Encontrado: 01GXE2438C0134        RSSI: -71
+Encontrado: 01GXE2438C0134        RSSI: -74
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -50
+Encontrado: 01GXE2438C0134        RSSI: -71
+Encontrado: Xiaomi Smart Band 7 1B11  RSSI: -87
+Encontrado: 01GXE2438C0134        RSSI: -69
+Encontrado: OBDBLE                RSSI: -65
+ELM327 detectado → conectando...
+Conectado. Descubriendo servicios...
+>> [OBD] RPM (01 0C)
+NOTIFY habilitado
+ELM327 listo
+<< RPM = 410C1E28OKELM327 v2.1OKOKOK
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":20996,"gnss":",,,,,,,,","RPM":"410C1E28OKELM327 v2.1OKOKOK"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = SEARCHING...410C0FB8
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":23714,"gnss":",,,,,,,,","RPM":"SEARCHING...410C0FB8"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C4D88
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":26255,"gnss":",,,,,,,,","RPM":"410C4D88"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C27B8
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":28856,"gnss":",,,,,,,,","RPM":"410C27B8"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C1234
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":31516,"gnss":",,,,,,,,","RPM":"410C1234"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C3988
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":34116,"gnss":",,,,,,,,","RPM":"410C3988"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C1CF0
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":36755,"gnss":",,,,,,,,","RPM":"410C1CF0"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C3DFC
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":39316,"gnss":",,,,,,,,","RPM":"410C3DFC"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2F34
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":41875,"gnss":",,,,,,,,","RPM":"410C2F34"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C111C
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":44416,"gnss":",,,,,,,,","RPM":"410C111C"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C1DE0
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":47016,"gnss":",,,,,,,,","RPM":"410C1DE0"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C3F9C
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":49616,"gnss":",,,,,,,,","RPM":"410C3F9C"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2714
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":52196,"gnss":",,,,,,,,","RPM":"410C2714"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C4178
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":54835,"gnss":",,,,,,,,","RPM":"410C4178"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C0CFC
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":57476,"gnss":",,,,,,,,","RPM":"410C0CFC"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2AC8
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":60036,"gnss":",,,,,,,,","RPM":"410C2AC8"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C1D04
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":62595,"gnss":",,,,,,,,","RPM":"410C1D04"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C54A0
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":65236,"gnss":",,,,,,,,","RPM":"410C54A0"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C1BF8
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":67795,"gnss":",,,,,,,,","RPM":"410C1BF8"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C19A0
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":70356,"gnss":",,,,,,,,","RPM":"410C19A0"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C13FC
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":72916,"gnss":",,,,,,,,","RPM":"410C13FC"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C17FC
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":75476,"gnss":",,,,,,,,","RPM":"410C17FC"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C3538
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":78036,"gnss":",,,,,,,,","RPM":"410C3538"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C4130
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":80576,"gnss":",,,,,,,,","RPM":"410C4130"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2A28
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":83215,"gnss":",,,,,,,,","RPM":"410C2A28"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C1A7C
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":85795,"gnss":",,,,,,,,","RPM":"410C1A7C"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C531C
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":88356,"gnss":",,,,,,,,","RPM":"410C531C"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C5538
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":90896,"gnss":",,,,,,,,","RPM":"410C5538"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C131C
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":93456,"gnss":",,,,,,,,","RPM":"410C131C"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C1744
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":96036,"gnss":",,,,,,,,","RPM":"410C1744"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C5D20
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":98656,"gnss":",,,,,,,,","RPM":"410C5D20"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C4984
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":101215,"gnss":",,,,,,,,","RPM":"410C4984"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C4CF8
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":103776,"gnss":",,,,,,,,","RPM":"410C4CF8"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C1E0C
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":106335,"gnss":",,,,,,,,","RPM":"410C1E0C"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2D68
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":108916,"gnss":",,,,,,,,","RPM":"410C2D68"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2294
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":111556,"gnss":",,,,,,,,","RPM":"410C2294"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C0C08
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":114095,"gnss":",,,,,,,,","RPM":"410C0C08"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C22F8
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":116675,"gnss":",,,,,,,,","RPM":"410C22F8"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C3058
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":119236,"gnss":",,,,,,,,","RPM":"410C3058"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2C10
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":121776,"gnss":",,,,,,,,","RPM":"410C2C10"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C1CD0
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":124335,"gnss":",,,,,,,,","RPM":"410C1CD0"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C3AD8
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":126916,"gnss":",,,,,,,,","RPM":"410C3AD8"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C17F8
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":129456,"gnss":",,,,,,,,","RPM":"410C17F8"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C25E8
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":132036,"gnss":",,,,,,,,","RPM":"410C25E8"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C3828
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":134576,"gnss":",,,,,,,,","RPM":"410C3828"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C4D8C
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":137135,"gnss":",,,,,,,,","RPM":"410C4D8C"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C3108
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":139696,"gnss":",,,,,,,,","RPM":"410C3108"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C4570
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":142335,"gnss":",,,,,,,,","RPM":"410C4570"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C4DF8
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":144896,"gnss":",,,,,,,,","RPM":"410C4DF8"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2AF8
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":147536,"gnss":",,,,,,,,","RPM":"410C2AF8"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C3ABC
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":150095,"gnss":",,,,,,,,","RPM":"410C3ABC"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C0CDC
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":152656,"gnss":",,,,,,,,","RPM":"410C0CDC"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C3A8C
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":155215,"gnss":",,,,,,,,","RPM":"410C3A8C"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C34E4
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":157776,"gnss":",,,,,,,,","RPM":"410C34E4"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)

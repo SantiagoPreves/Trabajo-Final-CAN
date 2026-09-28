@@ -1,0 +1,761 @@
+=== OBD + GPS MQTT Logger ===
+--- Iniciando red 4G ---
+  [1/5] Módulo AT... OK
+  [2/5] Esperando registro... OK
+  [3/5] APN (internet)... OK
+  [4/5] Activando PDP... OK
+  [5/5] IP asignada: +CGPADDR: 1,10.87.176.176
+
+OK
+  Red 4G lista
+--- Iniciando MQTT ---
+MQTT: conectado al broker
+Escaneando dispositivos BLE...
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -46
+Encontrado: Mi Smart Band 6       RSSI: -84
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -46
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -46
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -49
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -51
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -47
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -47
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -47
+Encontrado: OBDBLE                RSSI: -65
+ELM327 detectado → conectando...
+Conectado. Descubriendo servicios...
+>> [OBD] RPM (01 0C)
+NOTIFY habilitado
+ELM327 listo
+<< RPM = 01 0C41 0C 12 DC AT ZOKELM327 v2.1AT E0OKOKOK
+>> [OBD] Vel_kmh (01 0D)
+<< Vel_kmh = OK
+>> [OBD] Temp_Motor (01 05)
+<< Temp_Motor = SEARCHING...410D31
+>> [OBD] Temp_Adm (01 0F)
+<< Temp_Adm = 4105A3
+>> [OBD] Carga_Mot (01 04)
+<< Carga_Mot = 41049E
+>> [OBD] Nivel_Comb (01 2F)
+<< Nivel_Comb = 412FB4
+>> [OBD] Acelerador (01 11)
+<< Acelerador = 4111C5
+>> [OBD] Pres_MAP (01 0B)
+<< Pres_MAP = 410B68
+>> [OBD] MAF_gs (01 10)
+<< MAF_gs = 411001DE
+>> [OBD] Pres_Comb (01 0A)
+<< Pres_Comb = 410A5D
+>> [OBD] Avance_Enc (01 0E)
+<< Avance_Enc = 410E95
+>> [OBD] Tiempo_Motor (01 1F)
+<< Tiempo_Motor = 411F00EB
+>> [OBD] Dist_MIL (01 21)
+<< Dist_MIL = 4121002A
+>> [OBD] Temp_Aceite (01 5C)
+<< Temp_Aceite = 415C78
+>> [OBD] Consumo_L (01 5E)
+<< Consumo_L = 415E0109
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":38125,"gnss":",,,,,,,,","RPM":"01 0C41 0C 12 DC AT ZOKELM327 v2.1AT E0OKOKOK","Vel_kmh":"OK","Temp_Motor":"SEARCHING...410D31","Temp_Adm":"4105A3","Carga_Mot":"41049E","Nivel_Comb":"412FB4","Acelerador":"4111C5","Pres_MAP":"410B68","MAF_gs":"411001DE","Pres_Comb":"410A5D","Avance_Enc":"410E95","Tiempo_Motor":"411F00EB","Dist_MIL":"4121002A","Temp_Aceite":"415C78","Consumo_L":"415E0109"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C1110
+>> [OBD] Vel_kmh (01 0D)
+<< Vel_kmh = 410D02
+>> [OBD] Temp_Motor (01 05)
+<< Temp_Motor = 4105B1
+>> [OBD] Temp_Adm (01 0F)
+<< Temp_Adm = 410F3F
+>> [OBD] Carga_Mot (01 04)
+<< Carga_Mot = 41047F
+>> [OBD] Nivel_Comb (01 2F)
+<< Nivel_Comb = 412F81
+>> [OBD] Acelerador (01 11)
+<< Acelerador = 4111A0
+>> [OBD] Pres_MAP (01 0B)
+<< Pres_MAP = 410B5C
+>> [OBD] MAF_gs (01 10)
+<< MAF_gs = 411001F7
+>> [OBD] Pres_Comb (01 0A)
+<< Pres_Comb = 410A59
+>> [OBD] Avance_Enc (01 0E)
+<< Avance_Enc = 410E6D
+>> [OBD] Tiempo_Motor (01 1F)
+<< Tiempo_Motor = 411F010D
+>> [OBD] Dist_MIL (01 21)
+<< Dist_MIL = 4121002A
+>> [OBD] Temp_Aceite (01 5C)
+<< Temp_Aceite = 415C9D
+>> [OBD] Consumo_L (01 5E)
+<< Consumo_L = 415E0104
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":72825,"gnss":",,,,,,,,","RPM":"410C1110","Vel_kmh":"410D02","Temp_Motor":"4105B1","Temp_Adm":"410F3F","Carga_Mot":"41047F","Nivel_Comb":"412F81","Acelerador":"4111A0","Pres_MAP":"410B5C","MAF_gs":"411001F7","Pres_Comb":"410A59","Avance_Enc":"410E6D","Tiempo_Motor":"411F010D","Dist_MIL":"4121002A","Temp_Aceite":"415C9D","Consumo_L":"415E0104"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C17F4
+>> [OBD] Vel_kmh (01 0D)
+<< Vel_kmh = 410D63
+>> [OBD] Temp_Motor (01 05)
+<< Temp_Motor = 4105A8
+>> [OBD] Temp_Adm (01 0F)
+<< Temp_Adm = 410F4C
+>> [OBD] Carga_Mot (01 04)
+<< Carga_Mot = 410487
+>> [OBD] Nivel_Comb (01 2F)
+<< Nivel_Comb = 412F93
+>> [OBD] Acelerador (01 11)
+<< Acelerador = 411138
+>> [OBD] Pres_MAP (01 0B)
+<< Pres_MAP = 410B70
+>> [OBD] MAF_gs (01 10)
+<< MAF_gs = 41100363
+>> [OBD] Pres_Comb (01 0A)
+<< Pres_Comb = 410A50
+>> [OBD] Avance_Enc (01 0E)
+<< Avance_Enc = 410E85
+>> [OBD] Tiempo_Motor (01 1F)
+<< Tiempo_Motor = 411F0130
+>> [OBD] Dist_MIL (01 21)
+<< Dist_MIL = 4121002A
+>> [OBD] Temp_Aceite (01 5C)
+<< Temp_Aceite = 415C8B
+>> [OBD] Consumo_L (01 5E)
+<< Consumo_L = 415E00F9
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":107425,"gnss":",,,,,,,,","RPM":"410C17F4","Vel_kmh":"410D63","Temp_Motor":"4105A8","Temp_Adm":"410F4C","Carga_Mot":"410487","Nivel_Comb":"412F93","Acelerador":"411138","Pres_MAP":"410B70","MAF_gs":"41100363","Pres_Comb":"410A50","Avance_Enc":"410E85","Tiempo_Motor":"411F0130","Dist_MIL":"4121002A","Temp_Aceite":"415C8B","Consumo_L":"415E00F9"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C540C
+>> [OBD] Vel_kmh (01 0D)
+<< Vel_kmh = 410D15
+>> [OBD] Temp_Motor (01 05)
+<< Temp_Motor = 41059D
+>> [OBD] Temp_Adm (01 0F)
+<< Temp_Adm = 410F48
+>> [OBD] Carga_Mot (01 04)
+<< Carga_Mot = 4104C1
+>> [OBD] Nivel_Comb (01 2F)
+<< Nivel_Comb = 412F56
+>> [OBD] Acelerador (01 11)
+<< Acelerador = 41119B
+>> [OBD] Pres_MAP (01 0B)
+<< Pres_MAP = 410B69
+>> [OBD] MAF_gs (01 10)
+<< MAF_gs = 411004CC
+>> [OBD] Pres_Comb (01 0A)
+<< Pres_Comb = 410A6F
+>> [OBD] Avance_Enc (01 0E)
+<< Avance_Enc = 410E9A
+>> [OBD] Tiempo_Motor (01 1F)
+<< Tiempo_Motor = 411F0152
+>> [OBD] Dist_MIL (01 21)
+<< Dist_MIL = 4121002A
+>> [OBD] Temp_Aceite (01 5C)
+<< Temp_Aceite = 415C9D
+>> [OBD] Consumo_L (01 5E)
+<< Consumo_L = 415E0065
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":141584,"gnss":",,,,,,,,","RPM":"410C540C","Vel_kmh":"410D15","Temp_Motor":"41059D","Temp_Adm":"410F48","Carga_Mot":"4104C1","Nivel_Comb":"412F56","Acelerador":"41119B","Pres_MAP":"410B69","MAF_gs":"411004CC","Pres_Comb":"410A6F","Avance_Enc":"410E9A","Tiempo_Motor":"411F0152","Dist_MIL":"4121002A","Temp_Aceite":"415C9D","Consumo_L":"415E0065"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2B04
+>> [OBD] Vel_kmh (01 0D)
+<< Vel_kmh = 410D1C
+>> [OBD] Temp_Motor (01 05)
+<< Temp_Motor = 4105B8
+>> [OBD] Temp_Adm (01 0F)
+<< Temp_Adm = 410F44
+>> [OBD] Carga_Mot (01 04)
+<< Carga_Mot = 4104BE
+>> [OBD] Nivel_Comb (01 2F)
+<< Nivel_Comb = 412F4A
+>> [OBD] Acelerador (01 11)
+<< Acelerador = 411174
+>> [OBD] Pres_MAP (01 0B)
+<< Pres_MAP = 410B5A
+>> [OBD] MAF_gs (01 10)
+<< MAF_gs = 4110012F
+>> [OBD] Pres_Comb (01 0A)
+<< Pres_Comb = 410A5C
+>> [OBD] Avance_Enc (01 0E)
+<< Avance_Enc = 410E92
+>> [OBD] Tiempo_Motor (01 1F)
+<< Tiempo_Motor = 411F0174
+>> [OBD] Dist_MIL (01 21)
+<< Dist_MIL = 4121002A
+>> [OBD] Temp_Aceite (01 5C)
+<< Temp_Aceite = 415C95
+>> [OBD] Consumo_L (01 5E)
+<< Consumo_L = 415E007C
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":175964,"gnss":",,,,,,,,","RPM":"410C2B04","Vel_kmh":"410D1C","Temp_Motor":"4105B8","Temp_Adm":"410F44","Carga_Mot":"4104BE","Nivel_Comb":"412F4A","Acelerador":"411174","Pres_MAP":"410B5A","MAF_gs":"4110012F","Pres_Comb":"410A5C","Avance_Enc":"410E92","Tiempo_Motor":"411F0174","Dist_MIL":"4121002A","Temp_Aceite":"415C95","Consumo_L":"415E007C"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C5AA4
+>> [OBD] Vel_kmh (01 0D)
+<< Vel_kmh = 410D0D
+>> [OBD] Temp_Motor (01 05)
+<< Temp_Motor = 4105A7
+>> [OBD] Temp_Adm (01 0F)
+<< Temp_Adm = 410F44
+>> [OBD] Carga_Mot (01 04)
+<< Carga_Mot = 410480
+>> [OBD] Nivel_Comb (01 2F)
+<< Nivel_Comb = 412FB7
+>> [OBD] Acelerador (01 11)
+<< Acelerador = 41110D
+>> [OBD] Pres_MAP (01 0B)
+<< Pres_MAP = 410B65
+>> [OBD] MAF_gs (01 10)
+<< MAF_gs = 4110040B
+>> [OBD] Pres_Comb (01 0A)
+<< Pres_Comb = 410A53
+>> [OBD] Avance_Enc (01 0E)
+<< Avance_Enc = 410E91
+>> [OBD] Tiempo_Motor (01 1F)
+<< Tiempo_Motor = 411F0197
+>> [OBD] Dist_MIL (01 21)
+<< Dist_MIL = 4121002A
+>> [OBD] Temp_Aceite (01 5C)
+<< Temp_Aceite = 415C86
+>> [OBD] Consumo_L (01 5E)
+<< Consumo_L = 415E00A3
+>> AT+CGNSSINFO
+<< GNSS: ,,,,,,,,
+JSON: {"ts":210565,"gnss":",,,,,,,,","RPM":"410C5AA4","Vel_kmh":"410D0D","Temp_Motor":"4105A7","Temp_Adm":"410F44","Carga_Mot":"410480","Nivel_Comb":"412FB7","Acelerador":"41110D","Pres_MAP":"410B65","MAF_gs":"4110040B","Pres_Comb":"410A53","Avance_Enc":"410E91","Tiempo_Motor":"411F0197","Dist_MIL":"4121002A","Temp_Aceite":"415C86","Consumo_L":"415E00A3"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C3420
+>> [OBD] Vel_kmh (01 0D)
+<< Vel_kmh = 410D41
+>> [OBD] Temp_Motor (01 05)
+<< Temp_Motor = 41059F
+>> [OBD] Temp_Adm (01 0F)
+<< Temp_Adm = 410F4B
+>> [OBD] Carga_Mot (01 04)
+<< Carga_Mot = 4104C2
+>> [OBD] Nivel_Comb (01 2F)
+<< Nivel_Comb = 412FB3
+>> [OBD] Acelerador (01 11)
+<< Acelerador = 41116A
+>> [OBD] Pres_MAP (01 0B)
+<< Pres_MAP = 410B75
+>> [OBD] MAF_gs (01 10)
+<< MAF_gs = 411004AB
+>> [OBD] Pres_Comb (01 0A)
+<< Pres_Comb = 410A4B
+>> [OBD] Avance_Enc (01 0E)
+<< Avance_Enc = 410E90
+>> [OBD] Tiempo_Motor (01 1F)
+<< Tiempo_Motor = 411F01BA
+>> [OBD] Dist_MIL (01 21)
+<< Dist_MIL = 4121002A
+>> [OBD] Temp_Aceite (01 5C)
+<< Temp_Aceite = 415C83
+>> [OBD] Consumo_L (01 5E)
+<< Consumo_L = 415E00C6
+>> AT+CGNSSINFO
+<< GNSS: 3,06,04,00,05,38.012291,S,57.581506,W,070426,162848,179.77,1.32,1.08,0.75,9
+JSON: {"ts":245195,"gnss":"3,06,04,00,05,38.012291,S,57.581506,W,070426,162848,179.77,1.32,1.08,0.75,9","RPM":"410C3420","Vel_kmh":"410D41","Temp_Motor":"41059F","Temp_Adm":"410F4B","Carga_Mot":"4104C2","Nivel_Comb":"412FB3","Acelerador":"41116A","Pres_MAP":"410B75","MAF_gs":"411004AB","Pres_Comb":"410A4B","Avance_Enc":"410E90","Tiempo_Motor":"411F01BA","Dist_MIL":"4121002A","Temp_Aceite":"415C83","Consumo_L":"415E00C6"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2EB0
+>> [OBD] Vel_kmh (01 0D)
+<< Vel_kmh = 410D53
+>> [OBD] Temp_Motor (01 05)
+<< Temp_Motor = 410591
+>> [OBD] Temp_Adm (01 0F)
+<< Temp_Adm = 410F3E
+>> [OBD] Carga_Mot (01 04)
+<< Carga_Mot = 410498
+>> [OBD] Nivel_Comb (01 2F)
+<< Nivel_Comb = 412FA6
+>> [OBD] Acelerador (01 11)
+<< Acelerador = 411110
+>> [OBD] Pres_MAP (01 0B)
+<< Pres_MAP = 410B61
+>> [OBD] MAF_gs (01 10)
+<< MAF_gs = 411000EE
+>> [OBD] Pres_Comb (01 0A)
+<< Pres_Comb = 410A72
+>> [OBD] Avance_Enc (01 0E)
+<< Avance_Enc = 410E79
+>> [OBD] Tiempo_Motor (01 1F)
+<< Tiempo_Motor = 411F01DC
+>> [OBD] Dist_MIL (01 21)
+<< Dist_MIL = 4121002A
+>> [OBD] Temp_Aceite (01 5C)
+<< Temp_Aceite = 415C89
+>> [OBD] Consumo_L (01 5E)
+<< Consumo_L = 415E00AB
+>> AT+CGNSSINFO
+<< GNSS: 3,08,04,01,05,38.012320,S,57.581538,W,070426,1628.31,1.08,0.74,9
+JSON: {"ts":280076,"gnss":"3,08,04,01,05,38.012320,S,57.581538,W,070426,1628.31,1.08,0.74,9","RPM":"410C2EB0","Vel_kmh":"410D53","Temp_Motor":"410591","Temp_Adm":"410F3E","Carga_Mot":"410498","Nivel_Comb":"412FA6","Acelerador":"411110","Pres_MAP":"410B61","MAF_gs":"411000EE","Pres_Comb":"410A72","Avance_Enc":"410E79","Tiempo_Motor":"411F01DC","Dist_MIL":"4121002A","Temp_Aceite":"415C89","Consumo_L":"415E00AB"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C4850
+>> [OBD] Vel_kmh (01 0D)
+<< Vel_kmh = 410D11
+>> [OBD] Temp_Motor (01 05)
+<< Temp_Motor = 410594
+>> [OBD] Temp_Adm (01 0F)
+<< Temp_Adm = 410F4D
+>> [OBD] Carga_Mot (01 04)
+<< Carga_Mot = 4104C5
+>> [OBD] Nivel_Comb (01 2F)
+<< Nivel_Comb = 412FC2
+>> [OBD] Acelerador (01 11)
+<< Acelerador = 411190
+>> [OBD] Pres_MAP (01 0B)
+<< Pres_MAP = 410B59
+>> [OBD] MAF_gs (01 10)
+<< MAF_gs = 41100727
+>> [OBD] Pres_Comb (01 0A)
+<< Pres_Comb = 410A73
+>> [OBD] Avance_Enc (01 0E)
+<< Avance_Enc = 410E73
+>> [OBD] Tiempo_Motor (01 1F)
+<< Tiempo_Motor = 411F01FF
+>> [OBD] Dist_MIL (01 21)
+<< Dist_MIL = 4121002A
+>> [OBD] Temp_Aceite (01 5C)
+<< Temp_Aceite = 415C9B
+>> [OBD] Consumo_L (01 5E)
+<< Consumo_L = 415E00C6
+>> AT+CGNSSINFO
+<< GNSS: 3,10,06,01,05,38.012323,S,57.581543,W,070426,162904,258.83,1.30,1.08,0.73,10
+JSON: {"ts":314755,"gnss":"3,10,06,01,05,38.012323,S,57.581543,W,070426,162904,258.83,1.30,1.08,0.73,10","RPM":"410C4850","Vel_kmh":"410D11","Temp_Motor":"410594","Temp_Adm":"410F4D","Carga_Mot":"4104C5","Nivel_Comb":"412FC2","Acelerador":"411190","Pres_MAP":"410B59","MAF_gs":"41100727","Pres_Comb":"410A73","Avance_Enc":"410E73","Tiempo_Motor":"411F01FF","Dist_MIL":"4121002A","Temp_Aceite":"415C9B","Consumo_L":"415E00C6"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C43D8
+>> [OBD] Vel_kmh (01 0D)
+<< Vel_kmh = 410D4F
+>> [OBD] Temp_Motor (01 05)
+<< Temp_Motor = 41059E
+>> [OBD] Temp_Adm (01 0F)
+<< Temp_Adm = 410F48
+>> [OBD] Carga_Mot (01 04)
+<< Carga_Mot = 4104A0
+>> [OBD] Nivel_Comb (01 2F)
+<< Nivel_Comb = 412F39
+>> [OBD] Acelerador (01 11)
+<< Acelerador = 411127
+>> [OBD] Pres_MAP (01 0B)
+<< Pres_MAP = 410B58
+>> [OBD] MAF_gs (01 10)
+<< MAF_gs = 41100573
+>> [OBD] Pres_Comb (01 0A)
+<< Pres_Comb = 410A58
+>> [OBD] Avance_Enc (01 0E)
+<< Avance_Enc = 410E99
+>> [OBD] Tiempo_Motor (01 1F)
+<< Tiempo_Motor = 411F0222
+>> [OBD] Dist_MIL (01 21)
+<< Dist_MIL = 4121002A
+>> [OBD] Temp_Aceite (01 5C)
+<< Temp_Aceite = 415C82
+>> [OBD] Consumo_L (01 5E)
+<< Consumo_L = 415E006A
+>> AT+CGNSSINFO
+<< GNSS: 3,10,05,01,05,38.012315,S,57.581458,W,070426,1629,12
+JSON: {"ts":349477,"gnss":"3,10,05,01,05,38.012315,S,57.581458,W,070426,1629,12","RPM":"410C43D8","Vel_kmh":"410D4F","Temp_Motor":"41059E","Temp_Adm":"410F48","Carga_Mot":"4104A0","Nivel_Comb":"412F39","Acelerador":"411127","Pres_MAP":"410B58","MAF_gs":"41100573","Pres_Comb":"410A58","Avance_Enc":"410E99","Tiempo_Motor":"411F0222","Dist_MIL":"4121002A","Temp_Aceite":"415C82","Consumo_L":"415E006A"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C4D88
+>> [OBD] Vel_kmh (01 0D)
+<< Vel_kmh = 410D16
+>> [OBD] Temp_Motor (01 05)
+<< Temp_Motor = 41059B
+>> [OBD] Temp_Adm (01 0F)
+<< Temp_Adm = 410F3E
+>> [OBD] Carga_Mot (01 04)
+<< Carga_Mot = 410498
+>> [OBD] Nivel_Comb (01 2F)
+<< Nivel_Comb = 412F75
+>> [OBD] Acelerador (01 11)
+<< Acelerador = 4111AB
+>> [OBD] Pres_MAP (01 0B)
+<< Pres_MAP = 410B5F
+>> [OBD] MAF_gs (01 10)
+<< MAF_gs = 411005E8
+>> [OBD] Pres_Comb (01 0A)
+<< Pres_Comb = 410A5B
+>> [OBD] Avance_Enc (01 0E)
+<< Avance_Enc = 410E8D
+>> [OBD] Tiempo_Motor (01 1F)
+<< Tiempo_Motor = 411F0245
+>> [OBD] Dist_MIL (01 21)
+<< Dist_MIL = 4121002A
+>> [OBD] Temp_Aceite (01 5C)
+<< Temp_Aceite = 415C96
+>> [OBD] Consumo_L (01 5E)
+<< Consumo_L = 415E0083
+>> AT+CGNSSINFO
+<< GNSS: 3,10,05,01,05,38.012326,S,57.581455,W,070426,16309,13
+JSON: {"ts":384077,"gnss":"3,10,05,01,05,38.012326,S,57.581455,W,070426,16309,13","RPM":"410C4D88","Vel_kmh":"410D16","Temp_Motor":"41059B","Temp_Adm":"410F3E","Carga_Mot":"410498","Nivel_Comb":"412F75","Acelerador":"4111AB","Pres_MAP":"410B5F","MAF_gs":"411005E8","Pres_Comb":"410A5B","Avance_Enc":"410E8D","Tiempo_Motor":"411F0245","Dist_MIL":"4121002A","Temp_Aceite":"415C96","Consumo_L":"415E0083"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2AC8
+>> [OBD] Vel_kmh (01 0D)
+<< Vel_kmh = 410D39
+>> [OBD] Temp_Motor (01 05)
+<< Temp_Motor = 41059C
+>> [OBD] Temp_Adm (01 0F)
+<< Temp_Adm = 410F46
+>> [OBD] Carga_Mot (01 04)
+<< Carga_Mot = 41048C
+>> [OBD] Nivel_Comb (01 2F)
+<< Nivel_Comb = 412F81
+>> [OBD] Acelerador (01 11)
+<< Acelerador = 4111AA
+>> [OBD] Pres_MAP (01 0B)
+<< Pres_MAP = 410B56
+>> [OBD] MAF_gs (01 10)
+<< MAF_gs = 411007B4
+>> [OBD] Pres_Comb (01 0A)
+<< Pres_Comb = 410A76
+>> [OBD] Avance_Enc (01 0E)
+<< Avance_Enc = 410E73
+>> [OBD] Tiempo_Motor (01 1F)
+<< Tiempo_Motor = 411F0267
+>> [OBD] Dist_MIL (01 21)
+<< Dist_MIL = 4121002A
+>> [OBD] Temp_Aceite (01 5C)
+<< Temp_Aceite = 415C9F
+>> [OBD] Consumo_L (01 5E)
+<< Consumo_L = 415E009A
+>> AT+CGNSSINFO
+<< GNSS: 3,11,05,01,05,38.012341,S,57.581483,W,070426,16319,13
+JSON: {"ts":418857,"gnss":"3,11,05,01,05,38.012341,S,57.581483,W,070426,16319,13","RPM":"410C2AC8","Vel_kmh":"410D39","Temp_Motor":"41059C","Temp_Adm":"410F46","Carga_Mot":"41048C","Nivel_Comb":"412F81","Acelerador":"4111AA","Pres_MAP":"410B56","MAF_gs":"411007B4","Pres_Comb":"410A76","Avance_Enc":"410E73","Tiempo_Motor":"411F0267","Dist_MIL":"4121002A","Temp_Aceite":"415C9F","Consumo_L":"415E009A"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C131C
+>> [OBD] Vel_kmh (01 0D)
+<< Vel_kmh = 410D31
+>> [OBD] Temp_Motor (01 05)
+<< Temp_Motor = 410596
+>> [OBD] Temp_Adm (01 0F)
+<< Temp_Adm = 410F41
+>> [OBD] Carga_Mot (01 04)
+<< Carga_Mot = 41047E
+>> [OBD] Nivel_Comb (01 2F)
+<< Nivel_Comb = 412FAD
+>> [OBD] Acelerador (01 11)
+<< Acelerador = 411192
+>> [OBD] Pres_MAP (01 0B)
+<< Pres_MAP = 410B5D
+>> [OBD] MAF_gs (01 10)
+<< MAF_gs = 41100172
+>> [OBD] Pres_Comb (01 0A)
+<< Pres_Comb = 410A6C
+>> [OBD] Avance_Enc (01 0E)
+<< Avance_Enc = 410E86
+>> [OBD] Tiempo_Motor (01 1F)
+<< Tiempo_Motor = 411F028A
+>> [OBD] Dist_MIL (01 21)
+<< Dist_MIL = 4121002A
+>> [OBD] Temp_Aceite (01 5C)
+<< Temp_Aceite = 415C8C
+>> [OBD] Consumo_L (01 5E)
+<< Consumo_L = 415E0090
+>> AT+CGNSSINFO
+<< GNSS: 3,11,05,01,06,38.012343,S,57.581483,W,070426,163142,79.15,1.06,0.82,0.67,15
+JSON: {"ts":453515,"gnss":"3,11,05,01,06,38.012343,S,57.581483,W,070426,163142,79.15,1.06,0.82,0.67,15","RPM":"410C131C","Vel_kmh":"410D31","Temp_Motor":"410596","Temp_Adm":"410F41","Carga_Mot":"41047E","Nivel_Comb":"412FAD","Acelerador":"411192","Pres_MAP":"410B5D","MAF_gs":"41100172","Pres_Comb":"410A6C","Avance_Enc":"410E86","Tiempo_Motor":"411F028A","Dist_MIL":"4121002A","Temp_Aceite":"415C8C","Consumo_L":"415E0090"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C3AD8
+>> [OBD] Vel_kmh (01 0D)
+<< Vel_kmh = 410D5E
+>> [OBD] Temp_Motor (01 05)
+<< Temp_Motor = 4105A6
+>> [OBD] Temp_Adm (01 0F)
+<< Temp_Adm = 410F4A
+>> [OBD] Carga_Mot (01 04)
+<< Carga_Mot = 4104A3
+>> [OBD] Nivel_Comb (01 2F)
+<< Nivel_Comb = 412FBC
+>> [OBD] Acelerador (01 11)
+<< Acelerador = 411122
+>> [OBD] Pres_MAP (01 0B)
+<< Pres_MAP = 410B6E
+>> [OBD] MAF_gs (01 10)
+<< MAF_gs = 41100226
+>> [OBD] Pres_Comb (01 0A)
+<< Pres_Comb = 410A4F
+>> [OBD] Avance_Enc (01 0E)
+<< Avance_Enc = 410E8F
+>> [OBD] Tiempo_Motor (01 1F)
+<< Tiempo_Motor = 411F02AD
+>> [OBD] Dist_MIL (01 21)
+<< Dist_MIL = 4121002A
+>> [OBD] Temp_Aceite (01 5C)
+<< Temp_Aceite = 415C93
+>> [OBD] Consumo_L (01 5E)
+<< Consumo_L = 415E011D
+>> AT+CGNSSINFO
+<< GNSS: 3,12,05,03,06,38.012345,S,57.581490,W,070426,1632.05,0.81,0.67,15
+JSON: {"ts":488255,"gnss":"3,12,05,03,06,38.012345,S,57.581490,W,070426,1632.05,0.81,0.67,15","RPM":"410C3AD8","Vel_kmh":"410D5E","Temp_Motor":"4105A6","Temp_Adm":"410F4A","Carga_Mot":"4104A3","Nivel_Comb":"412FBC","Acelerador":"411122","Pres_MAP":"410B6E","MAF_gs":"41100226","Pres_Comb":"410A4F","Avance_Enc":"410E8F","Tiempo_Motor":"411F02AD","Dist_MIL":"4121002A","Temp_Aceite":"415C93","Consumo_L":"415E011D"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C4504
+>> [OBD] Vel_kmh (01 0D)
+<< Vel_kmh = 410D20
+>> [OBD] Temp_Motor (01 05)
+<< Temp_Motor = 4105B3
+>> [OBD] Temp_Adm (01 0F)
+<< Temp_Adm = 410F43
+>> [OBD] Carga_Mot (01 04)
+<< Carga_Mot = 4104B9
+>> [OBD] Nivel_Comb (01 2F)
+<< Nivel_Comb = 412F60
+>> [OBD] Acelerador (01 11)
+<< Acelerador = 4111BE
+>> [OBD] Pres_MAP (01 0B)
+<< Pres_MAP = 410B67
+>> [OBD] MAF_gs (01 10)
+<< MAF_gs = 41100654
+>> [OBD] Pres_Comb (01 0A)
+<< Pres_Comb = 410A72
+>> [OBD] Avance_Enc (01 0E)
+<< Avance_Enc = 410E6C
+>> [OBD] Tiempo_Motor (01 1F)
+<< Tiempo_Motor = 411F02D0
+>> [OBD] Dist_MIL (01 21)
+<< Dist_MIL = 4121002A
+>> [OBD] Temp_Aceite (01 5C)
+<< Temp_Aceite = 415C87
+>> [OBD] Consumo_L (01 5E)
+<< Consumo_L = 415E00D7
+>> AT+CGNSSINFO
+<< GNSS: 3,12,05,03,06,38.012335,S,57.581488,W,070426,1632.97,0.75,0.62,17
+JSON: {"ts":523036,"gnss":"3,12,05,03,06,38.012335,S,57.581488,W,070426,1632.97,0.75,0.62,17","RPM":"410C4504","Vel_kmh":"410D20","Temp_Motor":"4105B3","Temp_Adm":"410F43","Carga_Mot":"4104B9","Nivel_Comb":"412F60","Acelerador":"4111BE","Pres_MAP":"410B67","MAF_gs":"41100654","Pres_Comb":"410A72","Avance_Enc":"410E6C","Tiempo_Motor":"411F02D0","Dist_MIL":"4121002A","Temp_Aceite":"415C87","Consumo_L":"415E00D7"}
+MQTT: publicado OK
+>> [OBD] RPM (01 0C)
+<< RPM = 410C3264
+>> [OBD] Vel_kmh (01 0D)
+<< Vel_kmh = 410D0E
+>> [OBD] Temp_Motor (01 05)
+<< Temp_Motor = 4105B6
+>> [OBD] Temp_Adm (01 0F)
+<< Temp_Adm = 410F47
+>> [OBD] Carga_Mot (01 04)
+<< Carga_Mot = 4104B3
+>> [OBD] Nivel_Comb (01 2F)
+<< Nivel_Comb = 412F98
+>> [OBD] Acelerador (01 11)
+<< Acelerador = 4111DB
+>> [OBD] Pres_MAP (01 0B)
+<< Pres_MAP = 410B5F
+>> [OBD] MAF_gs (01 10)
+<< MAF_gs = 411003FA
+>> [OBD] Pres_Comb (01 0A)
+<< Pres_Comb = 410A74
+>> [OBD] Avance_Enc (01 0E)
+<< Avance_Enc = 410E70
+>> [OBD] Tiempo_Motor (01 1F)
+<< Tiempo_Motor = 411F02F2
+>> [OBD] Dist_MIL (01 21)
+<< Dist_MIL = 4121002A
+>> [OBD] Temp_Aceite (01 5C)
+<< Temp_Aceite = 415C87
+>> [OBD] Consumo_L (01 5E)
+<< Consumo_L = 415E0123
+>> AT+CGNSSINFO
+<< GNSS: 3,13,07,03,07,38.012330,S,57.581491,W,070426,163306,157.56,1.02,0.79,0.65,16
+JSON: {"ts":557775,"gnss":"3,13,07,03,07,38.012330,S,57.581491,W,070426,163306,157.56,1.02,0.79,0.65,16","RPM":"410C3264","Vel_kmh":"410D0E","Temp_Motor":"4105B6","Temp_Adm":"410F47","Carga_Mot":"4104B3","Nivel_Comb":"412F98","Acelerador":"4111DB","Pres_MAP":"410B5F","MAF_gs":"411003FA","Pres_Comb":"410A74","Avance_Enc":"410E70","Tiempo_Motor":"411F02F2","Dist_MIL":"4121002A","Temp_Aceite":"415C87","Consumo_L":"415E0123"}
+MQTT: publicado OK
+=== OBD + GPS MQTT Logger ===
+--- Iniciando red 4G ---
+  [1/5] Módulo AT... OK
+  [2/5] Esperando registro... OK
+  [3/5] APN (internet)... OK
+  [4/5] Activando PDP... OK
+  [5/5] IP asignada: +CGPADDR: 1,10.87.176.176
+
+OK
+  Red 4G lista
+--- Iniciando MQTT ---
+  FAIL: AT+CMQTTACCQ=0,"feather_completo_01" → 
+ERROR
+
+AVISO: MQTT offline, se reintentará.
+Escaneando dispositivos BLE...
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -47
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -47
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -63
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -61
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -49
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -50
+Encontrado: OBDBLE                RSSI: -74
+ELM327 detectado → conectando...
+Conectado. Descubriendo servicios...
+ERROR: servicio FFF0 no encontrado
+Desconectado (0x3E). Reiniciando escaneo...
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -62
+Encontrado: Galaxy Watch4 (LZFA)  RSSI: -62
+Encontrado: OBDBLE                RSSI: -76
+ELM327 detectado → conectando...
+Conectado. Descubriendo servicios...
+>> [OBD] RPM (01 0C)
+NOTIFY habilitado
+ELM327 listo
+<< RPM = 410C3284OKELM327 v2.1OKOKOK
+>> [OBD] Vel_kmh (01 0D)
+<< Vel_kmh = OK
+>> [OBD] Temp_Motor (01 05)
+<< Temp_Motor = SEARCHING...410D1D
+>> [OBD] Temp_Adm (01 0F)
+<< Temp_Adm = 410D25
+>> [OBD] Carga_Mot (01 04)
+<< Carga_Mot = 410F49
+>> [OBD] Nivel_Comb (01 2F)
+<< Nivel_Comb = 410493
+>> [OBD] Acelerador (01 11)
+<< Acelerador = 412FAF
+>> [OBD] Pres_MAP (01 0B)
+<< Pres_MAP = 41115F
+>> [OBD] MAF_gs (01 10)
+<< MAF_gs = 410B66
+>> [OBD] Pres_Comb (01 0A)
+<< Pres_Comb = 411004BB
+>> [OBD] Avance_Enc (01 0E)
+<< Avance_Enc = 410A4E
+>> [OBD] Tiempo_Motor (01 1F)
+<< Tiempo_Motor = 410E89
+>> [OBD] Dist_MIL (01 21)
+<< Dist_MIL = 411F0327
+>> [OBD] Temp_Aceite (01 5C)
+<< Temp_Aceite = 4121002A
+>> [OBD] Consumo_L (01 5E)
+<< Consumo_L = 415C79
+>> AT+CGNSSINFO
+<< GNSS: 3,14,08,04,07,38.012336,S,57.581485,W,070426,16344,18
+MQTT: reintentando conexión — teardown completo...
+MQTT: re-iniciando red 4G (forzado)...
+--- Iniciando red 4G ---
+  [1/5] Módulo AT... OK
+  [2/5] Esperando registro... OK
+  [3/5] APN (internet)... OK
+  [4/5] Activando PDP... OK
+  [5/5] IP asignada: +CGPADDR: 1,10.87.176.176
+
+OK
+  Red 4G lista
+MQTT: red OK.
+--- Iniciando MQTT ---
+  FAIL: AT+CMQTTACCQ=0,"feather_completo_01" → 
+ERROR
+
+MQTT: reintento fallido.
+MQTT offline — dato descartado.
+[HB] MQTT offline — reconectando desde heartbeat...
+MQTT: reintentando conexión — teardown completo...
+MQTT: re-iniciando red 4G (forzado)...
+--- Iniciando red 4G ---
+  [1/5] Módulo AT... OK
+  [2/5] Esperando registro... OK
+  [3/5] APN (internet)... OK
+  [4/5] Activando PDP... OK
+  [5/5] IP asignada: +CGPADDR: 1,10.87.176.176
+
+OK
+  Red 4G lista
+MQTT: red OK.
+--- Iniciando MQTT ---
+  FAIL: AT+CMQTTACCQ=0,"feather_completo_01" → 
+ERROR
+
+MQTT: reintento fallido.
+>> [OBD] RPM (01 0C)
+<< RPM = 410C49FC
+>> [OBD] Vel_kmh (01 0D)
+<< Vel_kmh = 410D44
+>> [OBD] Temp_Motor (01 05)
+<< Temp_Motor = 4105B9
+>> [OBD] Temp_Adm (01 0F)
+<< Temp_Adm = 410F4C
+>> [OBD] Carga_Mot (01 04)
+<< Carga_Mot = 4104A7
+>> [OBD] Nivel_Comb (01 2F)
+<< Nivel_Comb = 412FBD
+>> [OBD] Acelerador (01 11)
+<< Acelerador = 411140
+>> [OBD] Pres_MAP (01 0B)
+<< Pres_MAP = 410B5B
+>> [OBD] MAF_gs (01 10)
+<< MAF_gs = 41100164
+>> [OBD] Pres_Comb (01 0A)
+<< Pres_Comb = 410A47
+>> [OBD] Avance_Enc (01 0E)
+<< Avance_Enc = 410E98
+>> [OBD] Tiempo_Motor (01 1F)
+<< Tiempo_Motor = 411F0360
+>> [OBD] Dist_MIL (01 21)
+<< Dist_MIL = 4121002A
+>> [OBD] Temp_Aceite (01 5C)
+<< Temp_Aceite = 415C78
+>> [OBD] Consumo_L (01 5E)
+<< Consumo_L = 415E00C2
+>> AT+CGNSSINFO
+<< GNSS: 3,14,08,06,07,38.012333,S,57.581481,W,070426,16359,0.65,0.61,21
+MQTT: reintentando conexión — teardown completo...
+MQTT: re-iniciando red 4G (forzado)...
+--- Iniciando red 4G ---
+  [1/5] Módulo AT... OK
+  [2/5] Esperando registro... OK
+  [3/5] APN (internet)... OK
+  [4/5] Activando PDP... OK
+  [5/5] IP asignada: +CGPADDR: 1,10.87.176.176
+
+OK
+  Red 4G lista
+MQTT: red OK.
+--- Iniciando MQTT ---
+  FAIL: AT+CMQTTACCQ=0,"feather_completo_01" → 
+ERROR
+
+MQTT: reintento fallido.
+MQTT offline — dato descartado.
+[HB] MQTT offline — reconectando desde heartbeat...
+MQTT: reintentando conexión — teardown completo...
+MQTT: re-iniciando red 4G (forzado)...
+--- Iniciando red 4G ---
+  [1/5] Módulo AT... OK
+  [2/5] Esperando registro... OK
+  [3/5] APN (internet)... OK
+  [4/5] Activando PDP... OK
+  [5/5] IP asignada: +CGPADDR: 1,10.87.176.176
+
+OK
+  Red 4G lista
+MQTT: red OK.
+--- Iniciando MQTT ---
+  FAIL: AT+CMQTTACCQ=0,"feather_completo_01" → 
+ERROR
+
+MQTT: reintento fallido.
+>> [OBD] RPM (01 0C)
+<< RPM = 410C2860
+>> [OBD] Vel_kmh (01 0D)
+<< Vel_kmh = 410D23
+>> [OBD] Temp_Motor (01 05)
+<< Temp_Motor = 4105B3
+>> [OBD] Temp_Adm (01 0F)
+<< Temp_Adm = 410F43
+>> [OBD] Carga_Mot (01 04)
+<< Carga_Mot = 410473
+>> [OBD] Nivel_Comb (01 2F)
+<< Nivel_Comb = 412F5D
+>> [OBD] Acelerador (01 11)
+<< Acelerador = 4111EF
+>> [OBD] Pres_MAP (01 0B)
+<< Pres_MAP = 410B50
+>> [OBD] MAF_gs (01 10)
+<< MAF_gs = 411000FF
+>> [OBD] Pres_Comb (01 0A)
+<< Pres_Comb = 410A4B

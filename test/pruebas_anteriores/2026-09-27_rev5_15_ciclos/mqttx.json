@@ -1,0 +1,1006 @@
+[
+  {
+    "id": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+    "clientId": "mqttx_bc31df50",
+    "name": "Facultad-depto",
+    "clean": true,
+    "protocol": "mqtt",
+    "host": "livra-mqtt.fi.mdp.edu.ar",
+    "port": 1884,
+    "keepalive": 60,
+    "connectTimeout": 10,
+    "reconnect": true,
+    "reconnectPeriod": 4000,
+    "username": "",
+    "password": "",
+    "path": "/mqtt",
+    "certType": "",
+    "ssl": false,
+    "mqttVersion": "5.0",
+    "unreadMessageCount": 0,
+    "clientIdWithTime": false,
+    "parentId": null,
+    "orderId": null,
+    "rejectUnauthorized": true,
+    "ALPNProtocols": "",
+    "ca": "",
+    "cert": "",
+    "key": "",
+    "isCollection": false,
+    "createAt": "2026-06-23T22:48:03.252Z",
+    "updateAt": "2026-09-27T16:42:27.071Z",
+    "subscriptions": [
+      {
+        "id": "scription_093c4464-9e84-4cef-a4d5-408864bce378",
+        "topic": "prueba_in",
+        "qos": 0,
+        "disabled": false,
+        "alias": "",
+        "retain": false,
+        "nl": false,
+        "rap": false,
+        "rh": 0,
+        "subscriptionIdentifier": null,
+        "color": "#2C819C",
+        "createAt": "2026-06-23T22:46:39.718Z",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae"
+      },
+      {
+        "id": "scription_f26c8630-cc81-4c3c-8105-d1dc16e91a05",
+        "topic": "prueba_out",
+        "qos": 0,
+        "disabled": false,
+        "alias": "",
+        "retain": false,
+        "nl": false,
+        "rap": false,
+        "rh": 0,
+        "subscriptionIdentifier": null,
+        "color": "#BF890E",
+        "createAt": "2026-06-23T22:46:39.718Z",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae"
+      },
+      {
+        "id": "scription_5259b997-57ba-4849-a4df-989a41acbfe7",
+        "topic": "prueba_out_texto",
+        "qos": 0,
+        "disabled": false,
+        "alias": "",
+        "retain": false,
+        "nl": false,
+        "rap": false,
+        "rh": 0,
+        "subscriptionIdentifier": null,
+        "color": "#9E4CDF",
+        "createAt": "2026-06-23T22:46:39.718Z",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae"
+      }
+    ],
+    "will": {
+      "id": "85091646-28c6-4bc1-b5b3-51dfc9a3d27f",
+      "lastWillTopic": "",
+      "lastWillPayload": "",
+      "lastWillQos": 0,
+      "lastWillRetain": false,
+      "properties": {
+        "willDelayInterval": null,
+        "payloadFormatIndicator": null,
+        "messageExpiryInterval": null,
+        "contentType": "",
+        "responseTopic": "",
+        "correlationData": null
+      }
+    },
+    "properties": {
+      "sessionExpiryInterval": 0,
+      "receiveMaximum": null,
+      "maximumPacketSize": null,
+      "topicAliasMaximum": null,
+      "requestResponseInformation": null,
+      "requestProblemInformation": null,
+      "authenticationMethod": null
+    },
+    "messages": [
+      {
+        "id": "message_7f4a7707-3b36-417a-a3c2-6d4a42cc05a1",
+        "createAt": "2026-09-27 13:45:24:268",
+        "out": false,
+        "payload": "{\"ts\":101261,\"gnss\":\"NO_FIX\",\"RPM\":\"410C27B8\",\"vel_kph\":\"410D2E\",\"temp_mot_c\":\"4105BD\",\"temp_adm_c\":\"410F49\",\"carga_pct\":\"4104B9\",\"comb_pct\":\"412F5B\",\"accel_pct\":\"4111BA\",\"map_kpa\":\"410B63\",\"maf_gs\":\"411003B0\",\"pcomb_kpa\":\"410A5A\",\"avance_deg\":\"410E91\",\"ton_s\":\"411F0078\",\"dist_mil_km\":\"4121002A\",\"temp_ace_c\":\"415C8D\",\"cons_lh\":\"415E00FE\",\"imu_ax\":0.2668,\"imu_ay\":0.5037,\"imu_az\":9.9984,\"imu_gx\":0.0661,\"imu_gy\":-0.0904,\"imu_gz\":-0.1300,\"vbat\":4.19,\"cargando\":true,\"carga_ok\":false,\"dtc\":\"43D000\"}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_in",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_96b41800-3be6-4e10-b228-8640993ea8dc",
+        "createAt": "2026-09-27 13:45:24:334",
+        "out": false,
+        "payload": "{\"ts\":101261,\"accel_x_g\":0.0272,\"accel_y_g\":0.0514,\"accel_z_g\":1.0196,\"gyro_x_dps\":3.7873,\"gyro_y_dps\":-5.1795,\"gyro_z_dps\":-7.4485,\"accel_total_g\":1.0213,\"accel_horizontal_ms2\":0.57,\"accel_horizontal_g\":0.0581,\"bat_v\":4.19,\"cargando\":true,\"carga_completa\":false,\"estado_carga\":\"cargando\",\"dtc\":[\"U1000\"],\"dtc_cantidad\":1,\"dtc_presente\":true,\"dtc_desc\":[\"Comunicacion en red CAN\"],\"dtc_alerta\":\"Red/Comunicacion en falla: Comunicacion en red CAN [U1000]\",\"rpm\":2542,\"vel_obd_kph\":46,\"temp_motor_c\":149,\"temp_adm_c\":33,\"carga_mot_pct\":72.5,\"nivel_comb_pct\":35.7,\"acelerador_pct\":72.9,\"pres_map_kpa\":99,\"maf_gs\":9.44,\"pres_comb_kpa\":270,\"avance_enc_deg\":8.5,\"tiempo_motor_s\":120,\"dist_mil_km\":42,\"temp_aceite_c\":101,\"consumo_lh\":12.7}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_5d2b1197-14e0-4277-bf91-57e6fe5d6550",
+        "createAt": "2026-09-27 13:45:24:335",
+        "out": false,
+        "payload": "========== TELEMETRIA  (ts 101261) ==========\n\n[DTC / FALLAS]\n  Red/Comunicacion en falla: Comunicacion en red CAN [U1000]\n  Cantidad: 1\n\n[GNSS]\n  (sin fix)\n\n[OBD / MOTOR]\n  RPM: 2542   Vel: 46 km/h\n  Temp motor: 149 C   Temp adm: 33 C   Temp aceite: 101 C\n  Carga: 72.5 %   Acelerador: 72.9 %   Combustible: 35.7 %\n  MAP: 99 kPa   MAF: 9.44 g/s   Pres comb: 270 kPa   Avance: 8.5 deg\n  Consumo: 12.7 L/h   Tiempo motor: 120 s   Dist MIL: 42 km\n\n[IMU]\n  Accel (g): x=0.0272 y=0.0514 z=1.0196   |total|=1.0213\n  Accel horizontal: 0.57 m/s2 (0.0581 g)\n  Giro (deg/s): x=3.7873 y=-5.1795 z=-7.4485\n\n[BATERIA]\n  Tension: 4.19 V   Estado: cargando",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out_texto",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_8d1da63a-e9e3-4ac4-8a4e-08c0ccd9be26",
+        "createAt": "2026-09-27 13:48:45:101",
+        "out": false,
+        "payload": "{\"ts\":302059,\"gnss\":\"NO_FIX\",\"RPM\":\"410C3F20\",\"vel_kph\":\"410D1E\",\"temp_mot_c\":\"4105A2\",\"temp_adm_c\":\"410F4A\",\"carga_pct\":\"4104BB\",\"comb_pct\":\"412F57\",\"accel_pct\":\"4111F1\",\"map_kpa\":\"410B51\",\"maf_gs\":\"4110079B\",\"pcomb_kpa\":\"410A48\",\"avance_deg\":\"410E94\",\"ton_s\":\"411F0140\",\"dist_mil_km\":\"41210000\",\"temp_ace_c\":\"415C80\",\"cons_lh\":\"415E0108\",\"imu_ax\":0.2345,\"imu_ay\":0.5121,\"imu_az\":9.9362,\"imu_gx\":0.0672,\"imu_gy\":-0.0919,\"imu_gz\":-0.1271,\"vbat\":4.12,\"cargando\":true,\"carga_ok\":false,\"dtc\":\"43\"}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_in",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_ed1e1296-6496-450d-8a5f-df974d669dd8",
+        "createAt": "2026-09-27 13:48:45:181",
+        "out": false,
+        "payload": "{\"ts\":302059,\"accel_x_g\":0.0239,\"accel_y_g\":0.0522,\"accel_z_g\":1.0132,\"gyro_x_dps\":3.8503,\"gyro_y_dps\":-5.2655,\"gyro_z_dps\":-7.2823,\"accel_total_g\":1.0148,\"accel_horizontal_ms2\":0.5632,\"accel_horizontal_g\":0.0574,\"bat_v\":4.12,\"cargando\":true,\"carga_completa\":false,\"estado_carga\":\"cargando\",\"dtc\":[],\"dtc_cantidad\":0,\"dtc_presente\":false,\"dtc_desc\":[],\"dtc_alerta\":\"sin fallas\",\"rpm\":4040,\"vel_obd_kph\":30,\"temp_motor_c\":122,\"temp_adm_c\":34,\"carga_mot_pct\":73.3,\"nivel_comb_pct\":34.1,\"acelerador_pct\":94.5,\"pres_map_kpa\":81,\"maf_gs\":19.47,\"pres_comb_kpa\":216,\"avance_enc_deg\":10,\"tiempo_motor_s\":320,\"dist_mil_km\":0,\"temp_aceite_c\":88,\"consumo_lh\":13.2}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_dc68d07c-a8e9-419d-8f1d-965fe104d281",
+        "createAt": "2026-09-27 13:48:45:182",
+        "out": false,
+        "payload": "========== TELEMETRIA  (ts 302059) ==========\n\n[DTC / FALLAS]\n  sin fallas\n\n[GNSS]\n  (sin fix)\n\n[OBD / MOTOR]\n  RPM: 4040   Vel: 30 km/h\n  Temp motor: 122 C   Temp adm: 34 C   Temp aceite: 88 C\n  Carga: 73.3 %   Acelerador: 94.5 %   Combustible: 34.1 %\n  MAP: 81 kPa   MAF: 19.47 g/s   Pres comb: 216 kPa   Avance: 10 deg\n  Consumo: 13.2 L/h   Tiempo motor: 320 s   Dist MIL: 0 km\n\n[IMU]\n  Accel (g): x=0.0239 y=0.0522 z=1.0132   |total|=1.0148\n  Accel horizontal: 0.5632 m/s2 (0.0574 g)\n  Giro (deg/s): x=3.8503 y=-5.2655 z=-7.2823\n\n[BATERIA]\n  Tension: 4.12 V   Estado: cargando",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out_texto",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_b48a00aa-9fac-485d-99ce-7c5b56da5222",
+        "createAt": "2026-09-27 13:52:04:538",
+        "out": false,
+        "payload": "{\"ts\":501520,\"gnss\":\"NO_FIX\",\"RPM\":\"410C57D4\",\"vel_kph\":\"410D33\",\"temp_mot_c\":\"41059A\",\"temp_adm_c\":\"410F4B\",\"carga_pct\":\"410496\",\"comb_pct\":\"412F41\",\"accel_pct\":\"4111F8\",\"map_kpa\":\"410B72\",\"maf_gs\":\"4110020D\",\"pcomb_kpa\":\"410A57\",\"avance_deg\":\"410E8C\",\"ton_s\":\"411F0208\",\"dist_mil_km\":\"4121002A\",\"temp_ace_c\":\"415C88\",\"cons_lh\":\"415E00A3\",\"imu_ax\":0.2321,\"imu_ay\":0.5085,\"imu_az\":9.9003,\"imu_gx\":0.0663,\"imu_gy\":-0.0886,\"imu_gz\":-0.1283,\"vbat\":4.12,\"cargando\":true,\"carga_ok\":false,\"dtc\":\"430100\"}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_in",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_01caafac-bf54-4c1b-b5e4-f488bf793d4c",
+        "createAt": "2026-09-27 13:52:04:607",
+        "out": false,
+        "payload": "{\"ts\":501520,\"accel_x_g\":0.0237,\"accel_y_g\":0.0519,\"accel_z_g\":1.0095,\"gyro_x_dps\":3.7987,\"gyro_y_dps\":-5.0764,\"gyro_z_dps\":-7.351,\"accel_total_g\":1.0111,\"accel_horizontal_ms2\":0.559,\"accel_horizontal_g\":0.057,\"bat_v\":4.12,\"cargando\":true,\"carga_completa\":false,\"estado_carga\":\"cargando\",\"dtc\":[\"P0100\"],\"dtc_cantidad\":1,\"dtc_presente\":true,\"dtc_desc\":[\"Sensor de flujo de aire (MAF)\"],\"dtc_alerta\":\"Motor en falla: Sensor de flujo de aire (MAF) [P0100]\",\"rpm\":5621,\"vel_obd_kph\":51,\"temp_motor_c\":114,\"temp_adm_c\":35,\"carga_mot_pct\":58.8,\"nivel_comb_pct\":25.5,\"acelerador_pct\":97.3,\"pres_map_kpa\":114,\"maf_gs\":5.25,\"pres_comb_kpa\":261,\"avance_enc_deg\":6,\"tiempo_motor_s\":520,\"dist_mil_km\":42,\"temp_aceite_c\":96,\"consumo_lh\":8.15}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_16ae7921-aa88-4fd5-afe6-c11906b6acfb",
+        "createAt": "2026-09-27 13:52:04:609",
+        "out": false,
+        "payload": "========== TELEMETRIA  (ts 501520) ==========\n\n[DTC / FALLAS]\n  Motor en falla: Sensor de flujo de aire (MAF) [P0100]\n  Cantidad: 1\n\n[GNSS]\n  (sin fix)\n\n[OBD / MOTOR]\n  RPM: 5621   Vel: 51 km/h\n  Temp motor: 114 C   Temp adm: 35 C   Temp aceite: 96 C\n  Carga: 58.8 %   Acelerador: 97.3 %   Combustible: 25.5 %\n  MAP: 114 kPa   MAF: 5.25 g/s   Pres comb: 261 kPa   Avance: 6 deg\n  Consumo: 8.15 L/h   Tiempo motor: 520 s   Dist MIL: 42 km\n\n[IMU]\n  Accel (g): x=0.0237 y=0.0519 z=1.0095   |total|=1.0111\n  Accel horizontal: 0.559 m/s2 (0.057 g)\n  Giro (deg/s): x=3.7987 y=-5.0764 z=-7.351\n\n[BATERIA]\n  Tension: 4.12 V   Estado: cargando",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out_texto",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_4cd05426-f5aa-466f-a747-076abbe01676",
+        "createAt": "2026-09-27 13:55:26:216",
+        "out": false,
+        "payload": "{\"ts\":703179,\"gnss\":\"NO_FIX\",\"RPM\":\"410C1830\",\"vel_kph\":\"410D71\",\"temp_mot_c\":\"4105B8\",\"temp_adm_c\":\"410F4E\",\"carga_pct\":\"41047B\",\"comb_pct\":\"412F5C\",\"accel_pct\":\"411116\",\"map_kpa\":\"410B73\",\"maf_gs\":\"41100508\",\"pcomb_kpa\":\"410A6A\",\"avance_deg\":\"410E6E\",\"ton_s\":\"411F02D1\",\"dist_mil_km\":\"4121002A\",\"temp_ace_c\":\"415C78\",\"cons_lh\":\"415E00BD\",\"imu_ax\":0.2357,\"imu_ay\":0.5109,\"imu_az\":9.8704,\"imu_gx\":0.0658,\"imu_gy\":-0.0895,\"imu_gz\":-0.1280,\"vbat\":4.12,\"cargando\":true,\"carga_ok\":false,\"dtc\":\"4304204110\"}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_in",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_881d9535-1546-45d0-be0a-021832d94838",
+        "createAt": "2026-09-27 13:55:26:262",
+        "out": false,
+        "payload": "{\"ts\":703179,\"accel_x_g\":0.024,\"accel_y_g\":0.0521,\"accel_z_g\":1.0065,\"gyro_x_dps\":3.7701,\"gyro_y_dps\":-5.128,\"gyro_z_dps\":-7.3339,\"accel_total_g\":1.0081,\"accel_horizontal_ms2\":0.5626,\"accel_horizontal_g\":0.0574,\"bat_v\":4.12,\"cargando\":true,\"carga_completa\":false,\"estado_carga\":\"cargando\",\"dtc\":[\"P0420\",\"C0110\"],\"dtc_cantidad\":2,\"dtc_presente\":true,\"dtc_desc\":[\"Eficiencia del catalizador baja\",\"Motor de bomba de ABS\"],\"dtc_alerta\":\"Motor en falla: Eficiencia del catalizador baja [P0420] | Chasis en falla: Motor de bomba de ABS [C0110]\",\"rpm\":1548,\"vel_obd_kph\":113,\"temp_motor_c\":144,\"temp_adm_c\":38,\"carga_mot_pct\":48.2,\"nivel_comb_pct\":36.1,\"acelerador_pct\":8.6,\"pres_map_kpa\":115,\"maf_gs\":12.88,\"pres_comb_kpa\":318,\"avance_enc_deg\":-9,\"tiempo_motor_s\":721,\"dist_mil_km\":42,\"temp_aceite_c\":80,\"consumo_lh\":9.45}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_c03b3137-9e9b-4eef-abf8-01d362262047",
+        "createAt": "2026-09-27 13:55:26:263",
+        "out": false,
+        "payload": "========== TELEMETRIA  (ts 703179) ==========\n\n[DTC / FALLAS]\n  Motor en falla: Eficiencia del catalizador baja [P0420] | Chasis en falla: Motor de bomba de ABS [C0110]\n  Cantidad: 2\n\n[GNSS]\n  (sin fix)\n\n[OBD / MOTOR]\n  RPM: 1548   Vel: 113 km/h\n  Temp motor: 144 C   Temp adm: 38 C   Temp aceite: 80 C\n  Carga: 48.2 %   Acelerador: 8.6 %   Combustible: 36.1 %\n  MAP: 115 kPa   MAF: 12.88 g/s   Pres comb: 318 kPa   Avance: -9 deg\n  Consumo: 9.45 L/h   Tiempo motor: 721 s   Dist MIL: 42 km\n\n[IMU]\n  Accel (g): x=0.024 y=0.0521 z=1.0065   |total|=1.0081\n  Accel horizontal: 0.5626 m/s2 (0.0574 g)\n  Giro (deg/s): x=3.7701 y=-5.128 z=-7.3339\n\n[BATERIA]\n  Tension: 4.12 V   Estado: cargando",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out_texto",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_d4bdb5c8-ae55-46a5-9f8d-033c9acbfd2e",
+        "createAt": "2026-09-27 13:58:49:567",
+        "out": false,
+        "payload": "{\"ts\":906529,\"gnss\":\"NO_FIX\",\"RPM\":\"410C3BF8\",\"vel_kph\":\"410D65\",\"temp_mot_c\":\"4105BA\",\"temp_adm_c\":\"410F4B\",\"carga_pct\":\"4104AE\",\"comb_pct\":\"412FA7\",\"accel_pct\":\"41117F\",\"map_kpa\":\"410B61\",\"maf_gs\":\"41100764\",\"pcomb_kpa\":\"410A73\",\"avance_deg\":\"410E92\",\"ton_s\":\"411F039D\",\"dist_mil_km\":\"4121002A\",\"temp_ace_c\":\"415C9F\",\"cons_lh\":\"415E00AF\",\"imu_ax\":0.2572,\"imu_ay\":0.5157,\"imu_az\":9.8728,\"imu_gx\":0.0664,\"imu_gy\":-0.0878,\"imu_gz\":-0.1283,\"vbat\":4.13,\"cargando\":true,\"carga_ok\":false,\"dtc\":\"438010D000\"}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_in",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_7673268f-7e9b-43e7-916f-51dc92527d9a",
+        "createAt": "2026-09-27 13:58:49:589",
+        "out": false,
+        "payload": "{\"ts\":906529,\"accel_x_g\":0.0262,\"accel_y_g\":0.0526,\"accel_z_g\":1.0067,\"gyro_x_dps\":3.8044,\"gyro_y_dps\":-5.0306,\"gyro_z_dps\":-7.351,\"accel_total_g\":1.0084,\"accel_horizontal_ms2\":0.5763,\"accel_horizontal_g\":0.0588,\"bat_v\":4.13,\"cargando\":true,\"carga_completa\":false,\"estado_carga\":\"cargando\",\"dtc\":[\"B0010\",\"U1000\"],\"dtc_cantidad\":2,\"dtc_presente\":true,\"dtc_desc\":[\"Airbag del conductor\",\"Comunicacion en red CAN\"],\"dtc_alerta\":\"Carroceria en falla: Airbag del conductor [B0010] | Red/Comunicacion en falla: Comunicacion en red CAN [U1000]\",\"rpm\":3838,\"vel_obd_kph\":101,\"temp_motor_c\":146,\"temp_adm_c\":35,\"carga_mot_pct\":68.2,\"nivel_comb_pct\":65.5,\"acelerador_pct\":49.8,\"pres_map_kpa\":97,\"maf_gs\":18.92,\"pres_comb_kpa\":345,\"avance_enc_deg\":9,\"tiempo_motor_s\":925,\"dist_mil_km\":42,\"temp_aceite_c\":119,\"consumo_lh\":8.75}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_3cd1e7ae-99a2-41dd-97f6-dc3b3f1a36bb",
+        "createAt": "2026-09-27 13:58:49:604",
+        "out": false,
+        "payload": "========== TELEMETRIA  (ts 906529) ==========\n\n[DTC / FALLAS]\n  Carroceria en falla: Airbag del conductor [B0010] | Red/Comunicacion en falla: Comunicacion en red CAN [U1000]\n  Cantidad: 2\n\n[GNSS]\n  (sin fix)\n\n[OBD / MOTOR]\n  RPM: 3838   Vel: 101 km/h\n  Temp motor: 146 C   Temp adm: 35 C   Temp aceite: 119 C\n  Carga: 68.2 %   Acelerador: 49.8 %   Combustible: 65.5 %\n  MAP: 97 kPa   MAF: 18.92 g/s   Pres comb: 345 kPa   Avance: 9 deg\n  Consumo: 8.75 L/h   Tiempo motor: 925 s   Dist MIL: 42 km\n\n[IMU]\n  Accel (g): x=0.0262 y=0.0526 z=1.0067   |total|=1.0084\n  Accel horizontal: 0.5763 m/s2 (0.0588 g)\n  Giro (deg/s): x=3.8044 y=-5.0306 z=-7.351\n\n[BATERIA]\n  Tension: 4.13 V   Estado: cargando",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out_texto",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_dd1b4076-9736-437d-a3c5-741148a8fc50",
+        "createAt": "2026-09-27 14:02:07:379",
+        "out": false,
+        "payload": "{\"ts\":1104354,\"gnss\":\"NO_FIX\",\"RPM\":\"410C3514\",\"vel_kph\":\"410D1D\",\"temp_mot_c\":\"4105BC\",\"temp_adm_c\":\"410F4B\",\"carga_pct\":\"4104A5\",\"comb_pct\":\"412F57\",\"accel_pct\":\"41117B\",\"map_kpa\":\"410B6E\",\"maf_gs\":\"41100163\",\"pcomb_kpa\":\"410A4C\",\"avance_deg\":\"410E81\",\"ton_s\":\"411F0463\",\"dist_mil_km\":\"4121002A\",\"temp_ace_c\":\"415C85\",\"cons_lh\":\"415E00E6\",\"imu_ax\":0.2512,\"imu_ay\":0.5145,\"imu_az\":9.9565,\"imu_gx\":0.0660,\"imu_gy\":-0.0867,\"imu_gz\":-0.1307,\"vbat\":4.13,\"cargando\":true,\"carga_ok\":false,\"dtc\":\"4341100171\"}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_in",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_b5c7bbbf-fb50-4a58-a893-423b1b73db6f",
+        "createAt": "2026-09-27 14:02:07:424",
+        "out": false,
+        "payload": "{\"ts\":1104354,\"accel_x_g\":0.0256,\"accel_y_g\":0.0525,\"accel_z_g\":1.0153,\"gyro_x_dps\":3.7815,\"gyro_y_dps\":-4.9675,\"gyro_z_dps\":-7.4886,\"accel_total_g\":1.017,\"accel_horizontal_ms2\":0.5725,\"accel_horizontal_g\":0.0584,\"bat_v\":4.13,\"cargando\":true,\"carga_completa\":false,\"estado_carga\":\"cargando\",\"dtc\":[\"C0110\",\"P0171\"],\"dtc_cantidad\":2,\"dtc_presente\":true,\"dtc_desc\":[\"Motor de bomba de ABS\",\"Mezcla demasiado pobre\"],\"dtc_alerta\":\"Chasis en falla: Motor de bomba de ABS [C0110] | Motor en falla: Mezcla demasiado pobre [P0171]\",\"rpm\":3397,\"vel_obd_kph\":29,\"temp_motor_c\":148,\"temp_adm_c\":35,\"carga_mot_pct\":64.7,\"nivel_comb_pct\":34.1,\"acelerador_pct\":48.2,\"pres_map_kpa\":110,\"maf_gs\":3.55,\"pres_comb_kpa\":228,\"avance_enc_deg\":0.5,\"tiempo_motor_s\":1123,\"dist_mil_km\":42,\"temp_aceite_c\":93,\"consumo_lh\":11.5}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_0851b555-5b31-4780-a2bb-0402e4fe1a6e",
+        "createAt": "2026-09-27 14:02:07:425",
+        "out": false,
+        "payload": "========== TELEMETRIA  (ts 1104354) ==========\n\n[DTC / FALLAS]\n  Chasis en falla: Motor de bomba de ABS [C0110] | Motor en falla: Mezcla demasiado pobre [P0171]\n  Cantidad: 2\n\n[GNSS]\n  (sin fix)\n\n[OBD / MOTOR]\n  RPM: 3397   Vel: 29 km/h\n  Temp motor: 148 C   Temp adm: 35 C   Temp aceite: 93 C\n  Carga: 64.7 %   Acelerador: 48.2 %   Combustible: 34.1 %\n  MAP: 110 kPa   MAF: 3.55 g/s   Pres comb: 228 kPa   Avance: 0.5 deg\n  Consumo: 11.5 L/h   Tiempo motor: 1123 s   Dist MIL: 42 km\n\n[IMU]\n  Accel (g): x=0.0256 y=0.0525 z=1.0153   |total|=1.017\n  Accel horizontal: 0.5725 m/s2 (0.0584 g)\n  Giro (deg/s): x=3.7815 y=-4.9675 z=-7.4886\n\n[BATERIA]\n  Tension: 4.13 V   Estado: cargando",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out_texto",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_ea654d71-6939-4f2d-b415-0abb32bf6c1f",
+        "createAt": "2026-09-27 14:05:28:627",
+        "out": false,
+        "payload": "{\"ts\":1305583,\"gnss\":\"NO_FIX\",\"RPM\":\"410C2328\",\"vel_kph\":\"410D0A\",\"temp_mot_c\":\"4105AD\",\"temp_adm_c\":\"410F46\",\"carga_pct\":\"410484\",\"comb_pct\":\"412FC4\",\"accel_pct\":\"411121\",\"map_kpa\":\"410B73\",\"maf_gs\":\"411003EA\",\"pcomb_kpa\":\"410A6D\",\"avance_deg\":\"410E7F\",\"ton_s\":\"411F052A\",\"dist_mil_km\":\"4121002A\",\"temp_ace_c\":\"415C8C\",\"cons_lh\":\"415E00D8\",\"imu_ax\":0.2393,\"imu_ay\":0.5049,\"imu_az\":9.9769,\"imu_gx\":0.0649,\"imu_gy\":-0.0892,\"imu_gz\":-0.1278,\"vbat\":4.13,\"cargando\":true,\"carga_ok\":false,\"dtc\":\"43C100\"}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_in",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_d076e70f-7139-406d-ba4f-2b0a849f3452",
+        "createAt": "2026-09-27 14:05:28:670",
+        "out": false,
+        "payload": "{\"ts\":1305583,\"accel_x_g\":0.0244,\"accel_y_g\":0.0515,\"accel_z_g\":1.0174,\"gyro_x_dps\":3.7185,\"gyro_y_dps\":-5.1108,\"gyro_z_dps\":-7.3224,\"accel_total_g\":1.019,\"accel_horizontal_ms2\":0.5587,\"accel_horizontal_g\":0.057,\"bat_v\":4.13,\"cargando\":true,\"carga_completa\":false,\"estado_carga\":\"cargando\",\"dtc\":[\"U0100\"],\"dtc_cantidad\":1,\"dtc_presente\":true,\"dtc_desc\":[\"Perdida de comunicacion con la ECU\"],\"dtc_alerta\":\"Red/Comunicacion en falla: Perdida de comunicacion con la ECU [U0100]\",\"rpm\":2250,\"vel_obd_kph\":10,\"temp_motor_c\":133,\"temp_adm_c\":30,\"carga_mot_pct\":51.8,\"nivel_comb_pct\":76.9,\"acelerador_pct\":12.9,\"pres_map_kpa\":115,\"maf_gs\":10.02,\"pres_comb_kpa\":327,\"avance_enc_deg\":-0.5,\"tiempo_motor_s\":1322,\"dist_mil_km\":42,\"temp_aceite_c\":100,\"consumo_lh\":10.8}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_db0ee334-a7ff-4678-b73c-3f9ce99f8de3",
+        "createAt": "2026-09-27 14:05:28:671",
+        "out": false,
+        "payload": "========== TELEMETRIA  (ts 1305583) ==========\n\n[DTC / FALLAS]\n  Red/Comunicacion en falla: Perdida de comunicacion con la ECU [U0100]\n  Cantidad: 1\n\n[GNSS]\n  (sin fix)\n\n[OBD / MOTOR]\n  RPM: 2250   Vel: 10 km/h\n  Temp motor: 133 C   Temp adm: 30 C   Temp aceite: 100 C\n  Carga: 51.8 %   Acelerador: 12.9 %   Combustible: 76.9 %\n  MAP: 115 kPa   MAF: 10.02 g/s   Pres comb: 327 kPa   Avance: -0.5 deg\n  Consumo: 10.8 L/h   Tiempo motor: 1322 s   Dist MIL: 42 km\n\n[IMU]\n  Accel (g): x=0.0244 y=0.0515 z=1.0174   |total|=1.019\n  Accel horizontal: 0.5587 m/s2 (0.057 g)\n  Giro (deg/s): x=3.7185 y=-5.1108 z=-7.3224\n\n[BATERIA]\n  Tension: 4.13 V   Estado: cargando",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out_texto",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_6453316d-e64f-4e9f-ad6a-433c35c44d1c",
+        "createAt": "2026-09-27 14:08:58:398",
+        "out": false,
+        "payload": "{\"ts\":1514637,\"gnss\":\"NO_FIX\",\"RPM\":\"410C4950\",\"vel_kph\":\"410D27\",\"temp_mot_c\":\"41059E\",\"temp_adm_c\":\"410F42\",\"carga_pct\":\"4104B1\",\"comb_pct\":\"412F71\",\"accel_pct\":\"411134\",\"map_kpa\":\"410B5C\",\"maf_gs\":\"41100275\",\"pcomb_kpa\":\"410A54\",\"avance_deg\":\"410E65\",\"ton_s\":\"411F05FD\",\"dist_mil_km\":\"4121002A\",\"temp_ace_c\":\"415C91\",\"cons_lh\":\"415E00C9\",\"imu_ax\":0.2560,\"imu_ay\":0.5049,\"imu_az\":9.9338,\"imu_gx\":0.0664,\"imu_gy\":-0.0880,\"imu_gz\":-0.1304,\"vbat\":4.13,\"cargando\":true,\"carga_ok\":false,\"dtc\":\"430420C121\"}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_in",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_8d46a66b-cbbc-4fd2-ade2-e2c2182aa300",
+        "createAt": "2026-09-27 14:08:58:458",
+        "out": false,
+        "payload": "{\"ts\":1514637,\"accel_x_g\":0.0261,\"accel_y_g\":0.0515,\"accel_z_g\":1.013,\"gyro_x_dps\":3.8044,\"gyro_y_dps\":-5.042,\"gyro_z_dps\":-7.4714,\"accel_total_g\":1.0146,\"accel_horizontal_ms2\":0.5661,\"accel_horizontal_g\":0.0577,\"bat_v\":4.13,\"cargando\":true,\"carga_completa\":false,\"estado_carga\":\"cargando\",\"dtc\":[\"P0420\",\"U0121\"],\"dtc_cantidad\":2,\"dtc_presente\":true,\"dtc_desc\":[\"Eficiencia del catalizador baja\",\"Perdida de comunicacion con ABS\"],\"dtc_alerta\":\"Motor en falla: Eficiencia del catalizador baja [P0420] | Red/Comunicacion en falla: Perdida de comunicacion con ABS [U0121]\",\"rpm\":4692,\"vel_obd_kph\":39,\"temp_motor_c\":118,\"temp_adm_c\":26,\"carga_mot_pct\":69.4,\"nivel_comb_pct\":44.3,\"acelerador_pct\":20.4,\"pres_map_kpa\":92,\"maf_gs\":6.29,\"pres_comb_kpa\":252,\"avance_enc_deg\":-13.5,\"tiempo_motor_s\":1533,\"dist_mil_km\":42,\"temp_aceite_c\":105,\"consumo_lh\":10.05}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_68dbe7f3-af14-4212-b712-dd69d938ad97",
+        "createAt": "2026-09-27 14:08:58:459",
+        "out": false,
+        "payload": "========== TELEMETRIA  (ts 1514637) ==========\n\n[DTC / FALLAS]\n  Motor en falla: Eficiencia del catalizador baja [P0420] | Red/Comunicacion en falla: Perdida de comunicacion con ABS [U0121]\n  Cantidad: 2\n\n[GNSS]\n  (sin fix)\n\n[OBD / MOTOR]\n  RPM: 4692   Vel: 39 km/h\n  Temp motor: 118 C   Temp adm: 26 C   Temp aceite: 105 C\n  Carga: 69.4 %   Acelerador: 20.4 %   Combustible: 44.3 %\n  MAP: 92 kPa   MAF: 6.29 g/s   Pres comb: 252 kPa   Avance: -13.5 deg\n  Consumo: 10.05 L/h   Tiempo motor: 1533 s   Dist MIL: 42 km\n\n[IMU]\n  Accel (g): x=0.0261 y=0.0515 z=1.013   |total|=1.0146\n  Accel horizontal: 0.5661 m/s2 (0.0577 g)\n  Giro (deg/s): x=3.8044 y=-5.042 z=-7.4714\n\n[BATERIA]\n  Tension: 4.13 V   Estado: cargando",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out_texto",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_4672fcea-ff0f-4e98-b6c6-c0fd452fbd15",
+        "createAt": "2026-09-27 14:11:21:921",
+        "out": false,
+        "payload": "{\"ts\":1658863,\"gnss\":\"3,06,,01,00,38.0082016,S,57.5442696,W,270926,171122.00,72.0,0.719,,2.92,2.41,1.65,06\",\"RPM\":\"410C2AE4\",\"vel_kph\":\"410D72\",\"temp_mot_c\":\"41059A\",\"temp_adm_c\":\"410F3D\",\"carga_pct\":\"41047F\",\"comb_pct\":\"412F57\",\"accel_pct\":\"41119D\",\"map_kpa\":\"410B5A\",\"maf_gs\":\"411006F5\",\"pcomb_kpa\":\"410A51\",\"avance_deg\":\"410E67\",\"ton_s\":\"411F06BB\",\"dist_mil_km\":\"4121002A\",\"temp_ace_c\":\"415C8A\",\"cons_lh\":\"415E0106\",\"imu_ax\":0.2489,\"imu_ay\":0.5133,\"imu_az\":9.9398,\"imu_gx\":0.0661,\"imu_gy\":-0.0869,\"imu_gz\":-0.1294,\"vbat\":4.14,\"cargando\":true,\"carga_ok\":false,\"dtc\":\"4393180420\"}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_in",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_5ce33313-d7f1-45c0-bf1d-f4d088cdb392",
+        "createAt": "2026-09-27 14:11:21:927",
+        "out": false,
+        "payload": "{\"ts\":1658863,\"lat_dir\":\"S\",\"lon_dir\":\"W\",\"lat\":-38.008202,\"lon\":-57.54427,\"fecha\":\"27-09-26\",\"hora\":\"14:11:22\",\"alt_m\":72,\"vel_gnss_kph\":1.33,\"dir_deg\":0,\"pdop\":2.92,\"hdop\":2.41,\"vdop\":1.65,\"sats_fix\":6,\"accel_x_g\":0.0254,\"accel_y_g\":0.0523,\"accel_z_g\":1.0136,\"gyro_x_dps\":3.7873,\"gyro_y_dps\":-4.979,\"gyro_z_dps\":-7.4141,\"accel_total_g\":1.0153,\"accel_horizontal_ms2\":0.5705,\"accel_horizontal_g\":0.0582,\"bat_v\":4.14,\"cargando\":true,\"carga_completa\":false,\"estado_carga\":\"cargando\",\"dtc\":[\"B1318\",\"P0420\"],\"dtc_cantidad\":2,\"dtc_presente\":true,\"dtc_desc\":[\"Tension de bateria baja\",\"Eficiencia del catalizador baja\"],\"dtc_alerta\":\"Carroceria en falla: Tension de bateria baja [B1318] | Motor en falla: Eficiencia del catalizador baja [P0420]\",\"rpm\":2745,\"vel_obd_kph\":114,\"temp_motor_c\":114,\"temp_adm_c\":21,\"carga_mot_pct\":49.8,\"nivel_comb_pct\":34.1,\"acelerador_pct\":61.6,\"pres_map_kpa\":90,\"maf_gs\":17.81,\"pres_comb_kpa\":243,\"avance_enc_deg\":-12.5,\"tiempo_motor_s\":1723,\"dist_mil_km\":42,\"temp_aceite_c\":98,\"consumo_lh\":13.1}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_2a40d09e-668f-4f8d-ae6e-ed916bf39ff9",
+        "createAt": "2026-09-27 14:11:21:953",
+        "out": false,
+        "payload": "========== TELEMETRIA  (ts 1658863) ==========\n\n[DTC / FALLAS]\n  Carroceria en falla: Tension de bateria baja [B1318] | Motor en falla: Eficiencia del catalizador baja [P0420]\n  Cantidad: 2\n\n[GNSS]\n  Fecha/Hora: 27-09-26 14:11:22\n  Posicion: -38.008202, -57.54427\n  Alt: 72 m   Vel: 1.33 km/h   Rumbo: 0 deg   Sats: 6\n\n[OBD / MOTOR]\n  RPM: 2745   Vel: 114 km/h\n  Temp motor: 114 C   Temp adm: 21 C   Temp aceite: 98 C\n  Carga: 49.8 %   Acelerador: 61.6 %   Combustible: 34.1 %\n  MAP: 90 kPa   MAF: 17.81 g/s   Pres comb: 243 kPa   Avance: -12.5 deg\n  Consumo: 13.1 L/h   Tiempo motor: 1723 s   Dist MIL: 42 km\n\n[IMU]\n  Accel (g): x=0.0254 y=0.0523 z=1.0136   |total|=1.0153\n  Accel horizontal: 0.5705 m/s2 (0.0582 g)\n  Giro (deg/s): x=3.7873 y=-4.979 z=-7.4141\n\n[BATERIA]\n  Tension: 4.14 V   Estado: cargando",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out_texto",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_c066695b-3ed4-48c8-afe9-1956fad058d6",
+        "createAt": "2026-09-27 14:15:25:829",
+        "out": false,
+        "payload": "{\"ts\":1902769,\"gnss\":\"NO_FIX\",\"RPM\":\"410C4BB4\",\"vel_kph\":\"410D49\",\"temp_mot_c\":\"4105B9\",\"temp_adm_c\":\"410F47\",\"carga_pct\":\"4104A5\",\"comb_pct\":\"412F85\",\"accel_pct\":\"4111F1\",\"map_kpa\":\"410B56\",\"maf_gs\":\"411001C1\",\"pcomb_kpa\":\"410A72\",\"avance_deg\":\"410E66\",\"ton_s\":\"411F0781\",\"dist_mil_km\":\"4121002A\",\"temp_ace_c\":\"415C84\",\"cons_lh\":\"415E00DD\",\"imu_ax\":0.2620,\"imu_ay\":0.5216,\"imu_az\":9.9087,\"imu_gx\":0.0670,\"imu_gy\":-0.0895,\"imu_gz\":-0.1284,\"vbat\":4.14,\"cargando\":true,\"carga_ok\":false,\"dtc\":\"4301004110\"}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_in",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_ac27e809-f873-4e2a-8b86-e50497822e35",
+        "createAt": "2026-09-27 14:15:25:842",
+        "out": false,
+        "payload": "{\"ts\":1902769,\"accel_x_g\":0.0267,\"accel_y_g\":0.0532,\"accel_z_g\":1.0104,\"gyro_x_dps\":3.8388,\"gyro_y_dps\":-5.128,\"gyro_z_dps\":-7.3568,\"accel_total_g\":1.0122,\"accel_horizontal_ms2\":0.5837,\"accel_horizontal_g\":0.0595,\"bat_v\":4.14,\"cargando\":true,\"carga_completa\":false,\"estado_carga\":\"cargando\",\"dtc\":[\"P0100\",\"C0110\"],\"dtc_cantidad\":2,\"dtc_presente\":true,\"dtc_desc\":[\"Sensor de flujo de aire (MAF)\",\"Motor de bomba de ABS\"],\"dtc_alerta\":\"Motor en falla: Sensor de flujo de aire (MAF) [P0100] | Chasis en falla: Motor de bomba de ABS [C0110]\",\"rpm\":4845,\"vel_obd_kph\":73,\"temp_motor_c\":145,\"temp_adm_c\":31,\"carga_mot_pct\":64.7,\"nivel_comb_pct\":52.2,\"acelerador_pct\":94.5,\"pres_map_kpa\":86,\"maf_gs\":4.49,\"pres_comb_kpa\":342,\"avance_enc_deg\":-13,\"tiempo_motor_s\":1921,\"dist_mil_km\":42,\"temp_aceite_c\":92,\"consumo_lh\":11.05}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_576f1b7e-2ea0-4c0d-b74e-c83fc09373a6",
+        "createAt": "2026-09-27 14:15:25:870",
+        "out": false,
+        "payload": "========== TELEMETRIA  (ts 1902769) ==========\n\n[DTC / FALLAS]\n  Motor en falla: Sensor de flujo de aire (MAF) [P0100] | Chasis en falla: Motor de bomba de ABS [C0110]\n  Cantidad: 2\n\n[GNSS]\n  (sin fix)\n\n[OBD / MOTOR]\n  RPM: 4845   Vel: 73 km/h\n  Temp motor: 145 C   Temp adm: 31 C   Temp aceite: 92 C\n  Carga: 64.7 %   Acelerador: 94.5 %   Combustible: 52.2 %\n  MAP: 86 kPa   MAF: 4.49 g/s   Pres comb: 342 kPa   Avance: -13 deg\n  Consumo: 11.05 L/h   Tiempo motor: 1921 s   Dist MIL: 42 km\n\n[IMU]\n  Accel (g): x=0.0267 y=0.0532 z=1.0104   |total|=1.0122\n  Accel horizontal: 0.5837 m/s2 (0.0595 g)\n  Giro (deg/s): x=3.8388 y=-5.128 z=-7.3568\n\n[BATERIA]\n  Tension: 4.14 V   Estado: cargando",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out_texto",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_11df968d-c0b1-4019-9566-7479cd805c2a",
+        "createAt": "2026-09-27 14:18:44:091",
+        "out": false,
+        "payload": "{\"ts\":2101036,\"gnss\":\"NO_FIX\",\"RPM\":\"410C1C34\",\"vel_kph\":\"410D57\",\"temp_mot_c\":\"4105B1\",\"temp_adm_c\":\"410F41\",\"carga_pct\":\"4104BB\",\"comb_pct\":\"412FC2\",\"accel_pct\":\"4111F1\",\"map_kpa\":\"410B59\",\"maf_gs\":\"4110042C\",\"pcomb_kpa\":\"410A47\",\"avance_deg\":\"410E7C\",\"ton_s\":\"411F0848\",\"dist_mil_km\":\"4121002A\",\"temp_ace_c\":\"415C9B\",\"cons_lh\":\"415E00BA\",\"imu_ax\":0.2393,\"imu_ay\":0.5133,\"imu_az\":9.9206,\"imu_gx\":0.0675,\"imu_gy\":-0.0899,\"imu_gz\":-0.1290,\"vbat\":4.14,\"cargando\":true,\"carga_ok\":false,\"dtc\":\"43C1000100\"}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_in",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_368c0516-f0a6-49a0-b9a5-6427fc47b073",
+        "createAt": "2026-09-27 14:18:44:103",
+        "out": false,
+        "payload": "{\"ts\":2101036,\"accel_x_g\":0.0244,\"accel_y_g\":0.0523,\"accel_z_g\":1.0116,\"gyro_x_dps\":3.8675,\"gyro_y_dps\":-5.1509,\"gyro_z_dps\":-7.3912,\"accel_total_g\":1.0132,\"accel_horizontal_ms2\":0.5663,\"accel_horizontal_g\":0.0578,\"bat_v\":4.14,\"cargando\":true,\"carga_completa\":false,\"estado_carga\":\"cargando\",\"dtc\":[\"U0100\",\"P0100\"],\"dtc_cantidad\":2,\"dtc_presente\":true,\"dtc_desc\":[\"Perdida de comunicacion con la ECU\",\"Sensor de flujo de aire (MAF)\"],\"dtc_alerta\":\"Red/Comunicacion en falla: Perdida de comunicacion con la ECU [U0100] | Motor en falla: Sensor de flujo de aire (MAF) [P0100]\",\"rpm\":1805,\"vel_obd_kph\":87,\"temp_motor_c\":137,\"temp_adm_c\":25,\"carga_mot_pct\":73.3,\"nivel_comb_pct\":76.1,\"acelerador_pct\":94.5,\"pres_map_kpa\":89,\"maf_gs\":10.68,\"pres_comb_kpa\":213,\"avance_enc_deg\":-2,\"tiempo_motor_s\":2120,\"dist_mil_km\":42,\"temp_aceite_c\":115,\"consumo_lh\":9.3}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_29c8dce0-7dea-499f-8850-7e75ae5d6dad",
+        "createAt": "2026-09-27 14:18:44:131",
+        "out": false,
+        "payload": "========== TELEMETRIA  (ts 2101036) ==========\n\n[DTC / FALLAS]\n  Red/Comunicacion en falla: Perdida de comunicacion con la ECU [U0100] | Motor en falla: Sensor de flujo de aire (MAF) [P0100]\n  Cantidad: 2\n\n[GNSS]\n  (sin fix)\n\n[OBD / MOTOR]\n  RPM: 1805   Vel: 87 km/h\n  Temp motor: 137 C   Temp adm: 25 C   Temp aceite: 115 C\n  Carga: 73.3 %   Acelerador: 94.5 %   Combustible: 76.1 %\n  MAP: 89 kPa   MAF: 10.68 g/s   Pres comb: 213 kPa   Avance: -2 deg\n  Consumo: 9.3 L/h   Tiempo motor: 2120 s   Dist MIL: 42 km\n\n[IMU]\n  Accel (g): x=0.0244 y=0.0523 z=1.0116   |total|=1.0132\n  Accel horizontal: 0.5663 m/s2 (0.0578 g)\n  Giro (deg/s): x=3.8675 y=-5.1509 z=-7.3912\n\n[BATERIA]\n  Tension: 4.14 V   Estado: cargando",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out_texto",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_0270a1b6-fc87-41a2-aa9b-94b533cb885a",
+        "createAt": "2026-09-27 14:21:58:076",
+        "out": false,
+        "payload": "{\"ts\":2295010,\"gnss\":\"3,11,,04,00,38.0091171,S,57.5439186,W,270926,172158.00,213.1,0.453,,3.35,2.97,1.55,05\",\"RPM\":\"410C22B0\",\"vel_kph\":\"410D17\",\"temp_mot_c\":\"4105AD\",\"temp_adm_c\":\"410F4E\",\"carga_pct\":\"4104C5\",\"comb_pct\":\"412FAB\",\"accel_pct\":\"411149\",\"map_kpa\":\"410B57\",\"maf_gs\":\"41100160\",\"pcomb_kpa\":\"410A75\",\"avance_deg\":\"410E8F\",\"ton_s\":\"411F0912\",\"dist_mil_km\":\"4121002A\",\"temp_ace_c\":\"415C8C\",\"cons_lh\":\"415E00C4\",\"imu_ax\":0.2417,\"imu_ay\":0.5216,\"imu_az\":9.9613,\"imu_gx\":0.0664,\"imu_gy\":-0.0866,\"imu_gz\":-0.1289,\"vbat\":4.15,\"cargando\":true,\"carga_ok\":false,\"dtc\":\"430100\"}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_in",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_b74a9321-b44a-4bc7-9358-d1b6a72cc9b2",
+        "createAt": "2026-09-27 14:21:58:106",
+        "out": false,
+        "payload": "{\"ts\":2295010,\"lat_dir\":\"S\",\"lon_dir\":\"W\",\"lat\":-38.009117,\"lon\":-57.543919,\"fecha\":\"27-09-26\",\"hora\":\"14:21:58\",\"alt_m\":213.1,\"vel_gnss_kph\":0.84,\"dir_deg\":0,\"pdop\":3.35,\"hdop\":2.97,\"vdop\":1.55,\"sats_fix\":5,\"accel_x_g\":0.0246,\"accel_y_g\":0.0532,\"accel_z_g\":1.0158,\"gyro_x_dps\":3.8044,\"gyro_y_dps\":-4.9618,\"gyro_z_dps\":-7.3854,\"accel_total_g\":1.0175,\"accel_horizontal_ms2\":0.5749,\"accel_horizontal_g\":0.0586,\"bat_v\":4.15,\"cargando\":true,\"carga_completa\":false,\"estado_carga\":\"cargando\",\"dtc\":[\"P0100\"],\"dtc_cantidad\":1,\"dtc_presente\":true,\"dtc_desc\":[\"Sensor de flujo de aire (MAF)\"],\"dtc_alerta\":\"Motor en falla: Sensor de flujo de aire (MAF) [P0100]\",\"rpm\":2220,\"vel_obd_kph\":23,\"temp_motor_c\":133,\"temp_adm_c\":38,\"carga_mot_pct\":77.3,\"nivel_comb_pct\":67.1,\"acelerador_pct\":28.6,\"pres_map_kpa\":87,\"maf_gs\":3.52,\"pres_comb_kpa\":351,\"avance_enc_deg\":7.5,\"tiempo_motor_s\":2322,\"dist_mil_km\":42,\"temp_aceite_c\":100,\"consumo_lh\":9.8}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_c246f847-4d04-4f8f-9815-6e1e332167a0",
+        "createAt": "2026-09-27 14:21:58:129",
+        "out": false,
+        "payload": "========== TELEMETRIA  (ts 2295010) ==========\n\n[DTC / FALLAS]\n  Motor en falla: Sensor de flujo de aire (MAF) [P0100]\n  Cantidad: 1\n\n[GNSS]\n  Fecha/Hora: 27-09-26 14:21:58\n  Posicion: -38.009117, -57.543919\n  Alt: 213.1 m   Vel: 0.84 km/h   Rumbo: 0 deg   Sats: 5\n\n[OBD / MOTOR]\n  RPM: 2220   Vel: 23 km/h\n  Temp motor: 133 C   Temp adm: 38 C   Temp aceite: 100 C\n  Carga: 77.3 %   Acelerador: 28.6 %   Combustible: 67.1 %\n  MAP: 87 kPa   MAF: 3.52 g/s   Pres comb: 351 kPa   Avance: 7.5 deg\n  Consumo: 9.8 L/h   Tiempo motor: 2322 s   Dist MIL: 42 km\n\n[IMU]\n  Accel (g): x=0.0246 y=0.0532 z=1.0158   |total|=1.0175\n  Accel horizontal: 0.5749 m/s2 (0.0586 g)\n  Giro (deg/s): x=3.8044 y=-4.9618 z=-7.3854\n\n[BATERIA]\n  Tension: 4.15 V   Estado: cargando",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out_texto",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_ba343e83-7dec-4cfd-9f4e-c94ac620a4ae",
+        "createAt": "2026-09-27 14:25:25:787",
+        "out": false,
+        "payload": "{\"ts\":2502726,\"gnss\":\"NO_FIX\",\"RPM\":\"410C3E20\",\"vel_kph\":\"410D39\",\"temp_mot_c\":\"4105BD\",\"temp_adm_c\":\"410F3D\",\"carga_pct\":\"410483\",\"comb_pct\":\"412F8D\",\"accel_pct\":\"4111CA\",\"map_kpa\":\"410B5F\",\"maf_gs\":\"41100180\",\"pcomb_kpa\":\"410A61\",\"avance_deg\":\"410E9D\",\"ton_s\":\"411F09DA\",\"dist_mil_km\":\"41210000\",\"temp_ace_c\":\"415C8D\",\"cons_lh\":\"415E00EC\",\"imu_ax\":0.2524,\"imu_ay\":0.5192,\"imu_az\":9.9386,\"imu_gx\":0.0660,\"imu_gy\":-0.0846,\"imu_gz\":-0.1318,\"vbat\":4.14,\"cargando\":true,\"carga_ok\":false,\"dtc\":\"43\"}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_in",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_8303c83b-f900-49c3-9369-c837eeadba85",
+        "createAt": "2026-09-27 14:25:25:856",
+        "out": false,
+        "payload": "{\"ts\":2502726,\"accel_x_g\":0.0257,\"accel_y_g\":0.0529,\"accel_z_g\":1.0135,\"gyro_x_dps\":3.7815,\"gyro_y_dps\":-4.8472,\"gyro_z_dps\":-7.5516,\"accel_total_g\":1.0152,\"accel_horizontal_ms2\":0.5773,\"accel_horizontal_g\":0.0589,\"bat_v\":4.14,\"cargando\":true,\"carga_completa\":false,\"estado_carga\":\"cargando\",\"dtc\":[],\"dtc_cantidad\":0,\"dtc_presente\":false,\"dtc_desc\":[],\"dtc_alerta\":\"sin fallas\",\"rpm\":3976,\"vel_obd_kph\":57,\"temp_motor_c\":149,\"temp_adm_c\":21,\"carga_mot_pct\":51.4,\"nivel_comb_pct\":55.3,\"acelerador_pct\":79.2,\"pres_map_kpa\":95,\"maf_gs\":3.84,\"pres_comb_kpa\":291,\"avance_enc_deg\":14.5,\"tiempo_motor_s\":2522,\"dist_mil_km\":0,\"temp_aceite_c\":101,\"consumo_lh\":11.8}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_f015f16a-ef07-4d51-946f-48e00a64563b",
+        "createAt": "2026-09-27 14:25:25:856",
+        "out": false,
+        "payload": "========== TELEMETRIA  (ts 2502726) ==========\n\n[DTC / FALLAS]\n  sin fallas\n\n[GNSS]\n  (sin fix)\n\n[OBD / MOTOR]\n  RPM: 3976   Vel: 57 km/h\n  Temp motor: 149 C   Temp adm: 21 C   Temp aceite: 101 C\n  Carga: 51.4 %   Acelerador: 79.2 %   Combustible: 55.3 %\n  MAP: 95 kPa   MAF: 3.84 g/s   Pres comb: 291 kPa   Avance: 14.5 deg\n  Consumo: 11.8 L/h   Tiempo motor: 2522 s   Dist MIL: 0 km\n\n[IMU]\n  Accel (g): x=0.0257 y=0.0529 z=1.0135   |total|=1.0152\n  Accel horizontal: 0.5773 m/s2 (0.0589 g)\n  Giro (deg/s): x=3.7815 y=-4.8472 z=-7.5516\n\n[BATERIA]\n  Tension: 4.14 V   Estado: cargando",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out_texto",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_dc3f15b6-aafa-419f-8e1b-f02b5b5e374d",
+        "createAt": "2026-09-27 14:28:46:384",
+        "out": false,
+        "payload": "{\"ts\":2703316,\"gnss\":\"NO_FIX\",\"RPM\":\"410C0B8C\",\"vel_kph\":\"410D21\",\"temp_mot_c\":\"41059B\",\"temp_adm_c\":\"410F40\",\"carga_pct\":\"41049A\",\"comb_pct\":\"412FAE\",\"accel_pct\":\"41116C\",\"map_kpa\":\"410B54\",\"maf_gs\":\"4110019E\",\"pcomb_kpa\":\"410A74\",\"avance_deg\":\"410E7F\",\"ton_s\":\"411F0AA1\",\"dist_mil_km\":\"4121002A\",\"temp_ace_c\":\"415C98\",\"cons_lh\":\"415E00B3\",\"imu_ax\":0.2453,\"imu_ay\":0.5109,\"imu_az\":9.9398,\"imu_gx\":0.0658,\"imu_gy\":-0.0855,\"imu_gz\":-0.1297,\"vbat\":4.14,\"cargando\":true,\"carga_ok\":false,\"dtc\":\"43C1210171\"}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_in",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_736f53a1-500d-46ab-b654-243ec8695efe",
+        "createAt": "2026-09-27 14:28:46:392",
+        "out": false,
+        "payload": "{\"ts\":2703316,\"accel_x_g\":0.025,\"accel_y_g\":0.0521,\"accel_z_g\":1.0136,\"gyro_x_dps\":3.7701,\"gyro_y_dps\":-4.8988,\"gyro_z_dps\":-7.4313,\"accel_total_g\":1.0152,\"accel_horizontal_ms2\":0.5667,\"accel_horizontal_g\":0.0578,\"bat_v\":4.14,\"cargando\":true,\"carga_completa\":false,\"estado_carga\":\"cargando\",\"dtc\":[\"U0121\",\"P0171\"],\"dtc_cantidad\":2,\"dtc_presente\":true,\"dtc_desc\":[\"Perdida de comunicacion con ABS\",\"Mezcla demasiado pobre\"],\"dtc_alerta\":\"Red/Comunicacion en falla: Perdida de comunicacion con ABS [U0121] | Motor en falla: Mezcla demasiado pobre [P0171]\",\"rpm\":739,\"vel_obd_kph\":33,\"temp_motor_c\":115,\"temp_adm_c\":24,\"carga_mot_pct\":60.4,\"nivel_comb_pct\":68.2,\"acelerador_pct\":42.4,\"pres_map_kpa\":84,\"maf_gs\":4.14,\"pres_comb_kpa\":348,\"avance_enc_deg\":-0.5,\"tiempo_motor_s\":2721,\"dist_mil_km\":42,\"temp_aceite_c\":112,\"consumo_lh\":8.95}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_cda78c35-29cd-4986-b5ca-24ebae012f1d",
+        "createAt": "2026-09-27 14:28:46:414",
+        "out": false,
+        "payload": "========== TELEMETRIA  (ts 2703316) ==========\n\n[DTC / FALLAS]\n  Red/Comunicacion en falla: Perdida de comunicacion con ABS [U0121] | Motor en falla: Mezcla demasiado pobre [P0171]\n  Cantidad: 2\n\n[GNSS]\n  (sin fix)\n\n[OBD / MOTOR]\n  RPM: 739   Vel: 33 km/h\n  Temp motor: 115 C   Temp adm: 24 C   Temp aceite: 112 C\n  Carga: 60.4 %   Acelerador: 42.4 %   Combustible: 68.2 %\n  MAP: 84 kPa   MAF: 4.14 g/s   Pres comb: 348 kPa   Avance: -0.5 deg\n  Consumo: 8.95 L/h   Tiempo motor: 2721 s   Dist MIL: 42 km\n\n[IMU]\n  Accel (g): x=0.025 y=0.0521 z=1.0136   |total|=1.0152\n  Accel horizontal: 0.5667 m/s2 (0.0578 g)\n  Giro (deg/s): x=3.7701 y=-4.8988 z=-7.4313\n\n[BATERIA]\n  Tension: 4.14 V   Estado: cargando",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out_texto",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_e485dbd3-aac1-45f8-9649-c78a42f25f62",
+        "createAt": "2026-09-27 14:32:11:011",
+        "out": false,
+        "payload": "{\"ts\":2907922,\"gnss\":\"NO_FIX\",\"RPM\":\"410C1FC4\",\"vel_kph\":\"410D03\",\"temp_mot_c\":\"4105A3\",\"temp_adm_c\":\"410F3C\",\"carga_pct\":\"410496\",\"comb_pct\":\"412FBA\",\"accel_pct\":\"4111E6\",\"map_kpa\":\"410B68\",\"maf_gs\":\"4110040A\",\"pcomb_kpa\":\"410A70\",\"avance_deg\":\"410E68\",\"ton_s\":\"411F0B6F\",\"dist_mil_km\":\"4121002A\",\"temp_ace_c\":\"415C99\",\"cons_lh\":\"415E009E\",\"imu_ax\":0.2345,\"imu_ay\":0.5157,\"imu_az\":9.8596,\"imu_gx\":0.0678,\"imu_gy\":-0.0864,\"imu_gz\":-0.1309,\"vbat\":4.15,\"cargando\":true,\"carga_ok\":false,\"dtc\":\"4301714035\"}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_in",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_e3c6f92c-9a9c-4b89-86c1-0611e9a80427",
+        "createAt": "2026-09-27 14:32:11:054",
+        "out": false,
+        "payload": "{\"ts\":2907922,\"accel_x_g\":0.0239,\"accel_y_g\":0.0526,\"accel_z_g\":1.0054,\"gyro_x_dps\":3.8847,\"gyro_y_dps\":-4.9504,\"gyro_z_dps\":-7.5,\"accel_total_g\":1.0071,\"accel_horizontal_ms2\":0.5665,\"accel_horizontal_g\":0.0578,\"bat_v\":4.15,\"cargando\":true,\"carga_completa\":false,\"estado_carga\":\"cargando\",\"dtc\":[\"P0171\",\"C0035\"],\"dtc_cantidad\":2,\"dtc_presente\":true,\"dtc_desc\":[\"Mezcla demasiado pobre\",\"Sensor de velocidad rueda del. izq.\"],\"dtc_alerta\":\"Motor en falla: Mezcla demasiado pobre [P0171] | Chasis en falla: Sensor de velocidad rueda del. izq. [C0035]\",\"rpm\":2033,\"vel_obd_kph\":3,\"temp_motor_c\":123,\"temp_adm_c\":20,\"carga_mot_pct\":58.8,\"nivel_comb_pct\":72.9,\"acelerador_pct\":90.2,\"pres_map_kpa\":104,\"maf_gs\":10.34,\"pres_comb_kpa\":336,\"avance_enc_deg\":-12,\"tiempo_motor_s\":2927,\"dist_mil_km\":42,\"temp_aceite_c\":113,\"consumo_lh\":7.9}",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      },
+      {
+        "id": "message_e291b73b-ef9b-49af-bdc8-1c79df30b557",
+        "createAt": "2026-09-27 14:32:11:061",
+        "out": false,
+        "payload": "========== TELEMETRIA  (ts 2907922) ==========\n\n[DTC / FALLAS]\n  Motor en falla: Mezcla demasiado pobre [P0171] | Chasis en falla: Sensor de velocidad rueda del. izq. [C0035]\n  Cantidad: 2\n\n[GNSS]\n  (sin fix)\n\n[OBD / MOTOR]\n  RPM: 2033   Vel: 3 km/h\n  Temp motor: 123 C   Temp adm: 20 C   Temp aceite: 113 C\n  Carga: 58.8 %   Acelerador: 90.2 %   Combustible: 72.9 %\n  MAP: 104 kPa   MAF: 10.34 g/s   Pres comb: 336 kPa   Avance: -12 deg\n  Consumo: 7.9 L/h   Tiempo motor: 2927 s   Dist MIL: 42 km\n\n[IMU]\n  Accel (g): x=0.0239 y=0.0526 z=1.0054   |total|=1.0071\n  Accel horizontal: 0.5665 m/s2 (0.0578 g)\n  Giro (deg/s): x=3.8847 y=-4.9504 z=-7.5\n\n[BATERIA]\n  Tension: 4.15 V   Estado: cargando",
+        "qos": 0,
+        "retain": false,
+        "topic": "prueba_out_texto",
+        "meta": "{\"msgType\":\"Plaintext\"}",
+        "connectionId": "e68bdeab-7dce-4e81-acaa-85fb573fe6ae",
+        "properties": {
+          "payloadFormatIndicator": null,
+          "messageExpiryInterval": null,
+          "topicAlias": null,
+          "responseTopic": null,
+          "correlationData": null,
+          "subscriptionIdentifier": null,
+          "contentType": null
+        }
+      }
+    ]
+  }
+]
