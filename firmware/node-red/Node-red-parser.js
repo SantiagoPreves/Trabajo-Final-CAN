@@ -3,454 +3,446 @@
 -------------------------------------------------------------------------------
 -- File : Node-red-parser.js
 -- Author : Preves, Santiago.
--- Date : Sep 13, 2026.
--- Rev 13 : Final release.
+-- Date : Sep 27, 2026.
+-- Rev 13 : Código ordenado y estandarizado.
 --
 -------------------------------------------------------------------------------
 -- Description:
-	Codigo de traducción de datos MQTT en Node Red
-	Topic entrada : prueba_in   |   Topic salida : prueba_out & prueba_out_texto
---               
+  Nodo "function" de Node-RED que traduce el JSON crudo publicado por el
+  equipo a magnitudes físicas.
+
+  Entrada : tópico "prueba_in"  (JSON con tramas OBD-II en hexadecimal,
+            línea de AT+CGNSSINFO, IMU, batería y respuesta del Modo 03).
+  Salidas : tópico "prueba_out"        -> JSON con los valores traducidos.
+            tópico "prueba_out_texto"  -> reporte de texto legible.
+
+  El nodo "mqtt out" debe tener el tópico vacío para que use msg.topic.
+--
 -------------------------------------------------------------------------------*/
 
-const G_TO_MS2   = 9.80665;
-const RAD_TO_DEG = 180 / Math.PI;
 
+// =============================================================================
+//  CONSTANTES
+// =============================================================================
+const M_S2_POR_G        = 9.80665;      // 1 g expresado en m/s2
+const GRADOS_POR_RADIAN = 180 / Math.PI;
+const KMH_POR_NUDO      = 1.852;
+const MINUTOS_UTC_A_ARG = -180;         // hora argentina = UTC - 3 h
 
-// ════════ PASO 1 — Parsear entrada (Buffer / string / objeto) ════════
-let raw;
-try {
-    let p = msg.payload;
-    if (Buffer.isBuffer(p)) p = p.toString("utf8");
-    raw = (typeof p === "string") ? JSON.parse(p) : p;
-} catch (e) {
-    node.error("JSON inválido: " + e.message, msg);
-    return null;
-}
-if (raw === null || typeof raw !== "object" || Array.isArray(raw)) {
-    node.error("Payload no es un objeto JSON (" + typeof raw + ")", msg);
-    return null;
-}
+// Valores que el equipo envía cuando un PID no tiene dato válido
+const VALORES_SIN_DATO = new Set(["", "TIMEOUT", "NO_DATA"]);
 
+// Valores del campo "gnss" que indican que no hay posición
+const GNSS_SIN_POSICION = new Set(["", "NO_FIX", "GNSS_OFF"]);
 
-// ════════ PASO 2 — Objeto de salida ════════
-let out = { ts: raw.ts || 0 };
+// Tabla de PIDs del Modo 01 (fórmulas de la norma SAE J1979).
+//   Clave : nombre del campo en el JSON de entrada (mismo orden que el firmware).
+//   pid   : número de PID, para validar que la trama empiece con "41" + PID.
+//   clave : nombre del campo en el JSON de salida.
+//   f     : fórmula con los bytes de datos A y B.
+const TABLA_OBD = {
+    RPM:         { pid: 0x0C, clave: "rpm",            f: (A, B) => Math.round(((A * 256 + B) / 4) * 10) / 10 },
+    vel_kph:     { pid: 0x0D, clave: "vel_obd_kph",    f: (A, B) => A },
+    temp_mot_c:  { pid: 0x05, clave: "temp_motor_c",   f: (A, B) => A - 40 },
+    temp_adm_c:  { pid: 0x0F, clave: "temp_adm_c",     f: (A, B) => A - 40 },
+    carga_pct:   { pid: 0x04, clave: "carga_mot_pct",  f: (A, B) => redondear(A * 100 / 255, 1) },
+    comb_pct:    { pid: 0x2F, clave: "nivel_comb_pct", f: (A, B) => redondear(A * 100 / 255, 1) },
+    accel_pct:   { pid: 0x11, clave: "acelerador_pct", f: (A, B) => redondear(A * 100 / 255, 1) },
+    map_kpa:     { pid: 0x0B, clave: "pres_map_kpa",   f: (A, B) => A },
+    maf_gs:      { pid: 0x10, clave: "maf_gs",         f: (A, B) => redondear((A * 256 + B) / 100, 2) },
+    pcomb_kpa:   { pid: 0x0A, clave: "pres_comb_kpa",  f: (A, B) => A * 3 },
+    avance_deg:  { pid: 0x0E, clave: "avance_enc_deg", f: (A, B) => redondear(A / 2 - 64, 1) },
+    ton_s:       { pid: 0x1F, clave: "tiempo_motor_s", f: (A, B) => A * 256 + B },
+    dist_mil_km: { pid: 0x21, clave: "dist_mil_km",    f: (A, B) => A * 256 + B },
+    temp_ace_c:  { pid: 0x5C, clave: "temp_aceite_c",  f: (A, B) => A - 40 },
+    cons_lh:     { pid: 0x5E, clave: "consumo_lh",     f: (A, B) => redondear((A * 256 + B) / 20, 2) },
+};
 
+// Códigos de falla (DTC)
+const LETRA_DTC = ["P", "C", "B", "U"];
 
-// ════════ PASO 3 — GNSS (AT+CGNSSINFO) ════════
-if (raw.gnss && raw.gnss !== "NO_FIX" && typeof raw.gnss === "string") {
+const CATEGORIA_DTC = {
+    P: "Motor",
+    C: "Chasis",
+    B: "Carroceria",
+    U: "Red/Comunicacion",
+};
 
-    let g = raw.gnss.split(",");
+const DESCRIPCION_DTC = {
+    "P0100": "Sensor de flujo de aire (MAF)",
+    "P0101": "Sensor MAF - rango/rendimiento",
+    "P0110": "Sensor de temperatura de admision",
+    "P0115": "Sensor de temperatura de refrigerante",
+    "P0120": "Sensor de posicion del acelerador",
+    "P0128": "Termostato de refrigerante",
+    "P0171": "Mezcla demasiado pobre",
+    "P0172": "Mezcla demasiado rica",
+    "P0300": "Fallo de encendido en varios cilindros",
+    "P0301": "Fallo de encendido cilindro 1",
+    "P0302": "Fallo de encendido cilindro 2",
+    "P0303": "Fallo de encendido cilindro 3",
+    "P0304": "Fallo de encendido cilindro 4",
+    "P0420": "Eficiencia del catalizador baja",
+    "P0442": "Fuga pequena en sistema EVAP",
+    "P0500": "Sensor de velocidad del vehiculo",
+    "C0035": "Sensor de velocidad rueda del. izq.",
+    "C0110": "Motor de bomba de ABS",
+    "B0010": "Airbag del conductor",
+    "B1318": "Tension de bateria baja",
+    "U0100": "Perdida de comunicacion con la ECU",
+    "U0121": "Perdida de comunicacion con ABS",
+    "U1000": "Comunicacion en red CAN",
+};
 
-    try {
-        // ── Coordenadas SIGNADAS (S y W = negativo) ──────────────
-        let latNum = parseFloat(g[5]);
-        let lonNum = parseFloat(g[7]);
-        out.lat_dir = (g[6] || "").trim();
-        out.lon_dir = (g[8] || "").trim();
-        if (!isNaN(latNum))
-            out.lat = parseFloat((out.lat_dir === "S" ? -latNum : latNum).toFixed(6));
-        if (!isNaN(lonNum))
-            out.lon = parseFloat((out.lon_dir === "W" ? -lonNum : lonNum).toFixed(6));
-
-        // ── Fecha: "200826" -> "20-08-26" ───────────────────────
-        let fecha = (g[9] || "").trim();
-        if (fecha.length >= 6) {
-            out.fecha = fecha.substring(0, 2) + "-" +
-                        fecha.substring(2, 4) + "-" +
-                        fecha.substring(4, 6);
-        }
-
-        // ── Hora UTC -> Argentina (UTC-3) ───────────────────────
-        let horaRaw     = (g[10] || "").toString().trim();
-        let partes      = horaRaw.split(".");
-        let parteEntera = (partes[0] || "").replace(/\D/g, "");  // [FIX] sólo dígitos
-        let hh, mm, ss;
-
-        if (parteEntera.length === 6) {
-            hh = parteEntera.substring(0, 2);
-            mm = parteEntera.substring(2, 4);
-            ss = parteEntera.substring(4, 6);
-        } else if (parteEntera.length === 4) {
-            hh = parteEntera.substring(0, 2);
-            mm = parteEntera.substring(2, 4);
-            let fracMin = partes[1] ? parseFloat("0." + partes[1].replace(/\D/g, "")) : 0;
-            ss = Math.round(fracMin * 60).toString().padStart(2, "0");
-        } else {
-            node.warn("GNSS: formato de hora inesperado -> " + horaRaw);
-            hh = "00"; mm = "00"; ss = "00";
-        }
-
-        let totalMin = parseInt(hh) * 60 + parseInt(mm) - 180;
-
-        if (totalMin < 0) {
-            totalMin += 24 * 60;
-            if (out.fecha) {
-                let pf = out.fecha.split("-");
-                let d  = new Date(parseInt("20" + pf[2]),
-                                  parseInt(pf[1]) - 1,
-                                  parseInt(pf[0]));
-                d.setDate(d.getDate() - 1);
-                let dd = d.getDate().toString().padStart(2, "0");
-                let mo = (d.getMonth() + 1).toString().padStart(2, "0");
-                let yy = d.getFullYear().toString().substring(2);
-                out.fecha = dd + "-" + mo + "-" + yy;
-            }
-        }
-
-        let hhAR = Math.floor(totalMin / 60).toString().padStart(2, "0");
-        let mmAR = (totalMin % 60).toString().padStart(2, "0");
-        out.hora = hhAR + ":" + mmAR + ":" + ss;
-
-        // ── Campos opcionales según cantidad de campos ──────────
-        let total = g.length;
-
-        if (total >= 18) {
-            out.alt_m        = parseFloat(g[11]) || 0;
-            out.vel_gnss_kph = parseFloat((parseFloat(g[12] || 0) * 1.852).toFixed(2));
-            out.dir_deg      = parseFloat(g[13]) || 0;
-            out.pdop         = parseFloat(g[14]) || 0;
-            out.hdop         = parseFloat(g[15]) || 0;
-            out.vdop         = parseFloat(g[16]) || 0;
-            out.sats_fix     = parseInt(g[17])   || 0;
-        } else if (total >= 17) {
-            out.alt_m        = parseFloat(g[11]) || 0;
-            out.vel_gnss_kph = parseFloat((parseFloat(g[12] || 0) * 1.852).toFixed(2));
-            out.dir_deg      = parseFloat(g[13]) || 0;
-            out.pdop         = parseFloat(g[14]) || 0;
-            out.hdop         = parseFloat(g[15]) || 0;
-            out.vdop         = parseFloat(g[16]) || 0;
-        } else if (total >= 14) {
-            out.vel_gnss_kph = parseFloat((parseFloat(g[11] || 0) * 1.852).toFixed(2));
-            out.dir_deg      = parseFloat(g[12]) || 0;
-            out.sats_fix     = parseInt(g[13])   || 0;
-        } else {
-            node.warn("GNSS: cantidad de campos inesperada -> " + total);
-        }
-
-    } catch (e) {
-        node.warn("GNSS parse error: " + e.message + " | raw: " + raw.gnss);
-    }
-}
-
-
-// ════════ PASO 4 — Tabla de PIDs OBD-II ════════
-const OBD_TABLA = {
-    "RPM":         { out: "rpm",            f: (A, B) => Math.round(((A * 256 + B) / 4) * 10) / 10 },
-    "vel_kph":     { out: "vel_obd_kph",    f: (A, B) => A },
-    "temp_mot_c":  { out: "temp_motor_c",   f: (A, B) => A - 40 },
-    "temp_adm_c":  { out: "temp_adm_c",     f: (A, B) => A - 40 },
-    "temp_ace_c":  { out: "temp_aceite_c",  f: (A, B) => A - 40 },
-    "carga_pct":   { out: "carga_mot_pct",  f: (A, B) => parseFloat((A * 100 / 255).toFixed(1)) },
-    "comb_pct":    { out: "nivel_comb_pct", f: (A, B) => parseFloat((A * 100 / 255).toFixed(1)) },
-    "accel_pct":   { out: "acelerador_pct", f: (A, B) => parseFloat((A * 100 / 255).toFixed(1)) },
-    "map_kpa":     { out: "pres_map_kpa",   f: (A, B) => A },
-    "pcomb_kpa":   { out: "pres_comb_kpa",  f: (A, B) => A * 3 },
-    "maf_gs":      { out: "maf_gs",         f: (A, B) => parseFloat(((A * 256 + B) / 100).toFixed(2)) },
-    "avance_deg":  { out: "avance_enc_deg", f: (A, B) => parseFloat((A / 2 - 64).toFixed(1)) },
-    "ton_s":       { out: "tiempo_motor_s", f: (A, B) => (A * 256) + B },
-    "dist_mil_km": { out: "dist_mil_km",    f: (A, B) => (A * 256) + B },
-    "cons_lh":     { out: "consumo_lh",     f: (A, B) => parseFloat(((A * 256 + B) / 20).toFixed(2)) },
+// Descripción por categoría, para los códigos que no están en la tabla anterior
+const DESCRIPCION_GENERICA_DTC = {
+    P: "Falla del motor / tren motriz",
+    C: "Falla del chasis (frenos/suspension/direccion)",
+    B: "Falla de carroceria / confort",
+    U: "Falla de red / comunicacion",
 };
 
 
-// ════════ PASO 5 — IMU LSM6DS33 + aceleración del vehículo ════════
-const IMU_CAMPOS = ["imu_ax", "imu_ay", "imu_az", "imu_gx", "imu_gy", "imu_gz"];
+// =============================================================================
+//  FUNCIONES AUXILIARES
+// =============================================================================
 
-if (IMU_CAMPOS.some(c => raw[c] !== undefined)) {
-
-    // Acelerómetro m/s² -> g
-    if (raw.imu_ax !== undefined)
-        out.accel_x_g = parseFloat((raw.imu_ax / G_TO_MS2).toFixed(4));
-    if (raw.imu_ay !== undefined)
-        out.accel_y_g = parseFloat((raw.imu_ay / G_TO_MS2).toFixed(4));
-    if (raw.imu_az !== undefined)
-        out.accel_z_g = parseFloat((raw.imu_az / G_TO_MS2).toFixed(4));
-
-    // Giróscopo rad/s -> °/s
-    if (raw.imu_gx !== undefined)
-        out.gyro_x_dps = parseFloat((raw.imu_gx * RAD_TO_DEG).toFixed(4));
-    if (raw.imu_gy !== undefined)
-        out.gyro_y_dps = parseFloat((raw.imu_gy * RAD_TO_DEG).toFixed(4));
-    if (raw.imu_gz !== undefined)
-        out.gyro_z_dps = parseFloat((raw.imu_gz * RAD_TO_DEG).toFixed(4));
-
-    // Módulo de aceleración TOTAL (incluye gravedad; ~1 g en reposo)
-    if (out.accel_x_g !== undefined &&
-        out.accel_y_g !== undefined &&
-        out.accel_z_g !== undefined) {
-        out.accel_total_g = parseFloat(
-            Math.sqrt(out.accel_x_g ** 2 + out.accel_y_g ** 2 + out.accel_z_g ** 2).toFixed(4)
-        );
-    }
-
-    // ── [NEW] Aceleración del vehículo (frenada + giro) ──────────
-    //   Magnitud en el plano horizontal X-Y.
-    //   Supone la placa montada con el eje Z hacia ARRIBA, de modo
-    //   que la gravedad cae toda sobre Z y X-Y captura sólo la
-    //   dinámica del vehículo. En reposo ~0.
-    //     a_horizontal = sqrt(ax² + ay²)   [se usa el crudo en m/s²]
-    if (raw.imu_ax !== undefined && raw.imu_ay !== undefined) {
-        let hor = Math.sqrt(raw.imu_ax ** 2 + raw.imu_ay ** 2);
-        out.accel_horizontal_ms2 = parseFloat(hor.toFixed(4));
-        out.accel_horizontal_g   = parseFloat((hor / G_TO_MS2).toFixed(4));
-    }
-
-} else {
-    node.warn("IMU: ningún campo imu_* presente en el payload.");
+// Redondea 'valor' a la cantidad de decimales indicada.
+function redondear(valor, decimales) {
+    return parseFloat(valor.toFixed(decimales));
 }
 
-
-// ════════ PASO 5B — [NEW] Batería / estado de carga ════════
-//   Entrada del Feather:  vbat (V) , cargando (bool) , carga_ok (bool)
-if (raw.vbat !== undefined) {
-    let v = parseFloat(raw.vbat);
-    if (!isNaN(v)) out.bat_v = parseFloat(v.toFixed(2));
+// Completa con un cero a la izquierda: 7 -> "07".
+function dosDigitos(n) {
+    return n.toString().padStart(2, "0");
 }
-if (raw.cargando !== undefined)  out.cargando       = Boolean(raw.cargando);
-if (raw.carga_ok !== undefined)  out.carga_completa = Boolean(raw.carga_ok);
 
-// Estado combinado, cómodo para el dashboard
-if (out.carga_completa === true)      out.estado_carga = "completa";
-else if (out.cargando === true)       out.estado_carga = "cargando";
-else if (out.cargando === false)      out.estado_carga = "en_bateria";
+// true si el texto es un número decimal sin signo (ej. "38.008305").
+function esCoordenada(texto) {
+    return /^\d+(\.\d+)?$/.test(texto || "");
+}
 
+// Ubica los campos de la línea de AT+CGNSSINFO a partir de los indicadores de
+// hemisferio (N/S y E/W), igual que el firmware. Así no depende de cuántos
+// contadores de satélites informe el módulo antes de la latitud.
+// Devuelve null si la línea no tiene coordenadas válidas.
+function extraerCamposGNSS(linea) {
+    let c = linea.split(",").map(campo => campo.trim());
+    for (let k = 1; k + 2 < c.length; k++) {
+        let hemisferios = (c[k] === "N" || c[k] === "S") && (c[k + 2] === "E" || c[k + 2] === "W");
+        if (hemisferios && esCoordenada(c[k - 1]) && esCoordenada(c[k + 1])) {
+            return {
+                lat: c[k - 1], latDir: c[k], lon: c[k + 1], lonDir: c[k + 2],
+                fecha: c[k + 3], hora: c[k + 4], alt: c[k + 5], vel: c[k + 6],
+                rumbo: c[k + 7], pdop: c[k + 8], hdop: c[k + 9], vdop: c[k + 10],
+                sats: c[k + 11],
+            };
+        }
+    }
+    return null;
+}
 
-// ════════ PASO 5C — [NEW v11] DTCs (Modo 03) ════════
-//   Entrada: raw.dtc = respuesta cruda "43"+pares de bytes (o "").
-//   Salida:  dtc (array de códigos, ej ["P0133"]), dtc_cantidad, dtc_presente.
+// Resta un día a una fecha "dd-mm-aa".
+function restarUnDia(fecha) {
+    let p = fecha.split("-");
+    let d = new Date(parseInt("20" + p[2]), parseInt(p[1]) - 1, parseInt(p[0]));
+    d.setDate(d.getDate() - 1);
+    return dosDigitos(d.getDate()) + "-" + dosDigitos(d.getMonth() + 1) + "-" +
+           d.getFullYear().toString().substring(2);
+}
+
+// Convierte la hora UTC del GNSS (hhmmss.ss) a hora argentina y la guarda en
+// salida.hora. Si al restar 3 h se pasa al día anterior, corrige salida.fecha.
+function convertirHoraArgentina(salida, horaUTC) {
+    let partes = (horaUTC || "").split(".");
+    let entero = (partes[0] || "").replace(/\D/g, "");
+    let hh = "00", mm = "00", ss = "00";
+
+    if (entero.length === 6) {                // hhmmss
+        hh = entero.substring(0, 2);
+        mm = entero.substring(2, 4);
+        ss = entero.substring(4, 6);
+    } else if (entero.length === 4) {         // hhmm.mmmm (minutos con decimales)
+        hh = entero.substring(0, 2);
+        mm = entero.substring(2, 4);
+        let fraccion = partes[1] ? parseFloat("0." + partes[1].replace(/\D/g, "")) : 0;
+        ss = dosDigitos(Math.round(fraccion * 60));
+    } else {
+        node.warn("GNSS: formato de hora inesperado -> " + horaUTC);
+    }
+
+    let minutos = parseInt(hh) * 60 + parseInt(mm) + MINUTOS_UTC_A_ARG;
+    if (minutos < 0) {
+        minutos += 24 * 60;
+        if (salida.fecha) salida.fecha = restarUnDia(salida.fecha);
+    }
+    salida.hora = dosDigitos(Math.floor(minutos / 60)) + ":" + dosDigitos(minutos % 60) + ":" + ss;
+}
+
+// Traduce una trama OBD-II. Devuelve null si no es una trama válida "41"+PID
+// (por ejemplo "TIMEOUT", "NO_DATA" o una respuesta incompleta).
+function traducirPID(definicion, valorCrudo) {
+    if (typeof valorCrudo !== "string") return null;
+    let hex   = valorCrudo.replace(/\s+/g, "").toUpperCase();
+    let marca = "41" + dosDigitos(definicion.pid.toString(16).toUpperCase());
+    if (!/^[0-9A-F]+$/.test(hex) || !hex.startsWith(marca) || hex.length < 6) return null;
+
+    let A = parseInt(hex.substring(4, 6), 16);
+    let B = hex.length >= 8 ? parseInt(hex.substring(6, 8), 16) : 0;
+    return definicion.f(A, B);
+}
+
+// Decodifica la respuesta cruda del Modo 03 ("43" + pares de bytes) a una
+// lista de códigos, por ejemplo "430133" -> ["P0133"].
 function decodificarDTC(bruto) {
     if (typeof bruto !== "string") return [];
     let h = bruto.toUpperCase().replace(/[^0-9A-F]/g, "");
     let i = h.indexOf("43");
     if (i < 0) return [];
     h = h.substring(i + 2);
-    const letras = ["P", "C", "B", "U"];
+
     let codigos = [];
     for (let k = 0; k + 4 <= h.length; k += 4) {
-        let B1 = parseInt(h.substring(k, k + 2), 16);
-        let B2 = parseInt(h.substring(k + 2, k + 4), 16);
-        if (isNaN(B1) || isNaN(B2)) break;
-        if (B1 === 0 && B2 === 0) continue;        // relleno = sin código
-        let cod = letras[(B1 >> 6) & 0x03] +
-                  ((B1 >> 4) & 0x03).toString() +
-                  (B1 & 0x0F).toString(16).toUpperCase() +
-                  ((B2 >> 4) & 0x0F).toString(16).toUpperCase() +
-                  (B2 & 0x0F).toString(16).toUpperCase();
-        codigos.push(cod);
+        let b1 = parseInt(h.substring(k, k + 2), 16);
+        let b2 = parseInt(h.substring(k + 2, k + 4), 16);
+        if (b1 === 0 && b2 === 0) continue;            // relleno: no es un código
+        codigos.push(LETRA_DTC[(b1 >> 6) & 0x03] +
+                     ((b1 >> 4) & 0x03).toString() +
+                     (b1 & 0x0F).toString(16).toUpperCase() +
+                     ((b2 >> 4) & 0x0F).toString(16).toUpperCase() +
+                     (b2 & 0x0F).toString(16).toUpperCase());
     }
     return codigos;
 }
 
-// [v12] Categoría legible por letra del código
-function categoriaDTC(code) {
-    return ({ P: "Motor", C: "Chasis", B: "Carroceria", U: "Red/Comunicacion" })[code[0]] || "Sistema";
+function categoriaDTC(codigo) {
+    return CATEGORIA_DTC[codigo[0]] || "Sistema";
 }
 
-// [v12] Descripción legible del DTC (tabla de comunes + fallback por categoría)
-function descripcionDTC(code) {
-    const T = {
-        "P0100": "Sensor de flujo de aire (MAF)",
-        "P0101": "Sensor MAF - rango/rendimiento",
-        "P0110": "Sensor de temperatura de admision",
-        "P0115": "Sensor de temperatura de refrigerante",
-        "P0120": "Sensor de posicion del acelerador",
-        "P0128": "Termostato de refrigerante",
-        "P0171": "Mezcla demasiado pobre",
-        "P0172": "Mezcla demasiado rica",
-        "P0300": "Fallo de encendido en varios cilindros",
-        "P0301": "Fallo de encendido cilindro 1",
-        "P0302": "Fallo de encendido cilindro 2",
-        "P0303": "Fallo de encendido cilindro 3",
-        "P0304": "Fallo de encendido cilindro 4",
-        "P0420": "Eficiencia del catalizador baja",
-        "P0442": "Fuga pequena en sistema EVAP",
-        "P0500": "Sensor de velocidad del vehiculo",
-        "C0035": "Sensor de velocidad rueda del. izq.",
-        "C0110": "Motor de bomba de ABS",
-        "B0010": "Airbag del conductor",
-        "B1318": "Tension de bateria baja",
-        "U0100": "Perdida de comunicacion con la ECU",
-        "U0121": "Perdida de comunicacion con ABS",
-        "U1000": "Comunicacion en red CAN",
-    };
-    if (T[code]) return T[code];
-    const cat = {
-        P: "Falla del motor / tren motriz",
-        C: "Falla del chasis (frenos/suspension/direccion)",
-        B: "Falla de carroceria / confort",
-        U: "Falla de red / comunicacion",
-    };
-    return cat[code[0]] || "Codigo desconocido";
+function descripcionDTC(codigo) {
+    return DESCRIPCION_DTC[codigo] || DESCRIPCION_GENERICA_DTC[codigo[0]] || "Codigo desconocido";
 }
 
-if (raw.dtc !== undefined) {
-    let dtcs = decodificarDTC(raw.dtc);
-    out.dtc          = dtcs;              // ej ["P0133","C0200"]  o  []
-    out.dtc_cantidad = dtcs.length;
-    out.dtc_presente = dtcs.length > 0;
+// Arma una línea "Etiqueta: valor unidad   Etiqueta: valor unidad" con los
+// campos que tengan valor. Cada campo es [etiqueta, valor, unidad].
+function lineaDeCampos(campos) {
+    return campos
+        .filter(([, valor]) => valor !== undefined)
+        .map(([etiqueta, valor, unidad]) => etiqueta + ": " + valor + (unidad ? " " + unidad : ""))
+        .join("   ");
+}
 
-    // [v12] Descripción legible + alerta para un usuario cualquiera
-    out.dtc_desc   = dtcs.map(descripcionDTC);
-    out.dtc_alerta = dtcs.length
+
+// =============================================================================
+//  1. ENTRADA (Buffer, texto u objeto)
+// =============================================================================
+let entrada;
+try {
+    let p = msg.payload;
+    if (Buffer.isBuffer(p)) p = p.toString("utf8");
+    entrada = (typeof p === "string") ? JSON.parse(p) : p;
+} catch (e) {
+    node.error("JSON invalido: " + e.message, msg);
+    return null;
+}
+if (entrada === null || typeof entrada !== "object" || Array.isArray(entrada)) {
+    node.error("El payload no es un objeto JSON (" + typeof entrada + ")", msg);
+    return null;
+}
+
+let salida = { ts: entrada.ts || 0 };
+
+
+// =============================================================================
+//  2. GNSS (línea de AT+CGNSSINFO)
+// =============================================================================
+if (typeof entrada.gnss === "string" && !GNSS_SIN_POSICION.has(entrada.gnss)) {
+    let g = extraerCamposGNSS(entrada.gnss);
+    if (g === null) {
+        node.warn("GNSS: linea sin coordenadas validas -> " + entrada.gnss);
+    } else {
+        // Coordenadas con signo: sur y oeste son negativas
+        salida.lat_dir = g.latDir;
+        salida.lon_dir = g.lonDir;
+        salida.lat = redondear(g.latDir === "S" ? -parseFloat(g.lat) : parseFloat(g.lat), 6);
+        salida.lon = redondear(g.lonDir === "W" ? -parseFloat(g.lon) : parseFloat(g.lon), 6);
+
+        // Fecha ddmmaa -> dd-mm-aa y hora UTC -> hora argentina
+        let fecha = g.fecha || "";
+        if (fecha.length >= 6) {
+            salida.fecha = fecha.substring(0, 2) + "-" + fecha.substring(2, 4) + "-" + fecha.substring(4, 6);
+        }
+        convertirHoraArgentina(salida, g.hora);
+
+        // Campos opcionales (la velocidad llega en nudos)
+        if (g.alt   !== undefined) salida.alt_m        = parseFloat(g.alt) || 0;
+        if (g.vel   !== undefined) salida.vel_gnss_kph = redondear(parseFloat(g.vel || 0) * KMH_POR_NUDO, 2);
+        if (g.rumbo !== undefined) salida.dir_deg      = parseFloat(g.rumbo) || 0;
+        if (g.pdop  !== undefined) salida.pdop         = parseFloat(g.pdop) || 0;
+        if (g.hdop  !== undefined) salida.hdop         = parseFloat(g.hdop) || 0;
+        if (g.vdop  !== undefined) salida.vdop         = parseFloat(g.vdop) || 0;
+        if (g.sats  !== undefined) salida.sats_fix     = parseInt(g.sats) || 0;
+    }
+}
+
+
+// =============================================================================
+//  3. IMU LSM6DS33
+// =============================================================================
+const CAMPOS_IMU = ["imu_ax", "imu_ay", "imu_az", "imu_gx", "imu_gy", "imu_gz"];
+
+if (CAMPOS_IMU.some(campo => entrada[campo] !== undefined)) {
+    // Acelerómetro: m/s2 -> g
+    if (entrada.imu_ax !== undefined) salida.accel_x_g = redondear(entrada.imu_ax / M_S2_POR_G, 4);
+    if (entrada.imu_ay !== undefined) salida.accel_y_g = redondear(entrada.imu_ay / M_S2_POR_G, 4);
+    if (entrada.imu_az !== undefined) salida.accel_z_g = redondear(entrada.imu_az / M_S2_POR_G, 4);
+
+    // Giróscopo: rad/s -> grados/s
+    if (entrada.imu_gx !== undefined) salida.gyro_x_dps = redondear(entrada.imu_gx * GRADOS_POR_RADIAN, 4);
+    if (entrada.imu_gy !== undefined) salida.gyro_y_dps = redondear(entrada.imu_gy * GRADOS_POR_RADIAN, 4);
+    if (entrada.imu_gz !== undefined) salida.gyro_z_dps = redondear(entrada.imu_gz * GRADOS_POR_RADIAN, 4);
+
+    // Módulo de la aceleración total (incluye la gravedad: ~1 g en reposo)
+    if (salida.accel_x_g !== undefined && salida.accel_y_g !== undefined && salida.accel_z_g !== undefined) {
+        salida.accel_total_g = redondear(
+            Math.sqrt(salida.accel_x_g ** 2 + salida.accel_y_g ** 2 + salida.accel_z_g ** 2), 4);
+    }
+
+    // Aceleración del vehículo (frenadas y giros): módulo en el plano X-Y.
+    // Supone la placa montada con el eje Z hacia arriba, de modo que la
+    // gravedad queda sobre Z y el plano X-Y sólo ve la dinámica (~0 en reposo).
+    if (entrada.imu_ax !== undefined && entrada.imu_ay !== undefined) {
+        let horizontal = Math.sqrt(entrada.imu_ax ** 2 + entrada.imu_ay ** 2);
+        salida.accel_horizontal_ms2 = redondear(horizontal, 4);
+        salida.accel_horizontal_g   = redondear(horizontal / M_S2_POR_G, 4);
+    }
+} else {
+    node.warn("IMU: el payload no trae ningun campo imu_*");
+}
+
+
+// =============================================================================
+//  4. BATERÍA
+// =============================================================================
+if (entrada.vbat !== undefined) {
+    let v = parseFloat(entrada.vbat);
+    if (!isNaN(v)) salida.bat_v = redondear(v, 2);
+}
+if (entrada.cargando !== undefined) salida.cargando       = Boolean(entrada.cargando);
+if (entrada.carga_ok !== undefined) salida.carga_completa = Boolean(entrada.carga_ok);
+
+if (salida.carga_completa === true)  salida.estado_carga = "completa";
+else if (salida.cargando === true)   salida.estado_carga = "cargando";
+else if (salida.cargando === false)  salida.estado_carga = "en_bateria";
+
+
+// =============================================================================
+//  5. CÓDIGOS DE FALLA (Modo 03)
+// =============================================================================
+if (entrada.dtc !== undefined) {
+    let dtcs = decodificarDTC(entrada.dtc);
+    salida.dtc          = dtcs;
+    salida.dtc_cantidad = dtcs.length;
+    salida.dtc_presente = dtcs.length > 0;
+    salida.dtc_desc     = dtcs.map(descripcionDTC);
+    salida.dtc_alerta   = dtcs.length > 0
         ? dtcs.map(c => categoriaDTC(c) + " en falla: " + descripcionDTC(c) + " [" + c + "]").join(" | ")
         : "sin fallas";
 }
 
 
-// ════════ PASO 6 — Decodificar un PID ════════
-function parsearPID(nombre, hexStr) {
-    let entrada = OBD_TABLA[nombre];
-    if (!entrada) return null;
-    if (typeof hexStr !== "string") return null;
-    if (hexStr === "" || hexStr === "TIMEOUT") return null;
+// =============================================================================
+//  6. PIDs OBD-II (Modo 01)
+// =============================================================================
+for (let nombre of Object.keys(TABLA_OBD)) {
+    let crudo = entrada[nombre];
+    if (crudo === undefined) continue;
 
-    let limpio = hexStr.replace(/\s+/g, "").toUpperCase();
-    if (limpio.length < 6) {
-        node.warn("PID " + nombre + ": respuesta demasiado corta -> " + hexStr);
-        return null;
-    }
-    let A = parseInt(limpio.substring(4, 6), 16);
-    let B = limpio.length >= 8 ? parseInt(limpio.substring(6, 8), 16) : 0;
-    try {
-        return { clave: entrada.out, valor: entrada.f(A, B) };
-    } catch (e) {
-        node.warn("PID " + nombre + ": error en fórmula -> " + e.message);
-        return null;
+    let valor = traducirPID(TABLA_OBD[nombre], crudo);
+    if (valor !== null) {
+        salida[TABLA_OBD[nombre].clave] = valor;
+    } else if (!VALORES_SIN_DATO.has(crudo)) {
+        node.warn("PID " + nombre + ": trama invalida -> " + crudo);
     }
 }
 
 
-// ════════ PASO 7 — Procesar todos los PIDs ════════
-const CAMPOS_RESERVADOS = new Set([
-    "ts", "gnss",
-    "imu_ax", "imu_ay", "imu_az",
-    "imu_gx", "imu_gy", "imu_gz",
-    "vbat", "cargando", "carga_ok",     // [NEW] ya procesados arriba
-    "dtc",                              // [NEW v11] ya procesado arriba
-]);
-
-for (let campo of Object.keys(raw)) {
-    if (CAMPOS_RESERVADOS.has(campo)) continue;
-    try {
-        let resultado = parsearPID(campo, raw[campo]);
-        if (resultado !== null) out[resultado.clave] = resultado.valor;
-    } catch (e) {
-        node.warn("Campo " + campo + ": excepción ignorada -> " + e.message);
-    }
-}
-
-
-// ════════ PASO 8 — Salidas: JSON (máquina) + TEXTO legible (humano) ════════
-//  msg1 -> prueba_out       : JSON igual que antes (no romper aguas abajo)
-//  msg2 -> prueba_out_texto : reporte legible, bloques DTC/GNSS/OBD/IMU/batería
-//  El nodo "mqtt out" debe tener el Topic VACÍO para que use msg.topic.
-
+// =============================================================================
+//  7. REPORTE DE TEXTO
+// =============================================================================
 let L = [];
-L.push("========== TELEMETRIA  (ts " + (out.ts || 0) + ") ==========");
+L.push("========== TELEMETRIA  (ts " + (salida.ts || 0) + ") ==========");
 
-// ── DTC / FALLAS ──
 L.push("");
 L.push("[DTC / FALLAS]");
-if (out.dtc_alerta !== undefined) {
-    L.push("  " + out.dtc_alerta);
-    if (out.dtc_cantidad) L.push("  Cantidad: " + out.dtc_cantidad);
+if (salida.dtc_alerta !== undefined) {
+    L.push("  " + salida.dtc_alerta);
+    if (salida.dtc_cantidad) L.push("  Cantidad: " + salida.dtc_cantidad);
 } else {
     L.push("  (no reportado)");
 }
 
-// ── GNSS ──
 L.push("");
 L.push("[GNSS]");
-if (out.lat !== undefined || out.hora !== undefined) {
-    if (out.fecha !== undefined || out.hora !== undefined)
-        L.push("  Fecha/Hora: " + (out.fecha || "?") + " " + (out.hora || "?"));
-    if (out.lat !== undefined && out.lon !== undefined)
-        L.push("  Posicion: " + out.lat + ", " + out.lon);
-    let l3 = [];
-    if (out.alt_m !== undefined)        l3.push("Alt: " + out.alt_m + " m");
-    if (out.vel_gnss_kph !== undefined) l3.push("Vel: " + out.vel_gnss_kph + " km/h");
-    if (out.dir_deg !== undefined)      l3.push("Rumbo: " + out.dir_deg + " deg");
-    if (out.sats_fix !== undefined)     l3.push("Sats: " + out.sats_fix);
-    if (l3.length) L.push("  " + l3.join("   "));
+if (salida.lat !== undefined || salida.hora !== undefined) {
+    if (salida.fecha !== undefined || salida.hora !== undefined)
+        L.push("  Fecha/Hora: " + (salida.fecha || "?") + " " + (salida.hora || "?"));
+    if (salida.lat !== undefined && salida.lon !== undefined)
+        L.push("  Posicion: " + salida.lat + ", " + salida.lon);
+    let extra = lineaDeCampos([
+        ["Alt", salida.alt_m, "m"], ["Vel", salida.vel_gnss_kph, "km/h"],
+        ["Rumbo", salida.dir_deg, "deg"], ["Sats", salida.sats_fix],
+    ]);
+    if (extra) L.push("  " + extra);
 } else {
     L.push("  (sin fix)");
 }
 
-// ── OBD / MOTOR ──
 L.push("");
 L.push("[OBD / MOTOR]");
-{
-    let filas = [];
-    let r1 = [];
-    if (out.rpm !== undefined)          r1.push("RPM: " + out.rpm);
-    if (out.vel_obd_kph !== undefined)  r1.push("Vel: " + out.vel_obd_kph + " km/h");
-    if (r1.length) filas.push(r1.join("   "));
-    let r2 = [];
-    if (out.temp_motor_c !== undefined)  r2.push("Temp motor: " + out.temp_motor_c + " C");
-    if (out.temp_adm_c !== undefined)    r2.push("Temp adm: " + out.temp_adm_c + " C");
-    if (out.temp_aceite_c !== undefined) r2.push("Temp aceite: " + out.temp_aceite_c + " C");
-    if (r2.length) filas.push(r2.join("   "));
-    let r3 = [];
-    if (out.carga_mot_pct !== undefined)  r3.push("Carga: " + out.carga_mot_pct + " %");
-    if (out.acelerador_pct !== undefined) r3.push("Acelerador: " + out.acelerador_pct + " %");
-    if (out.nivel_comb_pct !== undefined) r3.push("Combustible: " + out.nivel_comb_pct + " %");
-    if (r3.length) filas.push(r3.join("   "));
-    let r4 = [];
-    if (out.pres_map_kpa !== undefined)   r4.push("MAP: " + out.pres_map_kpa + " kPa");
-    if (out.maf_gs !== undefined)         r4.push("MAF: " + out.maf_gs + " g/s");
-    if (out.pres_comb_kpa !== undefined)  r4.push("Pres comb: " + out.pres_comb_kpa + " kPa");
-    if (out.avance_enc_deg !== undefined) r4.push("Avance: " + out.avance_enc_deg + " deg");
-    if (r4.length) filas.push(r4.join("   "));
-    let r5 = [];
-    if (out.consumo_lh !== undefined)     r5.push("Consumo: " + out.consumo_lh + " L/h");
-    if (out.tiempo_motor_s !== undefined) r5.push("Tiempo motor: " + out.tiempo_motor_s + " s");
-    if (out.dist_mil_km !== undefined)    r5.push("Dist MIL: " + out.dist_mil_km + " km");
-    if (r5.length) filas.push(r5.join("   "));
-    if (filas.length) filas.forEach(f => L.push("  " + f));
-    else L.push("  (sin datos)");
-}
+let filasOBD = [
+    lineaDeCampos([["RPM", salida.rpm], ["Vel", salida.vel_obd_kph, "km/h"]]),
+    lineaDeCampos([["Temp motor", salida.temp_motor_c, "C"], ["Temp adm", salida.temp_adm_c, "C"],
+                   ["Temp aceite", salida.temp_aceite_c, "C"]]),
+    lineaDeCampos([["Carga", salida.carga_mot_pct, "%"], ["Acelerador", salida.acelerador_pct, "%"],
+                   ["Combustible", salida.nivel_comb_pct, "%"]]),
+    lineaDeCampos([["MAP", salida.pres_map_kpa, "kPa"], ["MAF", salida.maf_gs, "g/s"],
+                   ["Pres comb", salida.pres_comb_kpa, "kPa"], ["Avance", salida.avance_enc_deg, "deg"]]),
+    lineaDeCampos([["Consumo", salida.consumo_lh, "L/h"], ["Tiempo motor", salida.tiempo_motor_s, "s"],
+                   ["Dist MIL", salida.dist_mil_km, "km"]]),
+].filter(fila => fila.length > 0);
+if (filasOBD.length > 0) filasOBD.forEach(fila => L.push("  " + fila));
+else L.push("  (sin datos)");
 
-// ── IMU ──
 L.push("");
 L.push("[IMU]");
-{
-    let hay = false;
-    if (out.accel_x_g !== undefined) {
-        L.push("  Accel (g): x=" + out.accel_x_g + " y=" + out.accel_y_g + " z=" + out.accel_z_g +
-               (out.accel_total_g !== undefined ? "   |total|=" + out.accel_total_g : ""));
-        hay = true;
-    }
-    if (out.accel_horizontal_ms2 !== undefined) {
-        L.push("  Accel horizontal: " + out.accel_horizontal_ms2 + " m/s2 (" + out.accel_horizontal_g + " g)");
-        hay = true;
-    }
-    if (out.gyro_x_dps !== undefined) {
-        L.push("  Giro (deg/s): x=" + out.gyro_x_dps + " y=" + out.gyro_y_dps + " z=" + out.gyro_z_dps);
-        hay = true;
-    }
-    if (!hay) L.push("  (sin datos)");
+let hayIMU = false;
+if (salida.accel_x_g !== undefined) {
+    L.push("  Accel (g): x=" + salida.accel_x_g + " y=" + salida.accel_y_g + " z=" + salida.accel_z_g +
+           (salida.accel_total_g !== undefined ? "   |total|=" + salida.accel_total_g : ""));
+    hayIMU = true;
 }
+if (salida.accel_horizontal_ms2 !== undefined) {
+    L.push("  Accel horizontal: " + salida.accel_horizontal_ms2 + " m/s2 (" + salida.accel_horizontal_g + " g)");
+    hayIMU = true;
+}
+if (salida.gyro_x_dps !== undefined) {
+    L.push("  Giro (deg/s): x=" + salida.gyro_x_dps + " y=" + salida.gyro_y_dps + " z=" + salida.gyro_z_dps);
+    hayIMU = true;
+}
+if (!hayIMU) L.push("  (sin datos)");
 
-// ── BATERIA ──
 L.push("");
 L.push("[BATERIA]");
-{
-    let b = [];
-    if (out.bat_v !== undefined)        b.push("Tension: " + out.bat_v + " V");
-    if (out.estado_carga !== undefined) b.push("Estado: " + out.estado_carga);
-    if (b.length) L.push("  " + b.join("   "));
-    else L.push("  (sin datos)");
-}
+let bateria = lineaDeCampos([["Tension", salida.bat_v, "V"], ["Estado", salida.estado_carga]]);
+L.push("  " + (bateria || "(sin datos)"));
 
-let textoLegible = L.join("\n");
 
-let m1 = Object.assign({}, msg, { payload: JSON.stringify(out), topic: "prueba_out" });
-let m2 = Object.assign({}, msg, { payload: textoLegible,        topic: "prueba_out_texto" });
-
-// La Function tiene UNA sola salida. Con return [m1,m2] Node-RED mandaría
-// solo el primero. Con node.send() emitimos los DOS por esa única salida
-// (el nodo "mqtt out" publica cada uno según su msg.topic).
-node.send(m1);
-node.send(m2);
+// =============================================================================
+//  8. ENVÍO
+// =============================================================================
+// El nodo tiene una sola salida: con node.send() se emiten los dos mensajes por
+// ella y el nodo "mqtt out" publica cada uno en su msg.topic.
+node.send(Object.assign({}, msg, { payload: JSON.stringify(salida), topic: "prueba_out" }));
+node.send(Object.assign({}, msg, { payload: L.join("\n"),           topic: "prueba_out_texto" }));
 return null;
